@@ -1,13 +1,19 @@
 package com.rangarok.jparserutil.test;
 
 
+import java.lang.Deprecated;
 import java.util.Date;
 
 public class User {
 
     private int name = 1;
     
+    @Deprecated
     private Date birth = new Date();
+    
+    public String foo() {
+        return null;
+    }
     
     class InnerUser {
         
@@ -17,7 +23,5 @@ public class User {
             private float innerinnerName = 1.0;
         }
     }
-
 }
-
 
