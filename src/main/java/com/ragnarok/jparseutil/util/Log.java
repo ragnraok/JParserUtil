@@ -24,19 +24,19 @@ public class Log {
         println(VERBOSE, TAG, String.format(format, args));
     }
     
-    public static void d(String TAG, String format, String... args) {
+    public static void d(String TAG, String format, Object... args) {
         println(DEBUG, TAG, String.format(format, args));
     }
     
-    public static void i(String TAG, String format, String... args) {
+    public static void i(String TAG, String format, Object... args) {
         println(INFO, TAG, String.format(format, args));
     }
     
-    public static void w(String TAG, String format, String... args) {
+    public static void w(String TAG, String format, Object... args) {
         println(WARNING, TAG, String.format(format, args));
     }
     
-    public static void e(String TAG, String format, String... args) {
+    public static void e(String TAG, String format, Object... args) {
         println(ERROR, TAG, String.format(format, args));
     } 
     
