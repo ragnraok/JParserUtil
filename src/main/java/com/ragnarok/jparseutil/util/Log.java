@@ -1,4 +1,4 @@
-package com.ragnarok.jparseutil;
+package com.ragnarok.jparseutil.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
