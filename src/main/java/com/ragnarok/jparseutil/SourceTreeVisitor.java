@@ -4,32 +4,46 @@ import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.ImportTree;
 import com.sun.source.util.TreeScanner;
+import com.sun.tools.javac.code.Source;
+
+import java.util.ArrayList;
 
 /**
  * Created by ragnarok on 15/5/18.
- * The Source TreeVisitor
+ * The Source TreeVisitor, travel a CompilationUnit(a Java source file) and extract its info
  */
-public abstract class SourceTreeVisitor extends TreeScanner<Void, Void> {
+public class SourceTreeVisitor extends TreeScanner<Void, Void> {
     
-    private static final String TAG = "JParserUtilBaseSourceTreeVisitor";
+    private static final String TAG = "JParserUtil.SourceTreeVisitor";
 
-    protected String packageName = null;
+    private String packageName = null;
+    private ArrayList<String> importClassNames = new ArrayList<String>();
+    
+    private ClassTreeVisitor classVisitor;
+    
+    public SourceTreeVisitor() {
+        this.classVisitor = new ClassTreeVisitor();
+    }
     
     @Override
     public Void visitImport(ImportTree node, Void aVoid) {
-        Log.d(TAG, "visitImport, name: %s", node.toString());
-        onParseImport(node.getQualifiedIdentifier().toString());
-        return null;
+        String classname = node.getQualifiedIdentifier().toString();
+        Log.d(TAG, "visitImport, name: %s", classname);
+
+        importClassNames.add(classname);
+        return super.visitImport(node, aVoid);
     }
 
     @Override
     public Void visitClass(ClassTree node, Void aVoid) {
+        this.classVisitor.inspectClassTress(node);
         return super.visitClass(node, aVoid);
     }
 
     @Override
     public Void visitCompilationUnit(CompilationUnitTree node, Void aVoid) {
         this.packageName = node.getPackageName().toString();
+
         Log.d(TAG, "visitCompilationUnit, packagename: %s", this.packageName);
         return super.visitCompilationUnit(node, aVoid);
     }
@@ -38,5 +52,6 @@ public abstract class SourceTreeVisitor extends TreeScanner<Void, Void> {
         return this.packageName;
     }
     
-    protected abstract void onParseImport(String importClassName);
+    
+    
 }
