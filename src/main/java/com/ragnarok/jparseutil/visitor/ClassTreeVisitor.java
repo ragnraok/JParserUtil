@@ -1,5 +1,6 @@
-package com.ragnarok.jparseutil;
+package com.ragnarok.jparseutil.visitor;
 
+import com.ragnarok.jparseutil.util.Log;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.Tree;
 
