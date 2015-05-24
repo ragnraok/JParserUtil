@@ -2,6 +2,8 @@ package com.ragnarok.jparseutil.visitor;
 
 import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
+import com.ragnarok.jparseutil.dataobject.VariableInfo;
+import com.ragnarok.jparseutil.memberparser.VariableParser;
 import com.ragnarok.jparseutil.util.ClassNameUtil;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.source.tree.ClassTree;
@@ -67,8 +69,15 @@ public class ClassTreeVisitor {
     }
     
     private void inspectVariable(JCTree.JCVariableDecl variableDecl) {
-//        Log.d(TAG, "inspectVariable, name:%s, type: %s, init: %s, annotation: %d", 
-//                variableDecl.name, variableDecl.vartype, variableDecl.init, variableDecl.getModifiers().annotations.size());
+        Log.d(TAG, "inspectVariable, class: %s", currentHandleClassName);
+        VariableInfo variableInfo = VariableParser.parseVariable(sourceInfo, variableDecl);
+        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentHandleClassName);
+        if (classInfo != null) {
+            variableInfo.setContainClass(classInfo);
+            classInfo.addVariable(variableInfo);
+            
+            sourceInfo.updateClassInfoByQualifiedName(currentHandleClassName, classInfo);
+        }
     }
     
     private void inspectMethod(JCTree.JCMethodDecl methodDecl) {

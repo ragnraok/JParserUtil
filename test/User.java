@@ -8,7 +8,10 @@ public class User {
     
     private Date birth = new Date();
     
+    private InnerUser innerUser; //TODO: not support now
+    
     public String foo() {
+        int fooVar = 1;
         return null;
     }
     

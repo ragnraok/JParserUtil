@@ -52,6 +52,28 @@ public class SourceInfo {
         return false;
     }
     
+    public ClassInfo getClassInfoByQualifiedName(String qualifiedName) {
+        for (ClassInfo clazz : classInfos) {
+            if (clazz.getQualifiedName().equals(qualifiedName)) {
+                return clazz;
+            }
+        }
+        return null;
+    }
+    
+    public void updateClassInfoByQualifiedName(String qualifiedName, ClassInfo newClazz) {
+        int index = -1;
+        for (int i = 0; i < classInfos.size(); i++) {
+            if (classInfos.get(i).getQualifiedName().equals(qualifiedName)) {
+                index = i;
+                break;
+            }
+        }
+        if (index != -1) {
+            classInfos.set(index, newClazz);
+        }
+    }
+    
     public String dumpClazz() {
         String result = "";
         for (ClassInfo clazz : classInfos) {
