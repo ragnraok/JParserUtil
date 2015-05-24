@@ -35,7 +35,7 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
 
     @Override
     public Void visitClass(ClassTree node, Void aVoid) {
-        this.classVisitor.inspectClassTress(this, node);
+        this.classVisitor.inspectClassTress(sourceInfo, node);
         return super.visitClass(node, aVoid);
     }
 

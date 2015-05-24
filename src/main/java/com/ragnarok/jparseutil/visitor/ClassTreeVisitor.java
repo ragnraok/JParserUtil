@@ -19,15 +19,15 @@ public class ClassTreeVisitor {
     
     private static final String TAG = "JParserUtil.ClassTreeVisitor";
     
-    private SourceTreeVisitor sourceTreeVisitor;
+    private SourceInfo sourceInfo;
     
     private String currentHandleClassName = null;
     
     public ClassTreeVisitor() {
     }
     
-    public void inspectClassTress(SourceTreeVisitor sourceTreeVisitor, ClassTree classTree) {
-        this.sourceTreeVisitor = sourceTreeVisitor;
+    public void inspectClassTress(SourceInfo sourceInfo, ClassTree classTree) {
+        this.sourceInfo = sourceInfo;
         Log.d(TAG, "inspectClassTree, name: %s", classTree.getSimpleName().toString());
         if (classTree.getKind() == Tree.Kind.CLASS) {
             addClassInfo(classTree.getSimpleName().toString());
@@ -36,17 +36,17 @@ public class ClassTreeVisitor {
     }
     
     private void addClassInfo(String simpleName) {
-        if (!this.sourceTreeVisitor.getParseResult().isContainClass(simpleName)) {
+        if (!this.sourceInfo.isContainClass(simpleName)) {
             ClassInfo classInfo = new ClassInfo();
             
             classInfo.setSimpleName(simpleName);
             
-            String qualifiedName = ClassNameUtil.buildClassName(sourceTreeVisitor.getParseResult().getPackageName(), simpleName);
+            String qualifiedName = ClassNameUtil.buildClassName(sourceInfo.getPackageName(), simpleName);
             classInfo.setQualifiedName(qualifiedName);
 
             Log.d(TAG, "addClassInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
 
-            sourceTreeVisitor.getParseResult().addClassInfo(classInfo);
+            sourceInfo.addClassInfo(classInfo);
             
             currentHandleClassName = qualifiedName;
         }
@@ -84,7 +84,7 @@ public class ClassTreeVisitor {
         ClassInfo classInfo = new ClassInfo();
         classInfo.setSimpleName(simpleName);
         classInfo.setQualifiedName(qualifiedName);
-        sourceTreeVisitor.getParseResult().addClassInfo(classInfo);
+        sourceInfo.addClassInfo(classInfo);
         
         currentHandleClassName = qualifiedName;
 
