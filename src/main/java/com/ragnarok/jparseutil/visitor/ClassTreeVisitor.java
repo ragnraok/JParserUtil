@@ -2,6 +2,7 @@ package com.ragnarok.jparseutil.visitor;
 
 import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
+import com.ragnarok.jparseutil.util.ClassNameUtil;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.Tree;
@@ -18,18 +19,37 @@ public class ClassTreeVisitor {
     
     private static final String TAG = "JParserUtil.ClassTreeVisitor";
     
-    private SourceInfo sourceInfo;
+    private SourceTreeVisitor sourceTreeVisitor;
+    
+    private String currentHandleClassName = null;
     
     public ClassTreeVisitor() {
     }
     
-    public ClassInfo inspectClassTress(SourceInfo sourceInfo, ClassTree classTree) {
-        this.sourceInfo = sourceInfo;
-        Log.d(TAG, "inspectClassTress, name: %s", classTree.getSimpleName().toString());
-        Log.d(TAG, classTree.getKind().toString());
-        inspectAllClassTreeMembers(classTree.getMembers());
-        
-        return new ClassInfo();
+    public void inspectClassTress(SourceTreeVisitor sourceTreeVisitor, ClassTree classTree) {
+        this.sourceTreeVisitor = sourceTreeVisitor;
+        Log.d(TAG, "inspectClassTree, name: %s", classTree.getSimpleName().toString());
+        if (classTree.getKind() == Tree.Kind.CLASS) {
+            addClassInfo(classTree.getSimpleName().toString());
+            inspectAllClassTreeMembers(classTree.getMembers());
+        }
+    }
+    
+    private void addClassInfo(String simpleName) {
+        if (!this.sourceTreeVisitor.getParseResult().isContainClass(simpleName)) {
+            ClassInfo classInfo = new ClassInfo();
+            
+            classInfo.setSimpleName(simpleName);
+            
+            String qualifiedName = ClassNameUtil.buildClassName(sourceTreeVisitor.getParseResult().getPackageName(), simpleName);
+            classInfo.setQualifiedName(qualifiedName);
+
+            Log.d(TAG, "addClassInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
+
+            sourceTreeVisitor.getParseResult().addClassInfo(classInfo);
+            
+            currentHandleClassName = qualifiedName;
+        }
     }
     
     private void inspectAllClassTreeMembers(List<? extends Tree> classMembers) {
@@ -56,6 +76,17 @@ public class ClassTreeVisitor {
     }
     
     private void inspectInnerClass(JCTree.JCClassDecl classDecl) {
+        String simpleName = classDecl.getSimpleName().toString();
+        String qualifiedName = ClassNameUtil.buildClassName(this.currentHandleClassName, simpleName);
         
+        Log.d(TAG, "inspectInnerClass, qualifiedName: %s, currentHandleClassName: %s", qualifiedName, currentHandleClassName);
+        
+        ClassInfo classInfo = new ClassInfo();
+        classInfo.setSimpleName(simpleName);
+        classInfo.setQualifiedName(qualifiedName);
+        sourceTreeVisitor.getParseResult().addClassInfo(classInfo);
+        
+        currentHandleClassName = qualifiedName;
+
     }
 }

@@ -8,8 +8,6 @@ import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.ImportTree;
 import com.sun.source.util.TreeScanner;
 
-import java.util.ArrayList;
-
 /**
  * Created by ragnarok on 15/5/18.
  * The Source TreeVisitor, travel a CompilationUnit(a Java source file) and extract its info
@@ -37,7 +35,7 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
 
     @Override
     public Void visitClass(ClassTree node, Void aVoid) {
-        this.classVisitor.inspectClassTress(this.sourceInfo, node);
+        this.classVisitor.inspectClassTress(this, node);
         return super.visitClass(node, aVoid);
     }
 
