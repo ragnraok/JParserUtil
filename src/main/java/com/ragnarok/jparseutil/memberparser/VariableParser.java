@@ -1,5 +1,6 @@
 package com.ragnarok.jparseutil.memberparser;
 
+import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.VariableInfo;
 import com.ragnarok.jparseutil.util.Log;
@@ -37,7 +38,6 @@ public class VariableParser {
             result.setVariableValue(value);
         }
         
-        
         Log.d(TAG, "parseVariable, name: %s, type: %s, value: %s", name, type, value);
         
         return result;
@@ -51,7 +51,10 @@ public class VariableParser {
                 return className;
             }
         }
-        //TODO: add support to parse type from inner class, annotation etc..
+        
+        // for inner class variable, currently may not add in sourceInfo, so we will
+        // update type later
+        
         return type; // is import from java.lang
     }
 }

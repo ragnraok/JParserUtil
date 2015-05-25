@@ -74,6 +74,10 @@ public class SourceInfo {
         }
     }
     
+    public ArrayList<ClassInfo> getAllClass() {
+        return this.classInfos;
+    }
+    
     public String dumpClazz() {
         String result = "";
         for (ClassInfo clazz : classInfos) {

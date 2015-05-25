@@ -73,7 +73,7 @@ public class ClassTreeVisitor {
         VariableInfo variableInfo = VariableParser.parseVariable(sourceInfo, variableDecl);
         ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentHandleClassName);
         if (classInfo != null) {
-            variableInfo.setContainClass(classInfo);
+            variableInfo.setContainedClass(classInfo);
             classInfo.addVariable(variableInfo);
             
             sourceInfo.updateClassInfoByQualifiedName(currentHandleClassName, classInfo);
