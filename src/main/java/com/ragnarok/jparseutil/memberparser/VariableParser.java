@@ -57,4 +57,23 @@ public class VariableParser {
         
         return type; // is import from java.lang
     }
+    
+    // update inner class variables type
+    public static SourceInfo updateAllVariableTypeAfterParse(SourceInfo sourceInfo) {
+        ArrayList<ClassInfo> classInfos = sourceInfo.getAllClass();
+        for (ClassInfo classInfo : classInfos) {
+            ArrayList<VariableInfo> variableInfos = classInfo.getAllVariables();
+            for (VariableInfo variableInfo : variableInfos) {
+                String type = variableInfo.getVariableTypeClassName();
+                if (type.equals(classInfo.getSimpleName())) {
+                    type = classInfo.getQualifiedName();
+                }
+                variableInfo.setVariableTypeClassName(type);
+                classInfo.updateVariable(variableInfo.getVariableName(), variableInfo);
+                sourceInfo.updateClassInfoByQualifiedName(classInfo.getQualifiedName(), classInfo);
+            }
+        }
+        
+        return sourceInfo;
+    }
 }

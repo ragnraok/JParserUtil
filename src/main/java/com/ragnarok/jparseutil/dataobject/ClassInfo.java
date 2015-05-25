@@ -32,4 +32,21 @@ public class ClassInfo {
     public void addVariable(VariableInfo variableInfo) {
         this.variableInfos.add(variableInfo);
     }
+    
+    public void updateVariable(String variableName, VariableInfo variableInfo) {
+        int index = -1;
+        for (int i = 0; i < this.variableInfos.size(); i++) {
+            if (this.variableInfos.get(i).getVariableName().equals(variableName)) {
+                index = i;
+                break;
+            }
+        }
+        if (index != -1) {
+            this.variableInfos.set(index, variableInfo);
+        }
+    }
+    
+    public ArrayList<VariableInfo> getAllVariables() {
+        return this.variableInfos;
+    }
 }
