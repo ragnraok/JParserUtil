@@ -65,12 +65,14 @@ public class VariableParser {
             ArrayList<VariableInfo> variableInfos = classInfo.getAllVariables();
             for (VariableInfo variableInfo : variableInfos) {
                 String type = variableInfo.getVariableTypeClassName();
-                if (type.equals(classInfo.getSimpleName())) {
-                    type = classInfo.getQualifiedName();
+                ClassInfo classType = sourceInfo.getClassInfoBySuffixName(type);
+                if (classType != null) {
+                    type = classType.getQualifiedName();
+                    variableInfo.setVariableTypeClassName(type);
+                    classInfo.updateVariable(variableInfo.getVariableName(), variableInfo);
+                    Log.d(TAG, "update variable type: %s, name: %s", type, variableInfo.getVariableName());
+                    sourceInfo.updateClassInfoByQualifiedName(classInfo.getQualifiedName(), classInfo);
                 }
-                variableInfo.setVariableTypeClassName(type);
-                classInfo.updateVariable(variableInfo.getVariableName(), variableInfo);
-                sourceInfo.updateClassInfoByQualifiedName(classInfo.getQualifiedName(), classInfo);
             }
         }
         

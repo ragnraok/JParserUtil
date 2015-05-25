@@ -61,6 +61,24 @@ public class SourceInfo {
         return null;
     }
     
+    public ClassInfo getClassInfoBySimpleName(String simpleName) {
+        for (ClassInfo clazz : classInfos) {
+            if (clazz.getSimpleName().equals(simpleName)) {
+                return clazz;
+            }
+        }
+        return null;
+    }
+    
+    public ClassInfo getClassInfoBySuffixName(String suffixName) {
+        for (ClassInfo clazz : classInfos) {
+            if (clazz.getQualifiedName().endsWith(suffixName)) {
+                return clazz;
+            }
+        }
+        return null;
+    }
+    
     public void updateClassInfoByQualifiedName(String qualifiedName, ClassInfo newClazz) {
         int index = -1;
         for (int i = 0; i < classInfos.size(); i++) {
