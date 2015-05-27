@@ -17,7 +17,7 @@ public class VariableParser {
     
     private static final String TAG = "JParserUtil.VariableParser";
     
-    public static final VariableInfo parseVariable(SourceInfo sourceinfo, JCTree.JCVariableDecl variableDecl) {
+    public static VariableInfo parseVariable(SourceInfo sourceinfo, JCTree.JCVariableDecl variableDecl) {
         VariableInfo result = new VariableInfo();
         
         String name = variableDecl.name.toString();
