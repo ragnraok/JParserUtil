@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class MethodInfo {
     
     private String methodName;
-    private String returnType; // fully qualify name
-    private ArrayList<String> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualify), in the order of declare in method
+    private String returnType; // fully qualified name
+    private ArrayList<String> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualified), in the order of declare in method
     
     public void setMethodName(String name) {
         this.methodName = name;
