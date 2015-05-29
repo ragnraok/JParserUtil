@@ -54,17 +54,6 @@ public class VariableParser {
         
         return result;
     }
-
-    private static List<AnnotationModifier> handleAnnotations(SourceInfo sourceInfo, List<JCTree.JCAnnotation> annotationList) {
-        ArrayList<AnnotationModifier> result = new ArrayList<>();
-        for (JCTree.JCAnnotation annotation : annotationList) {
-            AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
-            if (annotationModifier != null) {
-                result.add(annotationModifier);
-            }
-        }
-        return result;
-    }
     
     // update inner class variables type
     public static SourceInfo updateAllVariableTypeAfterParse(SourceInfo sourceInfo) {
