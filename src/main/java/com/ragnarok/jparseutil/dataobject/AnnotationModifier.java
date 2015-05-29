@@ -6,7 +6,7 @@ import java.util.HashMap;
  * Created by ragnarok on 15/5/29.
  * represent an annotation modifier, may be set in class, variable and method
  */
-public class AnntationModifier {
+public class AnnotationModifier {
     
     private String annotationName; // fully qualified
     

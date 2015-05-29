@@ -81,7 +81,7 @@ public class ClassTreeVisitor {
     }
     
     private void inspectMethod(JCTree.JCMethodDecl methodDecl) {
-//        Log.d(TAG, "inspectMethod, name: %s,  ");
+//        Log.d(TAG, "inspectMethod, name: %s", methodDecl.getName());
     }
     
     private void inspectInnerClass(JCTree.JCClassDecl classDecl) {

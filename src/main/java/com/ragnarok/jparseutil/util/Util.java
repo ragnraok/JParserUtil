@@ -1,5 +1,9 @@
 package com.ragnarok.jparseutil.util;
 
+import com.ragnarok.jparseutil.dataobject.SourceInfo;
+import com.sun.source.tree.Tree;
+import com.sun.tools.javac.tree.JCTree;
+
 /**
  * Created by ragnarok on 15/5/25.
  */
@@ -23,5 +27,39 @@ public class Util {
             return value;
         }
         return value;
+    }
+
+    // parse type from source imports
+    public static String parseType(SourceInfo sourceInfo, String type) {
+        // currently we just support parse type from imports
+        for (String className : sourceInfo.getImports()) {
+            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+            if (simpleClassName.equals(type)) {
+                return className;
+            }
+        }
+
+        // for inner class variable, currently may not add in sourceInfo, so we will
+        // update type later
+
+        return type; // is import from java.lang
+    }
+    
+    public static String getValueFromLiteral(JCTree.JCLiteral literal) {
+        // currently only support base type
+        switch (literal.typetag) {
+            case 2:
+                return literal.value.toString();
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                return literal.value.toString();
+            case 10:
+                return literal.value.toString().substring(1, literal.value.toString().length() - 1);
+            default:
+                return null;
+        }
     }
 }

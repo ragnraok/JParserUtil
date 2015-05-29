@@ -1,5 +1,6 @@
 package com.ragnarok.jparseutil.memberparser;
 
+import com.ragnarok.jparseutil.dataobject.AnnotationModifier;
 import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.VariableInfo;
@@ -8,6 +9,7 @@ import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.javac.tree.JCTree;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/5/25.
@@ -17,7 +19,7 @@ public class VariableParser {
     
     private static final String TAG = "JParserUtil.VariableParser";
     
-    public static VariableInfo parseVariable(SourceInfo sourceinfo, JCTree.JCVariableDecl variableDecl) {
+    public static VariableInfo parseVariable(SourceInfo sourceInfo, JCTree.JCVariableDecl variableDecl) {
         VariableInfo result = new VariableInfo();
         
         String name = variableDecl.name.toString();
@@ -30,7 +32,7 @@ public class VariableParser {
             value = variableDecl.init.toString();
             value = Util.trimPrimitiveValue(type, value);
         } else {
-            type = parseType(sourceinfo, type);
+            type = Util.parseType(sourceInfo, type);
         }
         result.setVariableTypeClassName(type);
         
@@ -38,24 +40,30 @@ public class VariableParser {
             result.setVariableValue(value);
         }
         
+        if (variableDecl.getModifiers().getAnnotations() != null && variableDecl.getModifiers().getAnnotations().size() > 0) {
+            List<JCTree.JCAnnotation> annotationList = variableDecl.getModifiers().getAnnotations();
+            for (JCTree.JCAnnotation annotation : annotationList) {
+                AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
+                if (annotationModifier != null) {
+                    result.putAnnotation(annotationModifier);
+                }
+            }
+        }
+        
         Log.d(TAG, "parseVariable, name: %s, type: %s, value: %s", name, type, value);
         
         return result;
     }
-    
-    private static String parseType(SourceInfo sourceInfo, String type) {
-        // currently we just support parse type from imports
-        for (String className : sourceInfo.getImports()) {
-            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-            if (simpleClassName.equals(type)) {
-                return className;
+
+    private static List<AnnotationModifier> handleAnnotations(SourceInfo sourceInfo, List<JCTree.JCAnnotation> annotationList) {
+        ArrayList<AnnotationModifier> result = new ArrayList<>();
+        for (JCTree.JCAnnotation annotation : annotationList) {
+            AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
+            if (annotationModifier != null) {
+                result.add(annotationModifier);
             }
         }
-        
-        // for inner class variable, currently may not add in sourceInfo, so we will
-        // update type later
-        
-        return type; // is import from java.lang
+        return result;
     }
     
     // update inner class variables type
