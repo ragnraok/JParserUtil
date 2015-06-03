@@ -15,5 +15,4 @@ Currently support:
 1. Extract source information, like imports, packge name
 2.  Extract basic class name, inner class name, and retrive the fully qualified from imports and package declaration
 3. Extract variable info, include variable name, variable type and the fully qualified from imports and package declaration, variable value(currently only support parse primitive type), and annotations. 
-4. For annotaions annotated with variables or methods, now can extract its name, and arguments, but for default argument name(eg: the name of the argument is "value"), just support parse primitive type, otherwise just store the literal, which looks weird now.
-
+4. For annotaions annotated with variables or methods, now can extract its name, and arguments, but currently only support simple primitive simple value. 
