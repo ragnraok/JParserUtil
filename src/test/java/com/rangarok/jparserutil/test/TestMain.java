@@ -18,19 +18,6 @@ public class TestMain {
     public static void main(String[] args) {
         String filePath = "test/User.java"; // this should be the path to User.java
         
-//        JavaSourceReader sourceReader = new JavaSourceReader(filePath);
-//        Iterable<? extends CompilationUnitTree> parseResult = sourceReader.readSource();
-//        
-//        Log.d(TAG, "currentDir: %s", System.getProperty("user.dir"));
-//
-//        SourceTreeVisitor sourceTreeVisitor = new SourceTreeVisitor();
-//        for (CompilationUnitTree compilationUnitTree : parseResult) {
-//            compilationUnitTree.accept(sourceTreeVisitor, null);
-//        }
-//        SourceInfo sourceInfo = sourceTreeVisitor.getParseResult();
-//        sourceInfo = VariableParser.updateAllVariableTypeAfterParse(sourceInfo);
-
-
         SourceInfoExtracter extracter = new SourceInfoExtracter(filePath);
         extracter.extract();
     }

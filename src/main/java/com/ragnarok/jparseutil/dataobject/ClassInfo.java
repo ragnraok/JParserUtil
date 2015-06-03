@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/5/24.
@@ -12,7 +13,9 @@ public class ClassInfo {
     private String simpleName;
     
     ArrayList<VariableInfo> variableInfos = new ArrayList<>();
-    
+
+    private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
+
     public void setQualifiedName(String className) {
         this.qualifiedName = className;
     }
@@ -48,5 +51,13 @@ public class ClassInfo {
     
     public ArrayList<VariableInfo> getAllVariables() {
         return this.variableInfos;
+    }
+
+    public void putAnnotation(AnnotationModifier annotationModifier) {
+        this.annotationModifiers.add(annotationModifier);
+    }
+    
+    public List<AnnotationModifier> getAllAnnotationModifiers() {
+        return annotationModifiers;
     }
 }

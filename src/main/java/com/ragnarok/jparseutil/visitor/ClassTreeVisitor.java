@@ -1,15 +1,19 @@
 package com.ragnarok.jparseutil.visitor;
 
+import com.ragnarok.jparseutil.dataobject.AnnotationModifier;
 import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.VariableInfo;
+import com.ragnarok.jparseutil.memberparser.AnnotationModifierParser;
 import com.ragnarok.jparseutil.memberparser.VariableParser;
 import com.ragnarok.jparseutil.util.ClassNameUtil;
 import com.ragnarok.jparseutil.util.Log;
+import com.sun.source.tree.AnnotationTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +29,7 @@ public class ClassTreeVisitor {
     
     private String currentHandleClassName = null;
     
+    
     public ClassTreeVisitor() {
     }
     
@@ -32,12 +37,14 @@ public class ClassTreeVisitor {
         this.sourceInfo = sourceInfo;
         Log.d(TAG, "inspectClassTree, name: %s", classTree.getSimpleName().toString());
         if (classTree.getKind() == Tree.Kind.CLASS) {
-            addClassInfo(classTree.getSimpleName().toString());
+            addClassInfo(classTree);
             inspectAllClassTreeMembers(classTree.getMembers());
         }
     }
     
-    private void addClassInfo(String simpleName) {
+    private void addClassInfo(ClassTree classTree) {
+        String simpleName = classTree.getSimpleName().toString();
+        
         if (!this.sourceInfo.isContainClass(simpleName)) {
             ClassInfo classInfo = new ClassInfo();
             
@@ -47,6 +54,8 @@ public class ClassTreeVisitor {
             classInfo.setQualifiedName(qualifiedName);
 
             Log.d(TAG, "addClassInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
+            
+            classInfo = parseClassAnnotation(classTree, classInfo);
 
             sourceInfo.addClassInfo(classInfo);
             
@@ -54,6 +63,20 @@ public class ClassTreeVisitor {
         }
     }
     
+    private ClassInfo parseClassAnnotation(ClassTree classTree, ClassInfo classInfo) {
+        if (classTree.getModifiers().getAnnotations() != null && classTree.getModifiers().getAnnotations().size() > 0) {
+            for (AnnotationTree annotationTree : classTree.getModifiers().getAnnotations()) {
+                if (annotationTree instanceof JCTree.JCAnnotation) {
+                    JCTree.JCAnnotation annotation = (JCTree.JCAnnotation) annotationTree;
+                    AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
+                    classInfo.putAnnotation(annotationModifier);
+
+                }
+            }
+        }
+        return classInfo;
+    }
+   
     private void inspectAllClassTreeMembers(List<? extends Tree> classMembers) {
         for (Tree member : classMembers) {
             Log.d(TAG, "member.class: %s", member.getClass().getSimpleName());

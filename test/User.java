@@ -4,6 +4,7 @@ import java.lang.Deprecated;
 import java.lang.SuppressWarnings;
 import java.util.Date;
 
+@SuppressWarnings(new String[] {"123123", "123123"})
 public class User {
 
     private int name = 1;

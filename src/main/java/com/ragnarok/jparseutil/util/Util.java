@@ -12,6 +12,8 @@ public class Util {
     private static String[] PrimitiveType = new String[] {"String", "int", "Integer", 
             "float", "Float", "Double", "double", "Number", "char", "Character"};
     
+    private static String SYSTEM_DEFAULT_PACKAGE = "java.lang.";
+    
     public static boolean isPrimitive(String variableTypeName) {
         for (String type : PrimitiveType) {
             if (type.equals(variableTypeName)) {
@@ -42,7 +44,7 @@ public class Util {
         // for inner class variable, currently may not add in sourceInfo, so we will
         // update type later
 
-        return type; // is import from java.lang
+        return SYSTEM_DEFAULT_PACKAGE + type; // is import from java.lang
     }
     
     public static String getValueFromLiteral(JCTree.JCLiteral literal) {

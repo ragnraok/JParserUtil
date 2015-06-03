@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/5/24.
@@ -50,5 +51,9 @@ public class VariableInfo {
     
     public void putAnnotation(AnnotationModifier annotationModifier) {
         this.annotationModifiers.add(annotationModifier);
+    }
+    
+    public List<AnnotationModifier> getAllAnnotationModifiers() {
+        return annotationModifiers;
     }
 }
