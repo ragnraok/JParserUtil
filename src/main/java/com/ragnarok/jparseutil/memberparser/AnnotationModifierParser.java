@@ -41,6 +41,10 @@ public class AnnotationModifierParser {
                     Log.d(TAG, "parseAnnotation, lhs: %s, rhs: %s", assign.lhs, assign.rhs);
                     // for assign, just simply store the expression string representation
                     result.putNameValue(assign.lhs.toString(), assign.rhs.toString());
+                } else if (expression instanceof JCTree.JCNewArray) {
+                    JCTree.JCNewArray newArray = (JCTree.JCNewArray) expression;
+                } else if (expression instanceof JCTree.JCNewClass) {
+                    JCTree.JCNewClass newClass = (JCTree.JCNewClass) expression;
                 }
             }
         }
