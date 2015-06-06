@@ -33,6 +33,10 @@ public class Util {
 
     // parse type from source imports
     public static String parseType(SourceInfo sourceInfo, String type) {
+        if (isPrimitive(type)) {
+            return type;
+        }
+        
         // currently we just support parse type from imports
         for (String className : sourceInfo.getImports()) {
             String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
@@ -44,7 +48,7 @@ public class Util {
         // for inner class variable, currently may not add in sourceInfo, so we will
         // update type later
 
-        return SYSTEM_DEFAULT_PACKAGE + type; // is import from java.lang
+        return type; // is import from java.lang
     }
     
     public static String getValueFromLiteral(JCTree.JCLiteral literal) {

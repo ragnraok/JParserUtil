@@ -4,7 +4,7 @@ import java.lang.Deprecated;
 import java.lang.SuppressWarnings;
 import java.util.Date;
 
-@SuppressWarnings(new String("123123"))
+@SuppressWarnings(value="123123")
 public class User {
 
     private int name = 1;
@@ -15,7 +15,7 @@ public class User {
     
 //    private InnerUser innerUser; 
     
-    public String foo() {
+    public String foo(int a) {
         int fooVar = 1;
         return null;
     }
@@ -24,8 +24,16 @@ public class User {
         
         private String innerName = "1";
         
+        public InnerUser foo() {
+            
+        }
+                
         class InnerInnerUser {
             private float innerinnerName = 1.0;
+            
+            public void foo() {
+                
+            }
         }
     }
 }

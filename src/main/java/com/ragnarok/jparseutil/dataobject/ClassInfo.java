@@ -12,9 +12,11 @@ public class ClassInfo {
     private String qualifiedName;
     private String simpleName;
     
-    ArrayList<VariableInfo> variableInfos = new ArrayList<>();
+    private ArrayList<VariableInfo> variableInfos = new ArrayList<>();
 
     private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
+    
+    private ArrayList<MethodInfo> methodInfos = new ArrayList<>();
 
     public void setQualifiedName(String className) {
         this.qualifiedName = className;
@@ -59,5 +61,13 @@ public class ClassInfo {
     
     public List<AnnotationModifier> getAllAnnotationModifiers() {
         return annotationModifiers;
+    }
+    
+    public void putMethod(MethodInfo method) {
+        this.methodInfos.add(method);
+    }
+    
+    public List<MethodInfo> getAllMethods() {
+        return methodInfos;
     }
 }

@@ -1,10 +1,8 @@
 package com.ragnarok.jparseutil.visitor;
 
-import com.ragnarok.jparseutil.dataobject.AnnotationModifier;
-import com.ragnarok.jparseutil.dataobject.ClassInfo;
-import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.VariableInfo;
+import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.memberparser.AnnotationModifierParser;
+import com.ragnarok.jparseutil.memberparser.MethodParser;
 import com.ragnarok.jparseutil.memberparser.VariableParser;
 import com.ragnarok.jparseutil.util.ClassNameUtil;
 import com.ragnarok.jparseutil.util.Log;
@@ -104,7 +102,14 @@ public class ClassTreeVisitor {
     }
     
     private void inspectMethod(JCTree.JCMethodDecl methodDecl) {
-//        Log.d(TAG, "inspectMethod, name: %s", methodDecl.getName());
+//        Log.d(TAG, "inspectMethod, name: %s, currentHandleClass: %s", methodDecl.getName(), currentHandleClassName);
+        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentHandleClassName);
+        MethodInfo methodInfo = MethodParser.parseMethodInfo(classInfo, sourceInfo, methodDecl);
+        if (methodInfo != null) {
+            classInfo.putMethod(methodInfo);
+            
+            sourceInfo.updateClassInfoByQualifiedName(currentHandleClassName, classInfo);
+        }
     }
     
     private void inspectInnerClass(JCTree.JCClassDecl classDecl) {
