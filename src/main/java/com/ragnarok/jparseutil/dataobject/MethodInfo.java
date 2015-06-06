@@ -32,6 +32,12 @@ public class MethodInfo {
         this.methodParamsType.add(type);
     }
     
+    public void setParamType(int pos, String type) {
+        if (pos < methodParamsType.size()) {
+            methodParamsType.set(pos, type);
+        }
+    }
+    
     public ArrayList<String> getParamType() {
         return this.methodParamsType;
     }

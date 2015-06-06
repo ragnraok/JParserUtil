@@ -11,11 +11,11 @@ public class User {
     
     @TestAnnotation(user=new User())
     @TestAnnotation2("123123")
-    private Date birth = new Date();
+    private InnerUser birth = new Date();
     
 //    private InnerUser innerUser; 
     
-    public String foo(int a) {
+    public String foo(User a) {
         int fooVar = 1;
         return null;
     }
@@ -24,7 +24,7 @@ public class User {
         
         private String innerName = "1";
         
-        public InnerUser foo() {
+        public InnerUser foo(User u) {
             
         }
                 

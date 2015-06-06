@@ -72,7 +72,7 @@ public class SourceInfo {
     
     public ClassInfo getClassInfoBySuffixName(String suffixName) {
         for (ClassInfo clazz : classInfos) {
-            if (clazz.getQualifiedName().endsWith(suffixName)) {
+            if (clazz.getQualifiedName().endsWith("." + suffixName)) {
                 return clazz;
             }
         }

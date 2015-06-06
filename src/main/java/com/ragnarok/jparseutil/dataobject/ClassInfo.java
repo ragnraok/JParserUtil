@@ -70,4 +70,17 @@ public class ClassInfo {
     public List<MethodInfo> getAllMethods() {
         return methodInfos;
     }
+    
+    public void updateMethod(String methodName, MethodInfo newMethod) {
+        int index = -1;
+        for (int i = 0; i < this.methodInfos.size(); i++) {
+            if (this.methodInfos.get(i).getMethodName().equals(methodName)) {
+                index = i;
+                break;
+            }
+        }
+        if (index != -1) {
+            this.methodInfos.set(index, newMethod);
+        }
+    }
 }
