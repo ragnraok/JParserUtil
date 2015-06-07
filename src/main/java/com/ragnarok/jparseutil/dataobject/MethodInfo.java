@@ -11,6 +11,7 @@ public class MethodInfo {
     private String methodName;
     private String returnType; // fully qualified name
     private ArrayList<String> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualified), in the order of declare in method
+    private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
     
     public void setMethodName(String name) {
         this.methodName = name;
@@ -40,5 +41,13 @@ public class MethodInfo {
     
     public ArrayList<String> getParamType() {
         return this.methodParamsType;
+    }
+    
+    public void addAnnotation(AnnotationModifier annotationModifier) {
+        this.annotationModifiers.add(annotationModifier);
+    }
+    
+    public ArrayList<AnnotationModifier> getAllAnnotationModifiers() {
+        return this.annotationModifiers;
     }
 }

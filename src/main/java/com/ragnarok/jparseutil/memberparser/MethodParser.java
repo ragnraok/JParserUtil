@@ -1,9 +1,6 @@
 package com.ragnarok.jparseutil.memberparser;
 
-import com.ragnarok.jparseutil.dataobject.ClassInfo;
-import com.ragnarok.jparseutil.dataobject.MethodInfo;
-import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.VariableInfo;
+import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.javac.tree.JCTree;
@@ -44,6 +41,14 @@ public class MethodParser {
                     methodInfo.addParamType(paramType);
                     
                     Log.d(TAG, "parseMethodInfo, parameter type: %s", paramType);
+                }
+            }
+            
+            // parse annotaion
+            if (methodDecl.getModifiers().getAnnotations() != null && methodDecl.getModifiers().getAnnotations().size() > 0) {
+                for (JCTree.JCAnnotation annotation : methodDecl.getModifiers().getAnnotations()) {
+                    AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
+                    methodInfo.addAnnotation(annotationModifier);
                 }
             }
             

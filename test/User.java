@@ -1,6 +1,7 @@
 package com.rangarok.jparserutil.test;
 
 import java.lang.Deprecated;
+import java.lang.Override;
 import java.lang.SuppressWarnings;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ public class User {
     
 //    private InnerUser innerUser; 
     
+    @Deprecated("123123")
     public String foo(User a) {
         int fooVar = 1;
         return null;
