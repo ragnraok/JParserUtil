@@ -45,5 +45,5 @@ public @interface TestAnnotation {
 }
 
 public @interface TestAnnotation2 {
-    Sttring value();
+    Sttring value() default "123123";
 }
