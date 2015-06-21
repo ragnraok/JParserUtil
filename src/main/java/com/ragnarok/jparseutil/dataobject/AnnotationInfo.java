@@ -33,6 +33,6 @@ public class AnnotationInfo {
     // the type must fully qualified
     public void putParams(String type, String name, String defaultValue) {
         this.typeParamsNameMap.put(type, name);
-        
+        this.paramsDefaultValueMap.put(name, defaultValue);
     }
 }
