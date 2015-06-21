@@ -10,4 +10,6 @@ class Foo {
     public Date date = new Date();
     
     public Date date2 = date;
+    
+    public String[] c = null;
 }

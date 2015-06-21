@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Created by ragnarok on 15/5/25.
  * retrieve variable information from a {@link JCTree.JCVariableDecl} object
+ * Note: the variable type currently only support primitive type, exclude array!
  */
 public class VariableParser {
     
@@ -27,10 +28,11 @@ public class VariableParser {
         
         result.setVariableName(name);
         
-        Log.d(TAG, "init class name: %s", variableDecl.init.getClass().getSimpleName());
+        Log.d(TAG, "vartype class name: %s, init class name: %s", variableDecl.vartype.getClass().getSimpleName(),
+                variableDecl.init.getClass().getSimpleName());
  
         type = Util.parseType(sourceInfo, type);
-        String value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.init);
+        String value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);
 
         result.setVariableTypeClassName(type);
         

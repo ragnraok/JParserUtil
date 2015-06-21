@@ -7,17 +7,20 @@ import com.sun.tools.javac.tree.JCTree;
 
 /**
  * Created by ragnarok on 15/6/21.
- * parser for variable initialization, currently only support for primitive
+ * parser for variable initialization, currently only support for primitive, and exclude array!
  */
 public class VariableInitParser {
     
     private static final String TAG = "JParserUtil.VariableInitParser";
     
-    public static String parseVariableInit(SourceInfo sourceInfo, String type, JCTree.JCExpression expression) {
+    public static String parseVariableInit(SourceInfo sourceInfo, String fullQualifiedTypeName,
+                                           JCTree.JCExpression type, JCTree.JCExpression expression) {
         Log.d(TAG, "parseVariableInit, express class: %s", expression.getClass().getSimpleName());
-        if (expression instanceof JCTree.JCLiteral && Util.isPrimitive(type)) {
-            return Util.trimPrimitiveValue(type, expression.toString());
+        if (expression instanceof JCTree.JCLiteral && Util.isPrimitive(fullQualifiedTypeName)) {
+            return Util.trimPrimitiveValue(fullQualifiedTypeName, expression.toString());
         } else if (expression instanceof JCTree.JCIdent) {
+            return expression.toString();
+        } else if (expression instanceof JCTree.JCAssign) {
             return expression.toString();
         } else if (expression instanceof JCTree.JCNewClass) {
             
