@@ -1,7 +1,5 @@
 package com.ragnarok.jparseutil.dataobject;
 
-import com.ragnarok.jparseutil.util.Log;
-
 import java.util.ArrayList;
 
 /**
@@ -14,6 +12,7 @@ public class SourceInfo {
     
     private ArrayList<String> importClassNames = new ArrayList<>();
     private String packageName = null;
+    private ArrayList<AnnotationInfo> annotationInfos = new ArrayList<>();
     
     /**
      * all class informations
@@ -102,5 +101,9 @@ public class SourceInfo {
            result += clazz.getSimpleName() + ", ";
         }
         return result; 
+    }
+    
+    public void putAnnotaiotn(AnnotationInfo annotationInfo) {
+        this.annotationInfos.add(annotationInfo);
     }
 }

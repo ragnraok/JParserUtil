@@ -39,8 +39,8 @@ public class ClassTreeVisitor {
             addClassInfo(classTree);
             inspectAllClassTreeMembers(classTree.getMembers());
         } else if (classTree.getKind() == Tree.Kind.ANNOTATION_TYPE) {
-            Log.d(TAG, "%s", classTree.getClass().getSimpleName());
-            AnnotationParser.parseAnnotationInfo(currentHandleClassName, sourceInfo, classTree);
+            AnnotationInfo annotationInfo = AnnotationParser.parseAnnotationInfo(currentHandleClassName, sourceInfo, classTree);
+            this.sourceInfo.putAnnotaiotn(annotationInfo);
         }
     }
     
