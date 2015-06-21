@@ -24,16 +24,14 @@ public class VariableParser {
         
         String name = variableDecl.name.toString();
         String type = variableDecl.vartype.toString();
-        String value = null;
         
         result.setVariableName(name);
         
-        if (Util.isPrimitive(type)) {
-            value = variableDecl.init.toString();
-            value = Util.trimPrimitiveValue(type, value);
-        } else {
-            type = Util.parseType(sourceInfo, type);
-        }
+        Log.d(TAG, "init class name: %s", variableDecl.init.getClass().getSimpleName());
+ 
+        type = Util.parseType(sourceInfo, type);
+        String value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.init);
+
         result.setVariableTypeClassName(type);
         
         if (value != null) {

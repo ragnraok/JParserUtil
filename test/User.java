@@ -12,7 +12,7 @@ public class User {
     
     @TestAnnotation(user=new User())
     @TestAnnotation2("123123")
-    private InnerUser birth = new Date();
+    private Date birth = new Date();
     
 //    private InnerUser innerUser; 
     
