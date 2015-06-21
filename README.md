@@ -23,4 +23,4 @@ Currently support:
 
 Todo: 
 
-- [] multiple files parsing support
+- [ ] multiple files parsing support
