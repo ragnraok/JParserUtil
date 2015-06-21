@@ -11,7 +11,7 @@ public class AnnotationInfo {
     private String name;
     private String qualifiedName;
     
-    private HashMap<String, String> typeParamsNameMap = new HashMap<>();
+    private HashMap<String, String> typeParamsNameMap = new HashMap<>(); // full qualified name
     private HashMap<String, String> paramsDefaultValueMap = new HashMap<>();
     
     public void setSimpleName(String name) {

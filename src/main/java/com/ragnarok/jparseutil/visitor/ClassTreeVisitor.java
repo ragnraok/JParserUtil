@@ -2,6 +2,7 @@ package com.ragnarok.jparseutil.visitor;
 
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.memberparser.AnnotationModifierParser;
+import com.ragnarok.jparseutil.memberparser.AnnotationParser;
 import com.ragnarok.jparseutil.memberparser.MethodParser;
 import com.ragnarok.jparseutil.memberparser.VariableParser;
 import com.ragnarok.jparseutil.util.ClassNameUtil;
@@ -33,10 +34,13 @@ public class ClassTreeVisitor {
     
     public void inspectClassTress(SourceInfo sourceInfo, ClassTree classTree) {
         this.sourceInfo = sourceInfo;
-        Log.d(TAG, "inspectClassTree, name: %s", classTree.getSimpleName().toString());
+        Log.d(TAG, "inspectClassTree, name: %s, kind: %s", classTree.getSimpleName().toString(), classTree.getKind());
         if (classTree.getKind() == Tree.Kind.CLASS) {
             addClassInfo(classTree);
             inspectAllClassTreeMembers(classTree.getMembers());
+        } else if (classTree.getKind() == Tree.Kind.ANNOTATION_TYPE) {
+            Log.d(TAG, "%s", classTree.getClass().getSimpleName());
+            AnnotationParser.parseAnnotationInfo(currentHandleClassName, sourceInfo, classTree);
         }
     }
     
