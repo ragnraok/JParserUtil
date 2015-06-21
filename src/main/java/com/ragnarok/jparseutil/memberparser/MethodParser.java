@@ -58,7 +58,7 @@ public class MethodParser {
         return null;
     }
     
-    public static SourceInfo updateAllMethodReturnTypeAndParamsType(SourceInfo sourceInfo) {
+    public static SourceInfo updateAllMethodReturnTypeAndParamsTypeForInnerClass(SourceInfo sourceInfo) {
         ArrayList<ClassInfo> classInfos = sourceInfo.getAllClass();
         for (ClassInfo classInfo : classInfos) {
             List<MethodInfo> classMethods = classInfo.getAllMethods();

@@ -17,7 +17,7 @@ public class User {
 //    private InnerUser innerUser; 
     
     @Deprecated("123123")
-    public String foo(User a) {
+    public String foo(InnerUser a) {
         int fooVar = 1;
         return null;
     }

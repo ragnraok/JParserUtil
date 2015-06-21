@@ -28,8 +28,8 @@ public class SourceInfoExtracter {
             compilationUnitTree.accept(sourceTreeVisitor, null);
         }
         SourceInfo sourceInfo = sourceTreeVisitor.getParseResult();
-        sourceInfo = VariableParser.updateAllVariableTypeAfterParse(sourceInfo);
-        sourceInfo = MethodParser.updateAllMethodReturnTypeAndParamsType(sourceInfo);
+        sourceInfo = VariableParser.updateAllVariableTypeForInnerClassAfterParse(sourceInfo);
+        sourceInfo = MethodParser.updateAllMethodReturnTypeAndParamsTypeForInnerClass(sourceInfo);
         
         return sourceInfo;
     }

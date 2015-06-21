@@ -56,7 +56,7 @@ public class VariableParser {
     }
     
     // update inner class variables type
-    public static SourceInfo updateAllVariableTypeAfterParse(SourceInfo sourceInfo) {
+    public static SourceInfo updateAllVariableTypeForInnerClassAfterParse(SourceInfo sourceInfo) {
         ArrayList<ClassInfo> classInfos = sourceInfo.getAllClass();
         for (ClassInfo classInfo : classInfos) {
             ArrayList<VariableInfo> variableInfos = classInfo.getAllVariables();
