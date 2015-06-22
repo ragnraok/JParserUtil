@@ -13,6 +13,7 @@ public class Util {
             "float", "Float", "Double", "double", "Number", "char", "Character"};
     
     private static String SYSTEM_DEFAULT_PACKAGE = "java.lang.";
+    public static String STRING_NULL_LITERAL = "null";
     
     public static boolean isPrimitive(String variableTypeName) {
         for (String type : PrimitiveType) {
@@ -25,7 +26,9 @@ public class Util {
     
     public static String trimPrimitiveValue(String type, String value) {
         if (type.equals("String")) { // currently we only process String type
-            value = value.substring(1, value.length() - 1); // remove \" at the begin and the end
+            if (!value.equals(STRING_NULL_LITERAL)) {
+                value = value.substring(1, value.length() - 1); // remove \" at the begin and the end
+            }
             return value;
         }
         return value;
