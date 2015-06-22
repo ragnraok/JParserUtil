@@ -66,7 +66,7 @@ public class Util {
             case 8:
                 return literal.value.toString();
             case 10:
-                return literal.value.toString().substring(1, literal.value.toString().length() - 1);
+                return literal.value.toString();
             default:
                 return null;
         }
