@@ -1,5 +1,6 @@
 package com.ragnarok.jparseutil.util;
 
+import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
@@ -45,6 +46,14 @@ public class Util {
             String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
             if (simpleClassName.equals(type)) {
                 return className;
+            }
+        }
+        
+        // parse for annotation type
+        for (AnnotationInfo annotationInfo : sourceInfo.getAllAnnotations()) {
+            String name = annotationInfo.getQualifiedName();
+            if (name != null && name.endsWith(type)) {
+                return name;
             }
         }
 

@@ -9,7 +9,12 @@ public class Foo {
     public String annotateVar = null;
     
     @Deprecated("123123")
+    @Annotation
     public void annotateMethod() {
         
     }
+}
+
+public @interface Annotation {
+    
 }

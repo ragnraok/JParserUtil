@@ -108,6 +108,10 @@ public class SourceInfo {
     public void putAnnotaiotn(AnnotationInfo annotationInfo) {
         this.annotationInfos.add(annotationInfo);
     }
+    
+    public ArrayList<AnnotationInfo> getAllAnnotations() {
+        return this.annotationInfos;
+    }
 
     @Override
     public String toString() {
