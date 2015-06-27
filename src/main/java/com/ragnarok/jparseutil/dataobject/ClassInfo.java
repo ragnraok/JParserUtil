@@ -83,4 +83,34 @@ public class ClassInfo {
             this.methodInfos.set(index, newMethod);
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("Class: ");
+        result.append(String.format("qualifiedName: %s, ", qualifiedName));
+        result.append(String.format("simpleName: %s, ", simpleName));
+        result.append("\n");
+        if (variableInfos.size() > 0) {
+            for (VariableInfo variableInfo : variableInfos) {
+                result.append(variableInfo.toString() + ", ");
+                result.append("\n");
+            }
+        }
+        result.append("\n");
+        if (annotationModifiers.size() > 0) {
+            for (AnnotationModifier annotationModifier : annotationModifiers) {
+                result.append(annotationModifier.toString() + ", ");
+                result.append("\n");
+            }
+        }
+        result.append("\n");
+        if (methodInfos.size() > 0) {
+            for (MethodInfo methodInfo : methodInfos) {
+                result.append(methodInfo.toString() + ",");
+                result.append("\n");
+            }
+        }
+        return result.toString();
+    }
 }

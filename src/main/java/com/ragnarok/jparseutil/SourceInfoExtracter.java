@@ -31,6 +31,10 @@ public class SourceInfoExtracter {
         sourceInfo = VariableParser.updateAllVariableTypeForInnerClassAfterParse(sourceInfo);
         sourceInfo = MethodParser.updateAllMethodReturnTypeAndParamsTypeForInnerClass(sourceInfo);
         
+        System.out.println("\n\n\n");
+        
+        System.out.println(sourceInfo);
+        
         return sourceInfo;
     }
 }

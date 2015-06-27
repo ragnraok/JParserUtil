@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ragnarok on 15/6/9.
@@ -34,5 +35,20 @@ public class AnnotationInfo {
     public void putParams(String type, String name, String defaultValue) {
         this.typeParamsNameMap.put(type, name);
         this.paramsDefaultValueMap.put(name, defaultValue);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("Annotation: ");
+        result.append(String.format("name: %s, ", name));
+        result.append(String.format("qualifiedName: %s", qualifiedName));
+        for (Map.Entry<String, String> entry: typeParamsNameMap.entrySet()) {
+            result.append(String.format("type: %s, paramName: %s, ", entry.getKey(), entry.getValue()));
+        }
+        result.append("\n");
+        for (Map.Entry<String, String> entry : paramsDefaultValueMap.entrySet()) {
+            result.append(String.format("param: %s, defaultValue: %s", entry.getKey(), entry.getValue()));
+        }
+        return result.toString();
     }
 }

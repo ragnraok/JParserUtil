@@ -1,5 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
+import com.sun.tools.classfile.Annotation;
+
 import java.util.ArrayList;
 
 /**
@@ -105,5 +107,31 @@ public class SourceInfo {
     
     public void putAnnotaiotn(AnnotationInfo annotationInfo) {
         this.annotationInfos.add(annotationInfo);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(String.format("SourceInfo, packageName: %s", packageName));
+        result.append("\n");
+        if (importClassNames.size() > 0) {
+            for (String className : importClassNames) {
+                result.append(String.format("importClass: %s, ", className));
+            }
+        }
+        result.append("\n");
+        if (annotationInfos.size() > 0) {
+            for (AnnotationInfo annotationInfo : annotationInfos) {
+                result.append(annotationInfo.toString());
+                result.append("\n");
+            }
+        }
+        if (classInfos.size() > 0) {
+            for (ClassInfo classInfo : classInfos) {
+                result.append(classInfo.toString());
+                result.append("\n");
+            }
+        }
+        return result.toString();
     }
 }

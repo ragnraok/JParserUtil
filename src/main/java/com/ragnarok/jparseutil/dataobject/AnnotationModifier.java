@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ragnarok on 15/5/29.
@@ -26,5 +27,19 @@ public class AnnotationModifier {
     
     public HashMap<String, String> getNameValues() {
         return nameValues;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("");
+        result.append("AnnotationModifier: ");
+        result.append(String.format("annotationName: %s, ", annotationName));
+        result.append("\n");
+        if (nameValues.size() > 0) {
+            for (Map.Entry<String, String> entry : nameValues.entrySet()) {
+                result.append(String.format("paramName: %s, paramValue: %s, ", entry.getKey(), entry.getValue()));
+            }
+        }
+        return result.toString();
     }
 }

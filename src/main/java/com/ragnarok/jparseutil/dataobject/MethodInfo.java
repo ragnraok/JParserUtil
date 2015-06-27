@@ -50,4 +50,26 @@ public class MethodInfo {
     public ArrayList<AnnotationModifier> getAllAnnotationModifiers() {
         return this.annotationModifiers;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("Method: ");
+        result.append(String.format("name: %s, ", methodName));
+        result.append(String.format("returnType: %s, ", returnType));
+        result.append("\n");
+        if (methodParamsType.size() > 0) {
+            for (String params : methodParamsType) {
+                result.append(String.format("paramsType: %s, ", params));
+            }
+        }
+        result.append("\n");
+        if (annotationModifiers.size() > 0) {
+            for (AnnotationModifier annotationModifier : annotationModifiers) {
+                result.append(annotationModifier.toString());
+                result.append("\n");
+            }
+        }
+        return result.toString();
+    }
 }

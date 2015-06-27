@@ -56,4 +56,16 @@ public class VariableInfo {
     public List<AnnotationModifier> getAllAnnotationModifiers() {
         return annotationModifiers;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder(String.format("Variable: %s, type: %s, value: %s", variableName, variableQualifiedClassName, variableName));
+        result.append("\n");
+        if (annotationModifiers.size() > 0) {
+            for (AnnotationModifier modifier : annotationModifiers) {
+                result.append(modifier.toString() + "\n");
+            }
+        }
+        return result.toString();
+    }
 }
