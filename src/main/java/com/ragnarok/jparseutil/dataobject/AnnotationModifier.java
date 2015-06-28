@@ -21,7 +21,7 @@ public class AnnotationModifier {
         return this.annotationName;
     }
     
-    public void putNameValue(String name, String value) {
+    public void putNameValue(String name, Object value) {
         nameValues.put(name, value);
     }
     

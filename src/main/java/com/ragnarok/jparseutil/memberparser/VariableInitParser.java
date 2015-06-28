@@ -29,6 +29,6 @@ public class VariableInitParser {
             Log.d(TAG, "parseVariableInit, newArray elemType: %s, elemType class: %s", newArray.elemtype, newArray.elemtype.getClass().getSimpleName());
         }
         
-        return null;
+        return expression.toString();
     }
 }

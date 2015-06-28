@@ -43,8 +43,10 @@ public class AnnotationModifierParser {
                     result.putNameValue(assign.lhs.toString(), assign.rhs.toString());
                 } else if (expression instanceof JCTree.JCNewArray) {
                     JCTree.JCNewArray newArray = (JCTree.JCNewArray) expression;
+                    result.putNameValue(ANNOTATION_DEFAULT_ARG_NAME, newArray.toString());
                 } else if (expression instanceof JCTree.JCNewClass) {
                     JCTree.JCNewClass newClass = (JCTree.JCNewClass) expression;
+                    result.putNameValue(ANNOTATION_DEFAULT_ARG_NAME, newClass.toString());
                 }
             }
         }

@@ -9,7 +9,7 @@ public class Foo {
 //    public String annotateVar = null;
     
 //    @Deprecated("123123")
-    @Annotation({"123", "!23"})
+    @Annotation(new Date())
     public void annotateMethod() {
         
     }
