@@ -38,6 +38,8 @@ public class TypeParser {
                 if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
                     result.setPrimitive(true);
                 }
+                VariableType arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
+                result.setArrayElmentType(arrayElemType);
             }
         }
         return result;

@@ -12,4 +12,6 @@ class Foo {
     public Date date2 = date;
     
     public String[][] c = new String[][] {{"123", "123"}, {"123", "123"}, {"123", "123"}};
+    
+    public String[] cc = new String[] {"123", "!23"};
 }
