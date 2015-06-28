@@ -35,4 +35,9 @@ public class VariableType {
     public boolean isArray() {
         return this.isArray;
     }
+
+    @Override
+    public String toString() {
+        return String.format("variableType: %s, isPrimitive: %b, isArray: %b", typeName, isPrimitive, isArray);
+    }
 }

@@ -12,7 +12,7 @@ public class AnnotationInfo {
     private String name;
     private String qualifiedName;
     
-    private HashMap<String, String> typeParamsNameMap = new HashMap<>(); // full qualified name
+    private HashMap<VariableType, String> typeParamsNameMap = new HashMap<>(); // full qualified name
     private HashMap<String, String> paramsDefaultValueMap = new HashMap<>();
     
     public void setSimpleName(String name) {
@@ -32,7 +32,7 @@ public class AnnotationInfo {
     }
     
     // the type must fully qualified
-    public void putParams(String type, String name, String defaultValue) {
+    public void putParams(VariableType type, String name, String defaultValue) {
         this.typeParamsNameMap.put(type, name);
         this.paramsDefaultValueMap.put(name, defaultValue);
     }
@@ -42,7 +42,7 @@ public class AnnotationInfo {
         StringBuilder result = new StringBuilder("Annotation: ");
         result.append(String.format("name: %s, ", name));
         result.append(String.format("qualifiedName: %s, \n", qualifiedName));
-        for (Map.Entry<String, String> entry: typeParamsNameMap.entrySet()) {
+        for (Map.Entry<VariableType, String> entry: typeParamsNameMap.entrySet()) {
             result.append(String.format("paramName: %s, paramType: %s, defaultValue: %s",
                     entry.getValue(), entry.getKey(), paramsDefaultValueMap.get(entry.getValue())));
             result.append("\n");

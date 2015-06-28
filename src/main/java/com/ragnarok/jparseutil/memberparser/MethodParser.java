@@ -24,10 +24,7 @@ public class MethodParser {
             
             String methodName = methodDecl.name.toString();
             methodName = containedClass.getQualifiedName() + "." + methodName;
-            String returnType = methodDecl.getReturnType().toString();
-            if (!returnType.equals(VOID_TYPE)) {
-                returnType = Util.parseType(sourceInfo, returnType);
-            }
+            VariableType returnType = TypeParser.parseType(sourceInfo, methodDecl.getReturnType(), methodDecl.getReturnType().toString());
             methodInfo.setMethodName(methodName);
             methodInfo.setReturnType(returnType);
             
@@ -36,8 +33,7 @@ public class MethodParser {
             // parse parameters
             if (methodDecl.getParameters() != null && methodDecl.getParameters().size() > 0) {
                 for (JCTree.JCVariableDecl variableDecl : methodDecl.getParameters()) {
-                    String paramType = variableDecl.getType().toString();
-                    paramType = Util.parseType(sourceInfo, paramType);
+                    VariableType paramType = TypeParser.parseType(sourceInfo, variableDecl.getType(), variableDecl.getType().toString());
                     methodInfo.addParamType(paramType);
                     
                     Log.d(TAG, "parseMethodInfo, parameter type: %s", paramType);
@@ -65,23 +61,23 @@ public class MethodParser {
             for (MethodInfo method : classMethods) {
                 
                 // update return type
-                String returnType = method.getReturnType();
-                ClassInfo returnClassType = sourceInfo.getClassInfoBySuffixName(returnType);
+                VariableType returnType = method.getReturnType();
+                ClassInfo returnClassType = sourceInfo.getClassInfoBySuffixName(returnType.getTypeName());
                 if (returnClassType != null) {
-                    returnType = returnClassType.getQualifiedName();
+                    returnType.setTypeName(returnClassType.getQualifiedName());
                     method.setReturnType(returnType);
                     
                     Log.d(TAG, "update method, name: %s, new returnType: %s", method.getMethodName(), returnType);
                 }
                 
                 // update parameter type
-                List<String> paramsType = method.getParamType();
+                List<VariableType> paramsType = method.getParamType();
                 if (paramsType != null && paramsType.size() > 0) {
                     for (int i = 0; i < paramsType.size(); i++) {
-                        String paramType = paramsType.get(i);
-                        ClassInfo paramClassType = sourceInfo.getClassInfoBySuffixName(paramType);
+                        VariableType paramType = paramsType.get(i);
+                        ClassInfo paramClassType = sourceInfo.getClassInfoBySuffixName(paramType.getTypeName());
                         if (paramClassType != null) {
-                            paramType = paramClassType.getQualifiedName();
+                            paramType.setTypeName(paramClassType.getQualifiedName());
                             method.setParamType(i, paramType);
                             Log.d(TAG, "update method, name: %s, new paramType: %s, pos: %d", method.getMethodName(), paramType, i);
                         }

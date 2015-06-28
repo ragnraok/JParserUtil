@@ -1,9 +1,6 @@
 package com.ragnarok.jparseutil.memberparser;
 
-import com.ragnarok.jparseutil.dataobject.AnnotationModifier;
-import com.ragnarok.jparseutil.dataobject.ClassInfo;
-import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.VariableInfo;
+import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.javac.tree.JCTree;
@@ -31,10 +28,11 @@ public class VariableParser {
         Log.d(TAG, "vartype class name: %s, init class name: %s", variableDecl.vartype.getClass().getSimpleName(),
                 variableDecl.init.getClass().getSimpleName());
  
-        type = Util.parseType(sourceInfo, type);
         String value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);
 
-        result.setVariableTypeClassName(type);
+        VariableType variableType = TypeParser.parseType(sourceInfo, variableDecl.vartype, type);
+        Log.d(TAG, "variableType: %s", variableType);
+        result.setVariableType(variableType);
         
         if (value != null) {
             result.setVariableValue(value);
@@ -61,11 +59,11 @@ public class VariableParser {
         for (ClassInfo classInfo : classInfos) {
             ArrayList<VariableInfo> variableInfos = classInfo.getAllVariables();
             for (VariableInfo variableInfo : variableInfos) {
-                String type = variableInfo.getVariableTypeClassName();
-                ClassInfo classType = sourceInfo.getClassInfoBySuffixName(type);
+                VariableType type = variableInfo.getVariableType();
+                ClassInfo classType = sourceInfo.getClassInfoBySuffixName(type.getTypeName());
                 if (classType != null) {
-                    type = classType.getQualifiedName();
-                    variableInfo.setVariableTypeClassName(type);
+                    type.setTypeName(classType.getQualifiedName());
+                    variableInfo.setVariableType(type);
                     classInfo.updateVariable(variableInfo.getVariableName(), variableInfo);
                     Log.d(TAG, "update variable type: %s, name: %s", type, variableInfo.getVariableName());
                     sourceInfo.updateClassInfoByQualifiedName(classInfo.getQualifiedName(), classInfo);

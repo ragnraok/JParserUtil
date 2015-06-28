@@ -10,7 +10,7 @@ public class TestMain {
     private static final String TAG = "JParserUtil.TestMain";
 
     public static void main(String[] args) {
-        String filePath = "test/AnnotationTest.java"; // this should be the path to User.java
+        String filePath = "test/MethodParseTest.java"; // this should be the path to User.java
         
         SourceInfoExtracter extracter = new SourceInfoExtracter(filePath);
         extracter.extract();

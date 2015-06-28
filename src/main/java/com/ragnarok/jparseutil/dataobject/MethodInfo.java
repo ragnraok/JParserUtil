@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class MethodInfo {
     
     private String methodName;
-    private String returnType; // fully qualified name
-    private ArrayList<String> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualified), in the order of declare in method
+    private VariableType returnType; // fully qualified name
+    private ArrayList<VariableType> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualified), in the order of declare in method
     private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
     
     public void setMethodName(String name) {
@@ -21,25 +21,25 @@ public class MethodInfo {
         return this.methodName;
     }
     
-    public void setReturnType(String type) {
+    public void setReturnType(VariableType type) {
         this.returnType = type;
     } 
     
-    public String getReturnType() {
+    public VariableType getReturnType() {
         return this.returnType;
     }
     
-    public void addParamType(String type) {
+    public void addParamType(VariableType type) {
         this.methodParamsType.add(type);
     }
     
-    public void setParamType(int pos, String type) {
+    public void setParamType(int pos, VariableType type) {
         if (pos < methodParamsType.size()) {
             methodParamsType.set(pos, type);
         }
     }
     
-    public ArrayList<String> getParamType() {
+    public ArrayList<VariableType> getParamType() {
         return this.methodParamsType;
     }
     
@@ -59,7 +59,7 @@ public class MethodInfo {
         result.append(String.format("returnType: %s, ", returnType));
         result.append("\n");
         if (methodParamsType.size() > 0) {
-            for (String params : methodParamsType) {
+            for (VariableType params : methodParamsType) {
                 result.append(String.format("paramsType: %s, ", params));
             }
         }

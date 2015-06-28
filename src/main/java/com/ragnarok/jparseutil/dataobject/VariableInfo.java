@@ -12,7 +12,7 @@ public class VariableInfo {
     private ClassInfo clazz;
     
     private String variableName;
-    private String variableQualifiedClassName;
+    private VariableType variableType;
     private Object variableValue;
     
     private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
@@ -25,12 +25,12 @@ public class VariableInfo {
         return this.clazz;
     }
     
-    public void setVariableTypeClassName(String className) {
-        this.variableQualifiedClassName = className;
+    public void setVariableType(VariableType variableType) {
+        this.variableType = variableType;
     }
     
-    public String getVariableTypeClassName() {
-        return this.variableQualifiedClassName;
+    public VariableType getVariableType() {
+        return this.variableType;
     }
     
     public void setVariableName(String name) {
@@ -59,7 +59,7 @@ public class VariableInfo {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(String.format("Variable: %s, type: %s, value: %s", variableName, variableQualifiedClassName, variableValue));
+        StringBuilder result = new StringBuilder(String.format("Variable: %s, type: %s, value: %s", variableName, variableType, variableValue));
         result.append("\n");
         if (annotationModifiers.size() > 0) {
             for (AnnotationModifier modifier : annotationModifiers) {
