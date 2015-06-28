@@ -11,7 +11,7 @@ public class AnnotationModifier {
     
     private String annotationName; // fully qualified
     
-    private HashMap<String, String> nameValues = new HashMap<>(); // if value isn't primitive type, it may be null
+    private HashMap<String, Object> nameValues = new HashMap<>(); // if value isn't primitive type, it may be null
     
     public void setAnnotationName(String name) {
         this.annotationName = name;
@@ -25,7 +25,7 @@ public class AnnotationModifier {
         nameValues.put(name, value);
     }
     
-    public HashMap<String, String> getNameValues() {
+    public HashMap<String, Object> getNameValues() {
         return nameValues;
     }
 
@@ -36,7 +36,7 @@ public class AnnotationModifier {
         result.append(String.format("annotationName: %s, ", annotationName));
         result.append("\n");
         if (nameValues.size() > 0) {
-            for (Map.Entry<String, String> entry : nameValues.entrySet()) {
+            for (Map.Entry<String, Object> entry : nameValues.entrySet()) {
                 result.append(String.format("paramName: %s, paramValue: %s, ", entry.getKey(), entry.getValue()));
             }
         }

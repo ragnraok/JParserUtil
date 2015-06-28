@@ -41,7 +41,7 @@ public class VariableInfo {
         return this.variableName;
     }
     
-    public void setVariableValue(String value) {
+    public void setVariableValue(Object value) {
         this.variableValue = value;
     }
     
