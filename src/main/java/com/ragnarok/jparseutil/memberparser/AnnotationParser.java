@@ -36,13 +36,13 @@ public class AnnotationParser {
         List<? extends Tree> members = classTree.getMembers();
         if (members != null && members.size() > 0) {
             for (Tree member : classTree.getMembers()) {
-                Log.d(TAG, "annotation member class: %s", member.getClass().getSimpleName());
+                Log.d(TAG, "parseAnnotationInfo, annotation member class: %s", member.getClass().getSimpleName());
                 
                 if (member instanceof JCTree.JCMethodDecl) {
                     JCTree.JCMethodDecl annotationMember = (JCTree.JCMethodDecl) member;
                     String type = Util.parseType(sourceInfo, annotationMember.getReturnType().toString());
                     String name = annotationMember.getName().toString();
-                    Log.d(TAG, "parse annotation, paramName: %s, paramType: %s", type, name);
+                    Log.d(TAG, "parseAnnotationInfo, paramName: %s, paramType: %s, paramTypeKind: %s", type, name, annotationMember.getReturnType().getKind());
                     if (annotationMember.getDefaultValue() != null) {
                         String defaultValueLiteral = annotationMember.getDefaultValue().toString();
                         Log.d(TAG, "defaultValueLiteral: %s, defaultValueClass: %s", defaultValueLiteral,

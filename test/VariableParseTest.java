@@ -11,5 +11,5 @@ class Foo {
     
     public Date date2 = date;
     
-    public String[] c = null;
+    public String[][] c = new String[][] {{"123", "123"}, {"123", "123"}, {"123", "123"}};
 }

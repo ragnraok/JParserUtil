@@ -5,16 +5,16 @@ import java.util.Date;
 
 public class Foo {
    
-    @Deprecated("123123")
-    public String annotateVar = null;
+//    @Deprecated("123123")
+//    public String annotateVar = null;
     
-    @Deprecated("123123")
-    @Annotation
+//    @Deprecated("123123")
+    @Annotation({"123", "!23"})
     public void annotateMethod() {
         
     }
 }
 
 public @interface Annotation {
-    
+    String[] value();
 }
