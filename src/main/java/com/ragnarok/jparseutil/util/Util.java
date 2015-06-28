@@ -17,6 +17,9 @@ public class Util {
     public static String STRING_NULL_LITERAL = "null";
     
     public static boolean isPrimitive(String variableTypeName) {
+        if (variableTypeName == null) {
+            return false;
+        }
         for (String type : PrimitiveType) {
             if (type.equals(variableTypeName)) {
                 return true;
