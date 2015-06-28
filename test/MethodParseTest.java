@@ -11,7 +11,7 @@ public class Foo {
         
     }
     
-    public String fooWithParamReturnType(int a, String b, Date c) {
+    public String fooWithParamReturnType(int a, String[] b, Date c) {
         
     }
 }

@@ -3,6 +3,7 @@ package com.ragnarok.jparseutil.memberparser;
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.VariableType;
+import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
@@ -16,6 +17,7 @@ public class TypeParser {
     private static final String TAG = "JParserUtil.TypeParser";
 
     public static VariableType parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
+        Log.d(TAG, "parseType, typeElement class: %s", typeElement.getClass().getSimpleName());
         VariableType result = new VariableType();
         if (Util.isPrimitive(typeName)) {
             result.setPrimitive(true);
@@ -31,6 +33,12 @@ public class TypeParser {
         result.setTypeName(typeName);
         if (typeElement.getKind() == Tree.Kind.ARRAY_TYPE) {
             result.setArray(true);
+            if (typeElement instanceof JCTree.JCArrayTypeTree) {
+                JCTree.JCArrayTypeTree arrayTypeTree = (JCTree.JCArrayTypeTree) typeElement;
+                if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
+                    result.setPrimitive(true);
+                }
+            }
         }
         return result;
     }
