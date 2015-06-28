@@ -29,25 +29,28 @@ public class AnnotationModifierParser {
             for (JCTree.JCExpression expression : annotation.args) {
                 Log.d(TAG, "parseAnnotation, arg type: %s", expression.getClass().getSimpleName());
                 
-                // currently only support Literal and Assign
-                if (expression instanceof JCTree.JCLiteral) {
-                    String value = Util.getValueFromLiteral((JCTree.JCLiteral) expression);
-                    Log.d(TAG, "parseAnnotation, value: %s", value);
-                    if (value != null) {
-                        result.putNameValue(ANNOTATION_DEFAULT_ARG_NAME, value);
-                    }
-                } else if (expression instanceof JCTree.JCAssign) {
+                String argName = ANNOTATION_DEFAULT_ARG_NAME;
+                JCTree.JCExpression valueExpression = expression;
+                if (expression instanceof JCTree.JCAssign) {
                     JCTree.JCAssign assign = (JCTree.JCAssign) expression;
-                    Log.d(TAG, "parseAnnotation, lhs: %s, rhs: %s", assign.lhs, assign.rhs);
-                    // for assign, just simply store the expression string representation
-                    result.putNameValue(assign.lhs.toString(), assign.rhs.toString());
-                } else if (expression instanceof JCTree.JCNewArray) {
-                    JCTree.JCNewArray newArray = (JCTree.JCNewArray) expression;
-                    result.putNameValue(ANNOTATION_DEFAULT_ARG_NAME, newArray.toString());
-                } else if (expression instanceof JCTree.JCNewClass) {
-                    JCTree.JCNewClass newClass = (JCTree.JCNewClass) expression;
-                    result.putNameValue(ANNOTATION_DEFAULT_ARG_NAME, newClass.toString());
+                    argName = assign.lhs.toString();
+                    valueExpression = assign.rhs;
                 }
+                
+                Object value;
+                if (expression instanceof JCTree.JCLiteral) { // for primitive type
+                    value = Util.getValueFromLiteral((JCTree.JCLiteral) expression);
+                    if (value != null) {
+                        result.putNameValue(argName, value);
+                    }
+                } else {
+                    value = VariableInitParser.parseVariableInit(sourceInfo, null, null, valueExpression);
+                    if (value != null) {
+                        result.putNameValue(argName, value);
+                    }
+                }
+                
+                Log.d(TAG, "parseAnnotation, argName: %s, value: %s", argName, value);
             }
         }
         

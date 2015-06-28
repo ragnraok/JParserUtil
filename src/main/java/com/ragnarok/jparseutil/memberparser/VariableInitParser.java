@@ -13,7 +13,7 @@ public class VariableInitParser {
     
     private static final String TAG = "JParserUtil.VariableInitParser";
     
-    public static String parseVariableInit(SourceInfo sourceInfo, String fullQualifiedTypeName,
+    public static Object parseVariableInit(SourceInfo sourceInfo, String fullQualifiedTypeName,
                                            JCTree.JCExpression type, JCTree.JCExpression expression) {
         Log.d(TAG, "parseVariableInit, express class: %s", expression.getClass().getSimpleName());
         if (expression instanceof JCTree.JCLiteral && Util.isPrimitive(fullQualifiedTypeName)) {

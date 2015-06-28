@@ -28,7 +28,7 @@ public class VariableParser {
         Log.d(TAG, "vartype class name: %s, init class name: %s", variableDecl.vartype.getClass().getSimpleName(),
                 variableDecl.init.getClass().getSimpleName());
  
-        String value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);
+        Object value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);
 
         VariableType variableType = TypeParser.parseType(sourceInfo, variableDecl.vartype, type);
         Log.d(TAG, "variableType: %s", variableType);
