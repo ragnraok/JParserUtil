@@ -41,10 +41,11 @@ public class AnnotationInfo {
     public String toString() {
         StringBuilder result = new StringBuilder("Annotation: ");
         result.append(String.format("name: %s, ", name));
-        result.append(String.format("qualifiedName: %s, ", qualifiedName));
+        result.append(String.format("qualifiedName: %s, \n", qualifiedName));
         for (Map.Entry<String, String> entry: typeParamsNameMap.entrySet()) {
-            result.append(String.format("paramType: %s, paramName: %s, defaultValue: %s",
-                    entry.getKey(), entry.getValue(), paramsDefaultValueMap.get(entry.getValue())));
+            result.append(String.format("paramName: %s, paramType: %s, defaultValue: %s",
+                    entry.getValue(), entry.getKey(), paramsDefaultValueMap.get(entry.getValue())));
+            result.append("\n");
         }
         return result.toString();
     }
