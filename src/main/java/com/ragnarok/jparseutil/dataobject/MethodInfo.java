@@ -54,7 +54,7 @@ public class MethodInfo {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("Method: ");
+        result.append("{Method, ");
         result.append(String.format("name: %s, ", methodName));
         result.append(String.format("returnType: %s, ", returnType));
         result.append("\n");
@@ -70,6 +70,7 @@ public class MethodInfo {
                 result.append("\n");
             }
         }
+        result.append("}");
         return result.toString();
     }
 }

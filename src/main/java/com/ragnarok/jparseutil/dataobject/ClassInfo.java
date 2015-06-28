@@ -87,7 +87,7 @@ public class ClassInfo {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("Class: ");
+        result.append("{Class, ");
         result.append(String.format("qualifiedName: %s, ", qualifiedName));
         result.append(String.format("simpleName: %s, ", simpleName));
         result.append("\n");
@@ -111,6 +111,7 @@ public class ClassInfo {
                 result.append("\n");
             }
         }
+        result.append("}");
         return result.toString();
     }
 }

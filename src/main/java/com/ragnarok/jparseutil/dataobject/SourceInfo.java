@@ -116,7 +116,7 @@ public class SourceInfo {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append(String.format("SourceInfo, packageName: %s", packageName));
+        result.append(String.format("{SourceInfo, packageName: %s", packageName));
         result.append("\n");
         if (importClassNames.size() > 0) {
             for (String className : importClassNames) {
@@ -136,6 +136,7 @@ public class SourceInfo {
                 result.append("\n");
             }
         }
+        result.append("}");
         return result.toString();
     }
 }

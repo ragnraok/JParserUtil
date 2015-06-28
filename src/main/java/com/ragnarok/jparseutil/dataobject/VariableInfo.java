@@ -59,13 +59,14 @@ public class VariableInfo {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(String.format("Variable: %s, type: %s, value: %s", variableName, variableType, variableValue));
+        StringBuilder result = new StringBuilder(String.format("{Variable: %s, type: %s, value: %s", variableName, variableType, variableValue));
         result.append("\n");
         if (annotationModifiers.size() > 0) {
             for (AnnotationModifier modifier : annotationModifiers) {
                 result.append(modifier.toString() + "\n");
             }
         }
+        result.append("}");
         return result.toString();
     }
 }

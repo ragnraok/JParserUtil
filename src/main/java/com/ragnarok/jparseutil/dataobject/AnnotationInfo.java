@@ -39,7 +39,7 @@ public class AnnotationInfo {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("Annotation: ");
+        StringBuilder result = new StringBuilder("{Annotation, ");
         result.append(String.format("name: %s, ", name));
         result.append(String.format("qualifiedName: %s, \n", qualifiedName));
         for (Map.Entry<VariableType, String> entry: typeParamsNameMap.entrySet()) {
@@ -47,6 +47,7 @@ public class AnnotationInfo {
                     entry.getValue(), entry.getKey(), paramsDefaultValueMap.get(entry.getValue())));
             result.append("\n");
         }
+        result.append("}");
         return result.toString();
     }
 }

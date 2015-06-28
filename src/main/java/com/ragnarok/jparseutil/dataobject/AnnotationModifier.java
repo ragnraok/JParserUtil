@@ -32,7 +32,7 @@ public class AnnotationModifier {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("");
-        result.append("AnnotationModifier: ");
+        result.append("{AnnotationModifier,");
         result.append(String.format("annotationName: %s, ", annotationName));
         result.append("\n");
         if (nameValues.size() > 0) {
@@ -40,6 +40,7 @@ public class AnnotationModifier {
                 result.append(String.format("paramName: %s, paramValue: %s, ", entry.getKey(), entry.getValue()));
             }
         }
+        result.append("}");
         return result.toString();
     }
 }
