@@ -26,7 +26,7 @@ public class VariableInitParser {
             
         } else if (expression instanceof JCTree.JCNewArray) {
             JCTree.JCNewArray newArray = (JCTree.JCNewArray) expression;
-            Log.d(TAG, "parseVariableInit, newArray elemType: %s, elemType class: %s", newArray.elemtype, newArray.elemtype.getClass().getSimpleName());
+            return ArrayParser.parseArray(sourceInfo, newArray);
         }
         
         return expression.toString();
