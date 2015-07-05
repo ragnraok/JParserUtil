@@ -11,6 +11,8 @@ public class ArrayValue {
     
     private int dimensions = 0;
     
+    private VariableType elemType = null;
+    
     private ArrayDimension value;
     
     public void setDimensions(int dimen) {
@@ -28,29 +30,26 @@ public class ArrayValue {
     public ArrayDimension getValue() {
         return this.value;
     }
+    
+    public void setElemType(VariableType variableType) {
+        this.elemType = variableType;
+    }
+    
+    public VariableType getElemType() {
+        return this.elemType;
+    }
 
     /**
      * represent a dimension of an array
      */
     public static class ArrayDimension {
         private static final String TAG = "JParserUtil.ArrayValue.ArrayDimension";
-        
-        private VariableType elemType; // the type of the array, may be another array type, which is the multi dimensions array
-        
+   
         private int size;
 
         // may be the value literal, or another ArrayDimension object, which is the multi dimensions array
         // empty if the array does not initialize when decleare
         private ArrayList<Object> values = new ArrayList<Object>();
-       
-        
-        public void setElemType(VariableType type) {
-            this.elemType = type;
-        }
-        
-        public VariableType getElemType() {
-            return this.elemType;
-        }
         
         public void addValue(Object value) {
             this.values.add(value);
@@ -70,12 +69,12 @@ public class ArrayValue {
 
         @Override
         public String toString() {
-            return String.format("{ArrayDimension, size: %d, elemType: %s, value: %s}", size, elemType, values);
+            return String.format("{ArrayDimension, size: %d, value: %s}", size, values);
         }
     }
 
     @Override
     public String toString() {
-        return String.format("{Array, dimensions: %d, value: %s}", dimensions, value);
+        return String.format("{Array, dimensions: %d, elemType: %s, value: %s}", dimensions, elemType, value);
     }
 }

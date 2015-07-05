@@ -26,19 +26,6 @@ public class ArrayParser {
             } else {
                 
             }
-            
-//            int dimens = newArray.dims.size();
-//            Log.d(TAG, "parseArray, dimens: %d", dimens);
-//            
-//            for (JCTree.JCExpression dimenExpression : newArray.dims) {
-//                Log.d(TAG, "dimen class: %s", dimenExpression.getClass().getSimpleName());
-//            }
-//            
-//            if (newArray.elems != null) {
-//                for (JCTree.JCExpression elemExpression : newArray.elems) {
-//                    Log.d(TAG, "elem class: %s", elemExpression.getClass().getSimpleName());
-//                }
-//            }
         }
         
         return null;
@@ -53,19 +40,52 @@ public class ArrayParser {
         // for array without initialization, the elemType does not contained the inner array type
         VariableType elemType = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
         Log.d(TAG, "parseArrayForWithoutInitialization, elemType: %s", elemType);
+        result.setElemType(elemType);
 
+        int[] eachDimSizes = new int[newArray.dims.size()];
+        int index = 0;
+        
         for (JCTree.JCExpression dimExpression : newArray.dims) {
-            ArrayValue.ArrayDimension arrayDimension = new ArrayValue.ArrayDimension();
-            Log.d(TAG, "parseArrayForWithoutInitialization, dimen class: %s", dimExpression.getClass().getSimpleName());
             if (dimExpression instanceof JCTree.JCLiteral) {
                 JCTree.JCLiteral literal = (JCTree.JCLiteral) dimExpression;
-                int dimSize = (int) literal.getValue();
-                Log.d(TAG, "parseArrayForWithoutInitialization, dim size: %d", dimSize);
-                arrayDimension.setSize(dimSize);
-                arrayDimension.setElemType(elemType);
+                eachDimSizes[index] = (int) literal.getValue();
+                Log.d(TAG, "dimen %d size: %d", index, eachDimSizes[index]);
+                index++;
             }
+        }
+
+        ArrayValue.ArrayDimension arrayValue = new ArrayValue.ArrayDimension();
+        arrayValue.setSize(eachDimSizes[0]);
+        result.setValue(arrayValue);
+        
+        if (eachDimSizes.length == 1) {
+            return result;
+        }
+        
+        ArrayValue.ArrayDimension currentDimens = result.getValue();
+        for (int i = 0; i < eachDimSizes.length; i++) {
+            if (i == 0) {
+                currentDimens = parseOneLevelDimensionForWithoutInitialization(currentDimens, eachDimSizes[i]);
+            } else {
+                for (Object dimenValue : currentDimens.getValues()) {
+                    if (dimenValue instanceof ArrayValue.ArrayDimension) {
+                        currentDimens = (ArrayValue.ArrayDimension) dimenValue;
+                        currentDimens = parseOneLevelDimensionForWithoutInitialization(currentDimens, eachDimSizes[0]);
+                    }
+                }
+            }
+            
         }
         
         return result;
+    }
+    
+    private static ArrayValue.ArrayDimension parseOneLevelDimensionForWithoutInitialization(ArrayValue.ArrayDimension currentLevelValue, int dimenSize) {
+        for (int i = 0; i < dimenSize; i++) {
+            ArrayValue.ArrayDimension innerDimension = new ArrayValue.ArrayDimension();
+            innerDimension.setSize(dimenSize);
+            currentLevelValue.addValue(innerDimension);
+        }
+        return currentLevelValue;
     }
 }
