@@ -10,6 +10,7 @@ public class Foo {
     
 //    @Deprecated("123123")
     @Annotation(foo=new String[]{"123", "!23"})
+//    @Annotation({"123", "123", "!23"})
     public void annotateMethod() {
         
     }

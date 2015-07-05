@@ -10,8 +10,22 @@ import com.sun.tools.javac.tree.JCTree;
  */
 public class Util {
     
+    public static String INT_TYPE = "int";
+    public static String INTEGER_TYPE = "Integer";
+    public static String STRING_TYPE = "String";
+    public static String FLOAT_TYPE = "float";
+    public static String FLOAT_PKG_TYPE = "Float";
+    public static String DOUBLE_TYPE = "double";
+    public static String DOUBLE_PKG_TYPE = "Double";
+    public static String CHAR_TYPE = "char";
+    public static String CHARACTER_TYPE = "Character";
+    public static String LONG_TYPE = "long";
+    public static String LONG_PKG_TYPE = "Long";
+    public static String BOOLEAN_TYPE = "boolean";
+    public static String BOOLEAN_PKG_TYPE = "Boolean";
+    
     private static String[] PrimitiveType = new String[] {"String", "int", "Integer", 
-            "float", "Float", "Double", "double", "Number", "char", "Character"};
+            "float", "Float", "Double", "double", "Number", "char", "Character", "long", "Long", "boolean", "Boolean"};
     
     private static String SYSTEM_DEFAULT_PACKAGE = "java.lang.";
     public static String STRING_NULL_LITERAL = "null";

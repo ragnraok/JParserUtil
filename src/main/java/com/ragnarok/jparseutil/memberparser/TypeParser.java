@@ -65,4 +65,33 @@ public class TypeParser {
         }
         return null;
     }
+    
+    public static VariableType parseTypeFromJCLiteral(JCTree.JCLiteral literal) {
+        VariableType result = new VariableType();
+        result.setArray(false);
+        result.setPrimitive(true);
+        Tree.Kind kind = literal.getKind();
+        result.setTypeName(getTypeNameFromKind(kind));
+        return result;
+    }
+    
+    private static String getTypeNameFromKind(Tree.Kind kind) {
+        if (kind == Tree.Kind.INT_LITERAL) {
+            return Util.INT_TYPE;
+        } else if (kind == Tree.Kind.LONG_LITERAL) {
+            return Util.LONG_TYPE;
+        } else if (kind == Tree.Kind.FLOAT_LITERAL) {
+            return Util.FLOAT_TYPE;
+        } else if (kind == Tree.Kind.DOUBLE_LITERAL) {
+            return Util.DOUBLE_TYPE;
+        } else if (kind == Tree.Kind.BOOLEAN_LITERAL) {
+            return Util.BOOLEAN_TYPE;
+        } else if (kind == Tree.Kind.CHAR_LITERAL) {
+            return Util.CHAR_TYPE;
+        } else if (kind == Tree.Kind.STRING_LITERAL) {
+            return Util.STRING_TYPE;
+        } else {
+            return "";
+        }
+    }
 }

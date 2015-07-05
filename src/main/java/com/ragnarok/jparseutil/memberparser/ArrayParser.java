@@ -6,6 +6,8 @@ import com.ragnarok.jparseutil.dataobject.VariableType;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.tools.javac.tree.JCTree;
 
+import javax.lang.model.type.ArrayType;
+
 /**
  * Created by ragnarok on 15/7/2.
  * parser for parse array variable
@@ -24,11 +26,59 @@ public class ArrayParser {
             if (newArray.dims.size() != 0 && newArray.elems == null) {
                 return parseArrayForWithoutInitialization(sourceInfo, newArray);
             } else {
-                
+                return parseArrayForWithInitialization(sourceInfo, newArray);
             }
         }
         
         return null;
+    }
+    
+    private static ArrayValue parseArrayForWithInitialization(SourceInfo sourceInfo, JCTree.JCNewArray newArray) {
+        ArrayValue result = new ArrayValue();
+                
+        parseArrayForWithInitializationRecur(sourceInfo, newArray, null, result);
+        
+        return result;
+    }
+    
+    private static void parseArrayForWithInitializationRecur(SourceInfo sourceInfo, JCTree.JCExpression expr, ArrayValue.ArrayDimension currentDimenValue, ArrayValue arrayValue) {
+        Log.d(TAG, "parseArrayForWithInitializationRecur, exprClass: %s", expr.getClass().getSimpleName());
+        if (expr instanceof JCTree.JCNewArray) {
+            JCTree.JCNewArray newArray = (JCTree.JCNewArray) expr;
+            
+            Log.d(TAG, "parseArrayForWithInitializationRecur, elemType: %s", newArray.elemtype);
+
+            ArrayValue.ArrayDimension innerDimension = new ArrayValue.ArrayDimension();
+            innerDimension.setSize(newArray.elems.size());
+            
+            
+            if (currentDimenValue == null) { // the most outer array
+                currentDimenValue = innerDimension;
+                arrayValue.setValue(currentDimenValue);
+            } else {
+                currentDimenValue.addValue(innerDimension);
+            }
+            
+            
+            for (JCTree.JCExpression arrayExpr : newArray.elems) {
+                if (!(arrayExpr instanceof JCTree.JCNewArray) && arrayValue.getElemType() == null && newArray.elemtype != null) {
+                    VariableType type = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
+                    arrayValue.setElemType(type);    
+                }
+                
+                parseArrayForWithInitializationRecur(sourceInfo, arrayExpr, innerDimension, arrayValue);
+            }
+            
+        } else {
+            if (expr instanceof JCTree.JCLiteral) {
+                JCTree.JCLiteral literal = (JCTree.JCLiteral) expr;
+                currentDimenValue.addValue(literal.getValue());
+                
+                if (arrayValue.getElemType() == null) {
+                    arrayValue.setElemType(TypeParser.parseTypeFromJCLiteral(literal));
+                }
+            }
+        }
     }
     
     private static ArrayValue parseArrayForWithoutInitialization(SourceInfo sourceInfo, JCTree.JCNewArray newArray) {
