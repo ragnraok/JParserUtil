@@ -18,6 +18,7 @@ Currently support:
 4. Extract methods info for classes, include method name, return type, and parameter type.
 4. For annotaions annotated with variables or methods, now can extract its name, and arguments, but currently only support simple primitive simple value. 
 5. Extract Annotation declaration.
+6. Parse value from Array declaration, currently only support parse primitive type
 
 ---
 
