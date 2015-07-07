@@ -23,9 +23,11 @@ public class Util {
     public static String LONG_PKG_TYPE = "Long";
     public static String BOOLEAN_TYPE = "boolean";
     public static String BOOLEAN_PKG_TYPE = "Boolean";
+    public static String NUMBER_TYPE = "Number";
     
-    private static String[] PrimitiveType = new String[] {"String", "int", "Integer", 
-            "float", "Float", "Double", "double", "Number", "char", "Character", "long", "Long", "boolean", "Boolean"};
+    private static String[] PrimitiveType = new String[] {INT_TYPE, INTEGER_TYPE, STRING_TYPE,
+            FLOAT_TYPE, FLOAT_PKG_TYPE, DOUBLE_TYPE, DOUBLE_PKG_TYPE, CHAR_TYPE, CHARACTER_TYPE,
+            LONG_TYPE, LONG_PKG_TYPE, BOOLEAN_TYPE, BOOLEAN_PKG_TYPE, NUMBER_TYPE};
     
     private static String SYSTEM_DEFAULT_PACKAGE = "java.lang.";
     public static String STRING_NULL_LITERAL = "null";

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ArrayValue {
     private static final String TAG = "JParserUtil.ArrayValue";
     
-    private int dimensions = 0;
+    private int dimensions = 0; // how many dimensions for this array
     
     private VariableType elemType = null;
     
