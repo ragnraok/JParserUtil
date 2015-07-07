@@ -13,7 +13,7 @@ public class AnnotationInfo {
     private String qualifiedName;
     
     private HashMap<VariableType, String> typeParamsNameMap = new HashMap<>(); // full qualified name
-    private HashMap<String, String> paramsDefaultValueMap = new HashMap<>();
+    private HashMap<String, Object> paramsDefaultValueMap = new HashMap<>();
     
     public void setSimpleName(String name) {
         this.name = name;
@@ -32,7 +32,7 @@ public class AnnotationInfo {
     }
     
     // the type must fully qualified
-    public void putParams(VariableType type, String name, String defaultValue) {
+    public void putParams(VariableType type, String name, Object defaultValue) {
         this.typeParamsNameMap.put(type, name);
         this.paramsDefaultValueMap.put(name, defaultValue);
     }

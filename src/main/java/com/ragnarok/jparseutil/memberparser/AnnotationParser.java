@@ -48,7 +48,8 @@ public class AnnotationParser {
                         String defaultValueLiteral = annotationMember.getDefaultValue().toString();
                         Log.d(TAG, "defaultValueLiteral: %s, defaultValueClass: %s", defaultValueLiteral,
                                 annotationMember.getDefaultValue().getClass().getSimpleName());
-                        result.putParams(type, name, defaultValueLiteral);
+                        Object defaultValue = VariableInitParser.parseVariableInit(sourceInfo, null, null, (JCTree.JCExpression)annotationMember.getDefaultValue());
+                        result.putParams(type, name, defaultValue);
                     } else {
                         result.putParams(type, name, null);
                     }
