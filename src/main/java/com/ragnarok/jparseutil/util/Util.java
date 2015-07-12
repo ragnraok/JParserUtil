@@ -72,22 +72,8 @@ public class Util {
         return type; // is import from java.lang
     }
     
-    public static String getValueFromLiteral(JCTree.JCLiteral literal) {
-        // currently only support base type
-        switch (literal.typetag) {
-            case 2:
-                return literal.value.toString();
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                return literal.value.toString();
-            case 10:
-                return literal.value.toString();
-            default:
-                return null;
-        }
+    public static Object getValueFromLiteral(JCTree.JCLiteral literal) {
+        return literal.getValue();
     }
 
     public static String buildClassName(String prefix, String simpleName) {
