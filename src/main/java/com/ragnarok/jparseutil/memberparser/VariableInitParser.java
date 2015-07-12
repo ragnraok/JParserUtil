@@ -23,7 +23,8 @@ public class VariableInitParser {
         } else if (expression instanceof JCTree.JCAssign) {
             return expression.toString();
         } else if (expression instanceof JCTree.JCNewClass) {
-            
+            JCTree.JCNewClass newClass = (JCTree.JCNewClass) expression;
+            return NewClassObjectParser.parseNewClass(sourceInfo, newClass);
         } else if (expression instanceof JCTree.JCNewArray) {
             JCTree.JCNewArray newArray = (JCTree.JCNewArray) expression;
             return ArrayParser.parseArray(sourceInfo, newArray);
