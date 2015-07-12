@@ -43,16 +43,6 @@ public class Util {
         }
         return false;
     }
-    
-    public static String trimPrimitiveValue(String type, String value) {
-        if (type.equals("String")) { // currently we only process String type
-            if (!value.equals(STRING_NULL_LITERAL)) {
-                value = value.substring(1, value.length() - 1); // remove \" at the begin and the end
-            }
-            return value;
-        }
-        return value;
-    }
 
     // parse type from source imports
     public static String parseType(SourceInfo sourceInfo, String type) {
@@ -97,6 +87,15 @@ public class Util {
                 return literal.value.toString();
             default:
                 return null;
+        }
+    }
+
+    public static String buildClassName(String prefix, String simpleName) {
+        simpleName = simpleName.replace(".", "");
+        if (prefix.endsWith(".")) {
+            return prefix + simpleName;
+        } else  {
+            return prefix + "." + simpleName;
         }
     }
 }

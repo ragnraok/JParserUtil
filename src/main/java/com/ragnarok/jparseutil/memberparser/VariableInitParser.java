@@ -17,11 +17,7 @@ public class VariableInitParser {
                                            JCTree.JCExpression type, JCTree.JCExpression expression) {
         Log.d(TAG, "parseVariableInit, express class: %s", expression.getClass().getSimpleName());
         if (expression instanceof JCTree.JCLiteral) {
-            if (fullQualifiedTypeName != null && Util.isPrimitive(fullQualifiedTypeName)) {
-                return Util.trimPrimitiveValue(fullQualifiedTypeName, expression.toString());
-            } else {
-                return Util.getValueFromLiteral((JCTree.JCLiteral) expression);   
-            }
+            return Util.getValueFromLiteral((JCTree.JCLiteral) expression);
         } else if (expression instanceof JCTree.JCIdent) {
             return expression.toString();
         } else if (expression instanceof JCTree.JCAssign) {

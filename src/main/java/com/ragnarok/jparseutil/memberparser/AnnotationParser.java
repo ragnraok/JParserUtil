@@ -3,7 +3,6 @@ package com.ragnarok.jparseutil.memberparser;
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.VariableType;
-import com.ragnarok.jparseutil.util.ClassNameUtil;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.source.tree.ClassTree;
@@ -23,9 +22,9 @@ public class AnnotationParser {
         String simpleName = classTree.getSimpleName().toString();
         String qualifiedName = null;
         if (containedClassName != null && containedClassName.length() > 0) {
-            qualifiedName = ClassNameUtil.buildClassName(containedClassName, simpleName);
+            qualifiedName = Util.buildClassName(containedClassName, simpleName);
         } else {
-            qualifiedName = ClassNameUtil.buildClassName(sourceInfo.getPackageName(), simpleName);
+            qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
         }
 
         Log.d(TAG, "parseAnnotationInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);

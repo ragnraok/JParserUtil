@@ -5,14 +5,13 @@ import com.ragnarok.jparseutil.memberparser.AnnotationModifierParser;
 import com.ragnarok.jparseutil.memberparser.AnnotationParser;
 import com.ragnarok.jparseutil.memberparser.MethodParser;
 import com.ragnarok.jparseutil.memberparser.VariableParser;
-import com.ragnarok.jparseutil.util.ClassNameUtil;
 import com.ragnarok.jparseutil.util.Log;
+import com.ragnarok.jparseutil.util.Util;
 import com.sun.source.tree.AnnotationTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public class ClassTreeVisitor {
             
             classInfo.setSimpleName(simpleName);
             
-            String qualifiedName = ClassNameUtil.buildClassName(sourceInfo.getPackageName(), simpleName);
+            String qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
             classInfo.setQualifiedName(qualifiedName);
 
             Log.d(TAG, "addClassInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
@@ -118,7 +117,7 @@ public class ClassTreeVisitor {
     
     private void inspectInnerClass(JCTree.JCClassDecl classDecl) {
         String simpleName = classDecl.getSimpleName().toString();
-        String qualifiedName = ClassNameUtil.buildClassName(this.currentHandleClassName, simpleName);
+        String qualifiedName = Util.buildClassName(this.currentHandleClassName, simpleName);
         
         Log.d(TAG, "inspectInnerClass, qualifiedName: %s, currentHandleClassName: %s", qualifiedName, currentHandleClassName);
         
