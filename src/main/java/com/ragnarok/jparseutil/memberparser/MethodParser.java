@@ -28,6 +28,12 @@ public class MethodParser {
             methodInfo.setMethodName(methodName);
             methodInfo.setReturnType(returnType);
             
+            if (methodDecl.getModifiers().getFlags() != null && methodDecl.getModifiers().getFlags().size() > 0) {
+                for (javax.lang.model.element.Modifier modifier : methodDecl.getModifiers().getFlags()) {
+                    methodInfo.addModifier(Modifier.convertFromToolsModifier(modifier));
+                }
+            }
+            
             Log.d(TAG, "parseMethodInfo, methodName: %s, returnType: %s", methodName, returnType);
             
             // parse parameters
