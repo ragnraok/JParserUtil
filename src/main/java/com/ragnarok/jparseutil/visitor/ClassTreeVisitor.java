@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.visitor;
 
 import com.ragnarok.jparseutil.dataobject.*;
+import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.memberparser.AnnotationModifierParser;
 import com.ragnarok.jparseutil.memberparser.AnnotationParser;
 import com.ragnarok.jparseutil.memberparser.MethodParser;
@@ -12,6 +13,7 @@ import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
 
+import javax.lang.model.element.*;
 import java.util.List;
 
 /**
@@ -45,11 +47,16 @@ public class ClassTreeVisitor {
     
     private void addClassInfo(ClassTree classTree) {
         String simpleName = classTree.getSimpleName().toString();
-        
         if (!this.sourceInfo.isContainClass(simpleName)) {
             ClassInfo classInfo = new ClassInfo();
             
             classInfo.setSimpleName(simpleName);
+            
+            if (classTree.getModifiers().getFlags() != null && classTree.getModifiers().getFlags().size() > 0) {
+                for (javax.lang.model.element.Modifier modifier : classTree.getModifiers().getFlags()) {
+                    classInfo.addModifier(Modifier.convertFromToolsModifier(modifier));
+                }
+            }
             
             String qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
             classInfo.setQualifiedName(qualifiedName);

@@ -1,10 +1,12 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.ragnarok.jparseutil.dataobject.*;
+import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.javac.tree.JCTree;
 
+import javax.lang.model.element.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,12 @@ public class VariableParser {
         String type = variableDecl.vartype.toString();
         
         result.setVariableName(name);
+        
+        if (variableDecl.getModifiers().getFlags() != null && variableDecl.getModifiers().getFlags().size() > 0) {
+            for (javax.lang.model.element.Modifier modifier : variableDecl.getModifiers().getFlags()) {
+                result.addModifier(Modifier.convertFromToolsModifier(modifier));
+            }
+        }
         
         Log.d(TAG, "vartype class name: %s, init class name: %s", variableDecl.vartype.getClass().getSimpleName(),
                 variableDecl.init.getClass().getSimpleName());

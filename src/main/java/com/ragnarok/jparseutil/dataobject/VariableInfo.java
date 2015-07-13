@@ -1,7 +1,9 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ragnarok on 15/5/24.
@@ -14,6 +16,8 @@ public class VariableInfo {
     private String variableName;
     private VariableType variableType;
     private Object variableValue;
+
+    private Set<Modifier> modifiers = new HashSet<>();
     
     private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
     
@@ -57,11 +61,27 @@ public class VariableInfo {
         return annotationModifiers;
     }
 
+    public void addModifier(Modifier modifier) {
+        this.modifiers.add(modifier);
+    }
+
+    public Set<Modifier> getModifiers() {
+        return modifiers;
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder(String.format("{Variable: %s, type: %s, value: %s", variableName, variableType, variableValue));
-        result.append("\n");
+        if (modifiers.size() > 0) {
+            result.append("\n");
+            result.append("{modifiers: ");
+            for (Modifier modifier : modifiers) {
+                result.append(modifier.toString() + ", ");
+            }
+            result.append("}");
+        }
         if (annotationModifiers.size() > 0) {
+            result.append("\n");
             for (AnnotationModifier modifier : annotationModifiers) {
                 result.append(modifier.toString() + "\n");
             }
