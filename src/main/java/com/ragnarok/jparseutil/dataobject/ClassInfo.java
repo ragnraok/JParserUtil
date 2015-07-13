@@ -1,7 +1,9 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ragnarok on 15/5/24.
@@ -11,6 +13,8 @@ public class ClassInfo {
     
     private String qualifiedName;
     private String simpleName;
+    
+    private Set<Modifier> modifiers = new HashSet<>();
     
     private ArrayList<VariableInfo> variableInfos = new ArrayList<>();
 
@@ -83,6 +87,14 @@ public class ClassInfo {
             this.methodInfos.set(index, newMethod);
         }
     }
+    
+    public void addModifier(Modifier modifier) {
+        this.modifiers.add(modifier);
+    }
+    
+    public Set<Modifier> getModifiers() {
+        return modifiers;
+    }
 
     @Override
     public String toString() {
@@ -90,22 +102,30 @@ public class ClassInfo {
         result.append("{Class, ");
         result.append(String.format("qualifiedName: %s, ", qualifiedName));
         result.append(String.format("simpleName: %s, ", simpleName));
-        result.append("\n");
+        if (modifiers.size() > 0) {
+            result.append("\n");
+            result.append("{modifiers: ");
+            for (Modifier modifier : modifiers) {
+                result.append(modifier.toString() + ", ");
+            }
+            result.append("}");
+        }
         if (variableInfos.size() > 0) {
+            result.append("\n");
             for (VariableInfo variableInfo : variableInfos) {
                 result.append(variableInfo.toString() + ", ");
                 result.append("\n");
             }
         }
-        result.append("\n");
         if (annotationModifiers.size() > 0) {
+            result.append("\n");
             for (AnnotationModifier annotationModifier : annotationModifiers) {
                 result.append(annotationModifier.toString() + ", ");
                 result.append("\n");
             }
         }
-        result.append("\n");
         if (methodInfos.size() > 0) {
+            result.append("\n");
             for (MethodInfo methodInfo : methodInfos) {
                 result.append(methodInfo.toString() + ",");
                 result.append("\n");
