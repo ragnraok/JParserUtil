@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
+import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.VariableType;
 import com.ragnarok.jparseutil.util.Log;
@@ -32,6 +33,12 @@ public class AnnotationParser {
         AnnotationInfo result = new AnnotationInfo();
         result.setSimpleName(classTree.getSimpleName().toString());
         result.setQualifiedName(qualifiedName);
+        
+        if (classTree.getModifiers().getFlags() != null && classTree.getModifiers().getFlags().size() > 0) {
+            for (javax.lang.model.element.Modifier modifier : classTree.getModifiers().getFlags()) {
+                result.addModifier(Modifier.convertFromToolsModifier(modifier));
+            }
+        }
         
         List<? extends Tree> members = classTree.getMembers();
         if (members != null && members.size() > 0) {
