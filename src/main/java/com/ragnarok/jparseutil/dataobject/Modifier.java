@@ -5,17 +5,43 @@ package com.ragnarok.jparseutil.dataobject;
  * copy from javax.lang.model.element.Modifier
  */
 public enum Modifier {
-    /** The modifier {@code public} */          PUBLIC,
-    /** The modifier {@code protected} */       PROTECTED,
-    /** The modifier {@code private} */         PRIVATE,
-    /** The modifier {@code abstract} */        ABSTRACT,
-    /** The modifier {@code static} */          STATIC,
-    /** The modifier {@code final} */           FINAL,
-    /** The modifier {@code transient} */       TRANSIENT,
-    /** The modifier {@code volatile} */        VOLATILE,
-    /** The modifier {@code synchronized} */    SYNCHRONIZED,
-    /** The modifier {@code native} */          NATIVE,
-    /** The modifier {@code strictfp} */        STRICTFP;
+    /** The modifier {@code public} */          
+    PUBLIC,
+    
+    /** The modifier {@code protected} */       
+    PROTECTED,
+    
+    /** The modifier {@code private} */         
+    PRIVATE,
+    
+    /** The modifier {@code abstract} */        
+    ABSTRACT,
+    
+    /** The modifier {@code static} */          
+    STATIC,
+    
+    /** The modifier {@code final} */           
+    FINAL,
+    
+    /** The modifier {@code transient} */       
+    TRANSIENT,
+    
+    /** The modifier {@code volatile} */        
+    VOLATILE,
+    
+    /** The modifier {@code synchronized} */    
+    SYNCHRONIZED,
+    
+    /** The modifier {@code native} */          
+    NATIVE,
+    
+    /** The modifier {@code strictfp} */        
+    STRICTFP,
+
+    /**
+     * unknown modifier
+     */
+    UNKNOWN;
 
 
     private String lowercase = null;    // modifier name in lowercase
@@ -64,6 +90,6 @@ public enum Modifier {
         if  (toolsModifier == javax.lang.model.element.Modifier.STRICTFP) {
             return STRICTFP;
         }
-        return null;
+        return UNKNOWN;
     }
 }
