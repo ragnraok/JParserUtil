@@ -4,14 +4,14 @@ package com.ragnarok.jparseutil.dataobject;
  * Created by ragnarok on 15/6/28.
  * represent a variable type, currently only support primitive type and array type
  */
-public class VariableType {
+public class Type {
     
     private static final String TAG = "JParserUtil.VariableType";
     
     private String typeName; // fully qualified
     private boolean isPrimitive = false;
     private boolean isArray = false;
-    private VariableType arrayElmentType = null; // not null if isArray is true
+    private Type arrayElmentType = null; // not null if isArray is true
     
     public void setTypeName(String typeName) {
         this.typeName = typeName;
@@ -37,11 +37,11 @@ public class VariableType {
         return this.isArray;
     }
     
-    public void setArrayElmentType(VariableType elemType) {
+    public void setArrayElmentType(Type elemType) {
         this.arrayElmentType = elemType;
     }
     
-    public VariableType getArrayElmentType() {
+    public Type getArrayElmentType() {
         return this.arrayElmentType;
     }
 

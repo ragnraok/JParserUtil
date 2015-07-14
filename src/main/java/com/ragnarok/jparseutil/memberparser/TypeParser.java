@@ -2,7 +2,7 @@ package com.ragnarok.jparseutil.memberparser;
 
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.VariableType;
+import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.source.tree.Tree;
@@ -16,9 +16,9 @@ public class TypeParser {
 
     private static final String TAG = "JParserUtil.TypeParser";
 
-    public static VariableType parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
+    public static Type parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
         Log.d(TAG, "parseType, typeElement class: %s", typeElement.getClass().getSimpleName());
-        VariableType result = new VariableType();
+        Type result = new Type();
         if (Util.isPrimitive(typeName)) {
             result.setPrimitive(true);
             result.setTypeName(typeName);
@@ -38,7 +38,7 @@ public class TypeParser {
                 if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
                     result.setPrimitive(true);
                 }
-                VariableType arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
+                Type arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
                 result.setArrayElmentType(arrayElemType);
             }
         }
@@ -66,8 +66,8 @@ public class TypeParser {
         return null;
     }
     
-    public static VariableType parseTypeFromJCLiteral(JCTree.JCLiteral literal) {
-        VariableType result = new VariableType();
+    public static Type parseTypeFromJCLiteral(JCTree.JCLiteral literal) {
+        Type result = new Type();
         result.setArray(false);
         result.setPrimitive(true);
         Tree.Kind kind = literal.getKind();

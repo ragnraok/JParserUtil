@@ -14,7 +14,7 @@ public class VariableInfo {
     private ClassInfo clazz;
     
     private String variableName;
-    private VariableType variableType;
+    private Type type;
     private Object variableValue;
 
     private Set<Modifier> modifiers = new HashSet<>();
@@ -29,12 +29,12 @@ public class VariableInfo {
         return this.clazz;
     }
     
-    public void setVariableType(VariableType variableType) {
-        this.variableType = variableType;
+    public void setType(Type type) {
+        this.type = type;
     }
     
-    public VariableType getVariableType() {
-        return this.variableType;
+    public Type getType() {
+        return this.type;
     }
     
     public void setVariableName(String name) {
@@ -71,7 +71,7 @@ public class VariableInfo {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(String.format("{Variable: %s, type: %s, value: %s", variableName, variableType, variableValue));
+        StringBuilder result = new StringBuilder(String.format("{Variable: %s, type: %s, value: %s", variableName, type, variableValue));
         if (modifiers.size() > 0) {
             result.append("\n");
             result.append("{modifiers: ");

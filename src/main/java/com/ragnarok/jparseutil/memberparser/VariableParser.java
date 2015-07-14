@@ -3,10 +3,8 @@ package com.ragnarok.jparseutil.memberparser;
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.util.Log;
-import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.javac.tree.JCTree;
 
-import javax.lang.model.element.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +36,9 @@ public class VariableParser {
  
         Object value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);
 
-        VariableType variableType = TypeParser.parseType(sourceInfo, variableDecl.vartype, type);
+        Type variableType = TypeParser.parseType(sourceInfo, variableDecl.vartype, type);
         Log.d(TAG, "variableType: %s", variableType);
-        result.setVariableType(variableType);
+        result.setType(variableType);
         
         if (value != null) {
             result.setVariableValue(value);
@@ -67,11 +65,11 @@ public class VariableParser {
         for (ClassInfo classInfo : classInfos) {
             ArrayList<VariableInfo> variableInfos = classInfo.getAllVariables();
             for (VariableInfo variableInfo : variableInfos) {
-                VariableType type = variableInfo.getVariableType();
+                Type type = variableInfo.getType();
                 ClassInfo classType = sourceInfo.getClassInfoBySuffixName(type.getTypeName());
                 if (classType != null) {
                     type.setTypeName(classType.getQualifiedName());
-                    variableInfo.setVariableType(type);
+                    variableInfo.setType(type);
                     classInfo.updateVariable(variableInfo.getVariableName(), variableInfo);
                     Log.d(TAG, "update variable type: %s, name: %s", type, variableInfo.getVariableName());
                     sourceInfo.updateClassInfoByQualifiedName(classInfo.getQualifiedName(), classInfo);

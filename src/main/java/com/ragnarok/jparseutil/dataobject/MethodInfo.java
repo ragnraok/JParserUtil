@@ -11,8 +11,8 @@ import java.util.Set;
 public class MethodInfo {
     
     private String methodName;
-    private VariableType returnType; // fully qualified name
-    private ArrayList<VariableType> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualified), in the order of declare in method
+    private Type returnType; // fully qualified name
+    private ArrayList<Type> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualified), in the order of declare in method
     private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
 
     private Set<Modifier> modifiers = new HashSet<>();
@@ -25,25 +25,25 @@ public class MethodInfo {
         return this.methodName;
     }
     
-    public void setReturnType(VariableType type) {
+    public void setReturnType(Type type) {
         this.returnType = type;
     } 
     
-    public VariableType getReturnType() {
+    public Type getReturnType() {
         return this.returnType;
     }
     
-    public void addParamType(VariableType type) {
+    public void addParamType(Type type) {
         this.methodParamsType.add(type);
     }
     
-    public void setParamType(int pos, VariableType type) {
+    public void setParamType(int pos, Type type) {
         if (pos < methodParamsType.size()) {
             methodParamsType.set(pos, type);
         }
     }
     
-    public ArrayList<VariableType> getParamType() {
+    public ArrayList<Type> getParamType() {
         return this.methodParamsType;
     }
     
@@ -79,7 +79,7 @@ public class MethodInfo {
         }
         if (methodParamsType.size() > 0) {
             result.append("\n");
-            for (VariableType params : methodParamsType) {
+            for (Type params : methodParamsType) {
                 result.append(String.format("paramsType: %s, ", params));
             }
         }

@@ -3,7 +3,7 @@ package com.ragnarok.jparseutil.memberparser;
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.VariableType;
+import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.source.tree.ClassTree;
@@ -47,7 +47,7 @@ public class AnnotationParser {
                 
                 if (member instanceof JCTree.JCMethodDecl) {
                     JCTree.JCMethodDecl annotationMember = (JCTree.JCMethodDecl) member;
-                    VariableType type = TypeParser.parseType(sourceInfo, annotationMember.getReturnType(), annotationMember.getReturnType().toString());
+                    Type type = TypeParser.parseType(sourceInfo, annotationMember.getReturnType(), annotationMember.getReturnType().toString());
                     String name = annotationMember.getName().toString();
                     Log.d(TAG, "parseAnnotationInfo, paramName: %s, paramType: %s, paramTypeKind: %s", type, name, annotationMember.getReturnType().getKind());
                     if (annotationMember.getDefaultValue() != null) {

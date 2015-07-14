@@ -64,6 +64,9 @@ public class ClassTreeVisitor {
                 }
             }
             
+//            Log.d(TAG, "extends: %s", classTree.getExtendsClause().getClass().getSimpleName());
+//            Log.d(TAG, "implements: %s", classTree.getImplementsClause());
+            
             String qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
             classInfo.setQualifiedName(qualifiedName);
 

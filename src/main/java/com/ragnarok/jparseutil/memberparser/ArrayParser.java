@@ -2,11 +2,9 @@ package com.ragnarok.jparseutil.memberparser;
 
 import com.ragnarok.jparseutil.dataobject.ArrayValue;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.VariableType;
+import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.tools.javac.tree.JCTree;
-
-import javax.lang.model.type.ArrayType;
 
 /**
  * Created by ragnarok on 15/7/2.
@@ -62,7 +60,7 @@ public class ArrayParser {
             
             for (JCTree.JCExpression arrayExpr : newArray.elems) {
                 if (!(arrayExpr instanceof JCTree.JCNewArray) && arrayValue.getElemType() == null && newArray.elemtype != null) {
-                    VariableType type = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
+                    Type type = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
                     arrayValue.setElemType(type);    
                 }
                 
@@ -88,7 +86,7 @@ public class ArrayParser {
         result.setDimensions(dimensions);
 
         // for array without initialization, the elemType does not contained the inner array type
-        VariableType elemType = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
+        Type elemType = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
         Log.d(TAG, "parseArrayForWithoutInitialization, elemType: %s", elemType);
         result.setElemType(elemType);
 

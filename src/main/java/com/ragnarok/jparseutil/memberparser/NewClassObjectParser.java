@@ -2,7 +2,7 @@ package com.ragnarok.jparseutil.memberparser;
 
 import com.ragnarok.jparseutil.dataobject.NewClassObjectInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.VariableType;
+import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.tools.javac.tree.JCTree;
 
@@ -17,7 +17,7 @@ public class NewClassObjectParser {
         Log.d(TAG, "parseNewClass, class: %s, args: %s, constructor: %s, constructorType: %s", 
                 newClass.clazz, newClass.args, newClass.constructor, newClass.constructorType);
         NewClassObjectInfo newClassObjectInfo = new NewClassObjectInfo();
-        VariableType classType = TypeParser.parseType(sourceInfo, newClass.clazz, newClass.clazz.toString());
+        Type classType = TypeParser.parseType(sourceInfo, newClass.clazz, newClass.clazz.toString());
         newClassObjectInfo.setObjectType(classType);
         return newClassObjectInfo;
     }

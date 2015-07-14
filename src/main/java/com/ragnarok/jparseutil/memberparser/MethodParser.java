@@ -2,7 +2,6 @@ package com.ragnarok.jparseutil.memberparser;
 
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.util.Log;
-import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.javac.tree.JCTree;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class MethodParser {
             
             String methodName = methodDecl.name.toString();
             methodName = containedClass.getQualifiedName() + "." + methodName;
-            VariableType returnType = TypeParser.parseType(sourceInfo, methodDecl.getReturnType(), methodDecl.getReturnType().toString());
+            Type returnType = TypeParser.parseType(sourceInfo, methodDecl.getReturnType(), methodDecl.getReturnType().toString());
             methodInfo.setMethodName(methodName);
             methodInfo.setReturnType(returnType);
             
@@ -39,7 +38,7 @@ public class MethodParser {
             // parse parameters
             if (methodDecl.getParameters() != null && methodDecl.getParameters().size() > 0) {
                 for (JCTree.JCVariableDecl variableDecl : methodDecl.getParameters()) {
-                    VariableType paramType = TypeParser.parseType(sourceInfo, variableDecl.getType(), variableDecl.getType().toString());
+                    Type paramType = TypeParser.parseType(sourceInfo, variableDecl.getType(), variableDecl.getType().toString());
                     methodInfo.addParamType(paramType);
                     
                     Log.d(TAG, "parseMethodInfo, parameter type: %s", paramType);
@@ -67,7 +66,7 @@ public class MethodParser {
             for (MethodInfo method : classMethods) {
                 
                 // update return type
-                VariableType returnType = method.getReturnType();
+                Type returnType = method.getReturnType();
                 ClassInfo returnClassType = sourceInfo.getClassInfoBySuffixName(returnType.getTypeName());
                 if (returnClassType != null) {
                     returnType.setTypeName(returnClassType.getQualifiedName());
@@ -77,10 +76,10 @@ public class MethodParser {
                 }
                 
                 // update parameter type
-                List<VariableType> paramsType = method.getParamType();
+                List<Type> paramsType = method.getParamType();
                 if (paramsType != null && paramsType.size() > 0) {
                     for (int i = 0; i < paramsType.size(); i++) {
-                        VariableType paramType = paramsType.get(i);
+                        Type paramType = paramsType.get(i);
                         ClassInfo paramClassType = sourceInfo.getClassInfoBySuffixName(paramType.getTypeName());
                         if (paramClassType != null) {
                             paramType.setTypeName(paramClassType.getQualifiedName());

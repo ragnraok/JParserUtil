@@ -11,7 +11,7 @@ public class ArrayValue {
     
     private int dimensions = 0; // how many dimensions for this array
     
-    private VariableType elemType = null;
+    private Type elemType = null;
     
     private ArrayDimension value;
     
@@ -31,11 +31,11 @@ public class ArrayValue {
         return this.value;
     }
     
-    public void setElemType(VariableType variableType) {
-        this.elemType = variableType;
+    public void setElemType(Type type) {
+        this.elemType = type;
     }
     
-    public VariableType getElemType() {
+    public Type getElemType() {
         return this.elemType;
     }
 

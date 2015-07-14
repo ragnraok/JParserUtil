@@ -14,7 +14,7 @@ public class AnnotationInfo {
     private String name;
     private String qualifiedName;
     
-    private HashMap<VariableType, String> typeParamsNameMap = new HashMap<>(); // full qualified name
+    private HashMap<Type, String> typeParamsNameMap = new HashMap<>(); // full qualified name
     private HashMap<String, Object> paramsDefaultValueMap = new HashMap<>();
 
     private Set<Modifier> modifiers = new HashSet<>();
@@ -36,7 +36,7 @@ public class AnnotationInfo {
     }
     
     // the type must fully qualified
-    public void putParams(VariableType type, String name, Object defaultValue) {
+    public void putParams(Type type, String name, Object defaultValue) {
         this.typeParamsNameMap.put(type, name);
         this.paramsDefaultValueMap.put(name, defaultValue);
     }
@@ -64,7 +64,7 @@ public class AnnotationInfo {
         }
         if (typeParamsNameMap.size() > 0) {
             result.append("\n");
-            for (Map.Entry<VariableType, String> entry: typeParamsNameMap.entrySet()) {
+            for (Map.Entry<Type, String> entry: typeParamsNameMap.entrySet()) {
                 result.append(String.format("paramName: %s, paramType: %s, defaultValue: %s",
                         entry.getValue(), entry.getKey(), paramsDefaultValueMap.get(entry.getValue())));
                 result.append("\n");

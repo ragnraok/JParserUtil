@@ -8,13 +8,13 @@ public class NewClassObjectInfo {
     
     private static final String TAG = "JParserUtil.NewClassObjectInfo";
     
-    private VariableType objectType; // the ``new`` object type
+    private Type objectType; // the ``new`` object type
     
-    public void setObjectType(VariableType type) {
+    public void setObjectType(Type type) {
         this.objectType = type;
     }
     
-    public VariableType getObjectType() {
+    public Type getObjectType() {
         return this.objectType;
     }
 
