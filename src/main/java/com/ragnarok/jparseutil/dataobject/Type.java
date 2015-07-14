@@ -48,9 +48,9 @@ public class Type {
     @Override
     public String toString() {
         if (!isArray) {
-            return String.format("{variableType: %s, isPrimitive: %b, isArray: %b}", typeName, isPrimitive, isArray);
+            return String.format("{type: %s, isPrimitive: %b, isArray: %b}", typeName, isPrimitive, isArray);
         } else {
-            return String.format("{variableType: %s, isPrimitive: %b, isArray: %b, arrayElemType: %s}", typeName, isPrimitive, isArray, arrayElmentType);
+            return String.format("{type: %s, isPrimitive: %b, isArray: %b, arrayElemType: %s}", typeName, isPrimitive, isArray, arrayElmentType);
         }
     }
 }
