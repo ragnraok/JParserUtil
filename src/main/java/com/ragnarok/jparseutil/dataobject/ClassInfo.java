@@ -7,12 +7,14 @@ import java.util.Set;
 
 /**
  * Created by ragnarok on 15/5/24.
- * represent information for a Java Class
+ * represent information for a Java Class or Interface
  */
 public class ClassInfo {
     
     private String qualifiedName;
     private String simpleName;
+    
+    private boolean isInterface;
     
     private Set<Modifier> modifiers = new HashSet<>();
     
@@ -95,6 +97,14 @@ public class ClassInfo {
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
+    
+    public void setIsInterface(boolean isInterface) {
+        this.isInterface = isInterface;
+    }
+    
+    public boolean isInterface() {
+        return this.isInterface;
+    }
 
     @Override
     public String toString() {
@@ -102,6 +112,7 @@ public class ClassInfo {
         result.append("{Class, ");
         result.append(String.format("qualifiedName: %s, ", qualifiedName));
         result.append(String.format("simpleName: %s, ", simpleName));
+        result.append(String.format("isInterface: %b, ", isInterface));
         if (modifiers.size() > 0) {
             result.append("\n");
             result.append("{modifiers: ");

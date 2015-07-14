@@ -36,7 +36,7 @@ public class ClassTreeVisitor {
     public void inspectClassTress(SourceInfo sourceInfo, ClassTree classTree) {
         this.sourceInfo = sourceInfo;
         Log.d(TAG, "inspectClassTree, name: %s, kind: %s", classTree.getSimpleName().toString(), classTree.getKind());
-        if (classTree.getKind() == Tree.Kind.CLASS) {
+        if (classTree.getKind() == Tree.Kind.CLASS || classTree.getKind() == Tree.Kind.INTERFACE) {
             addClassInfo(classTree);
             inspectAllClassTreeMembers(classTree.getMembers());
         } else if (classTree.getKind() == Tree.Kind.ANNOTATION_TYPE) {
@@ -51,6 +51,12 @@ public class ClassTreeVisitor {
             ClassInfo classInfo = new ClassInfo();
             
             classInfo.setSimpleName(simpleName);
+            
+            if (classTree.getKind() == Tree.Kind.INTERFACE) {
+                classInfo.setIsInterface(true);
+            } else {
+                classInfo.setIsInterface(false);
+            }
             
             if (classTree.getModifiers().getFlags() != null && classTree.getModifiers().getFlags().size() > 0) {
                 for (javax.lang.model.element.Modifier modifier : classTree.getModifiers().getFlags()) {
