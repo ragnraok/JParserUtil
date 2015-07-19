@@ -26,7 +26,7 @@ public class TypeParser {
         } else {
             String qualifiedName = parseTypeNameFromSourceInfo(sourceInfo, typeName);
             if (qualifiedName != null) {
-                result.setTypeName(typeName);
+                result.setTypeName(qualifiedName);
                 return result;
             }
         }

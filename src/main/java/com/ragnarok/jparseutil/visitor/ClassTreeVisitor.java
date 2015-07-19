@@ -2,10 +2,7 @@ package com.ragnarok.jparseutil.visitor;
 
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.dataobject.Modifier;
-import com.ragnarok.jparseutil.memberparser.AnnotationModifierParser;
-import com.ragnarok.jparseutil.memberparser.AnnotationParser;
-import com.ragnarok.jparseutil.memberparser.MethodParser;
-import com.ragnarok.jparseutil.memberparser.VariableParser;
+import com.ragnarok.jparseutil.memberparser.*;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.source.tree.AnnotationTree;
@@ -65,7 +62,19 @@ public class ClassTreeVisitor {
             }
             
 //            Log.d(TAG, "extends: %s", classTree.getExtendsClause().getClass().getSimpleName());
-//            Log.d(TAG, "implements: %s", classTree.getImplementsClause());
+//            Log.d(TAG, "implements: %s", classTree.getImplementsClause().get(0).getClass().getSimpleName());
+            
+            if (classTree.getExtendsClause() != null) {
+                Type superClass = TypeParser.parseType(sourceInfo, (JCTree) classTree.getExtendsClause(), classTree.getExtendsClause().toString());
+                classInfo.setSuperClass(superClass);
+            }
+            
+            if (classTree.getImplementsClause() != null && classTree.getImplementsClause().size() > 0) {
+                for (Tree implementTree : classTree.getImplementsClause()) {
+                    Type implementType = TypeParser.parseType(sourceInfo, (JCTree) implementTree, implementTree.toString());
+                    classInfo.addImplements(implementType);
+                }
+            }
             
             String qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
             classInfo.setQualifiedName(qualifiedName);
