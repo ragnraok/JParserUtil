@@ -7,6 +7,7 @@ import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.ImportTree;
 import com.sun.source.util.TreeScanner;
+import com.sun.tools.javac.tree.JCTree;
 
 /**
  * Created by ragnarok on 15/5/18.
@@ -35,8 +36,9 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
 
     @Override
     public Void visitClass(ClassTree node, Void aVoid) {
-        this.classVisitor.inspectClassTress(sourceInfo, node);
-        return super.visitClass(node, aVoid);
+        Log.d(TAG, "visitClass, name: %s", node.getSimpleName());
+        this.classVisitor.inspectClassTress(sourceInfo, node, null, false);
+        return null;
     }
 
     @Override

@@ -24,20 +24,26 @@ public class ClassTreeVisitor {
     
     private SourceInfo sourceInfo;
     
-    private String currentHandleClassName = null;
+//    private String currentHandleClassName = null;
     
+    private String outerClassName = null; // fully qualified
+    
+    private String currentClassName = null; // fully qualified
     
     public ClassTreeVisitor() {
     }
     
-    public void inspectClassTress(SourceInfo sourceInfo, ClassTree classTree) {
+    public void inspectClassTress(SourceInfo sourceInfo, ClassTree classTree, String outerClassName, boolean ignoreSelf) {
         this.sourceInfo = sourceInfo;
-        Log.d(TAG, "inspectClassTree, name: %s, kind: %s", classTree.getSimpleName().toString(), classTree.getKind());
+        this.outerClassName = outerClassName;
+        Log.d(TAG, "inspectClassTree, name: %s, kind: %s, outerClassName: %s", classTree.getSimpleName().toString(), classTree.getKind(), outerClassName);
         if (classTree.getKind() == Tree.Kind.CLASS || classTree.getKind() == Tree.Kind.INTERFACE) {
-            addClassInfo(classTree);
+            if (!ignoreSelf) {
+                addClassInfo(classTree);
+            }
             inspectAllClassTreeMembers(classTree.getMembers());
         } else if (classTree.getKind() == Tree.Kind.ANNOTATION_TYPE) {
-            AnnotationInfo annotationInfo = AnnotationParser.parseAnnotationInfo(currentHandleClassName, sourceInfo, classTree);
+            AnnotationInfo annotationInfo = AnnotationParser.parseAnnotationInfo(this.outerClassName, sourceInfo, classTree);
             this.sourceInfo.putAnnotaiotn(annotationInfo);
         }
     }
@@ -61,9 +67,6 @@ public class ClassTreeVisitor {
                 }
             }
             
-//            Log.d(TAG, "extends: %s", classTree.getExtendsClause().getClass().getSimpleName());
-//            Log.d(TAG, "implements: %s", classTree.getImplementsClause().get(0).getClass().getSimpleName());
-            
             if (classTree.getExtendsClause() != null) {
                 Type superClass = TypeParser.parseType(sourceInfo, (JCTree) classTree.getExtendsClause(), classTree.getExtendsClause().toString());
                 classInfo.setSuperClass(superClass);
@@ -75,17 +78,22 @@ public class ClassTreeVisitor {
                     classInfo.addImplements(implementType);
                 }
             }
-            
-            String qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
+            String qualifiedName;
+            if (outerClassName != null) {
+                qualifiedName = Util.buildClassName(outerClassName, simpleName);
+            } else {
+                qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
+            }
+             
             classInfo.setQualifiedName(qualifiedName);
+            
+            currentClassName = qualifiedName;
 
             Log.d(TAG, "addClassInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
             
             classInfo = parseClassAnnotation(classTree, classInfo);
 
             sourceInfo.addClassInfo(classInfo);
-            
-            currentHandleClassName = qualifiedName;
         }
     }
     
@@ -118,40 +126,45 @@ public class ClassTreeVisitor {
     }
     
     private void inspectVariable(JCTree.JCVariableDecl variableDecl) {
-        Log.d(TAG, "inspectVariable, class: %s", currentHandleClassName);
+        Log.d(TAG, "inspectVariable, class: %s", outerClassName);
         VariableInfo variableInfo = VariableParser.parseVariable(sourceInfo, variableDecl);
-        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentHandleClassName);
+        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(outerClassName);
         if (classInfo != null) {
             variableInfo.setContainedClass(classInfo);
             classInfo.addVariable(variableInfo);
             
-            sourceInfo.updateClassInfoByQualifiedName(currentHandleClassName, classInfo);
+            sourceInfo.updateClassInfoByQualifiedName(outerClassName, classInfo);
         }
     }
     
     private void inspectMethod(JCTree.JCMethodDecl methodDecl) {
-//        Log.d(TAG, "inspectMethod, name: %s, currentHandleClass: %s", methodDecl.getName(), currentHandleClassName);
-        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentHandleClassName);
+        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(outerClassName);
         MethodInfo methodInfo = MethodParser.parseMethodInfo(classInfo, sourceInfo, methodDecl);
         if (methodInfo != null) {
             classInfo.putMethod(methodInfo);
             
-            sourceInfo.updateClassInfoByQualifiedName(currentHandleClassName, classInfo);
+            sourceInfo.updateClassInfoByQualifiedName(outerClassName, classInfo);
         }
     }
     
     private void inspectInnerClass(JCTree.JCClassDecl classDecl) {
         String simpleName = classDecl.getSimpleName().toString();
-        String qualifiedName = Util.buildClassName(this.currentHandleClassName, simpleName);
+        String qualifiedName = null;
+        if (outerClassName != null) {
+            qualifiedName  = Util.buildClassName(this.outerClassName, simpleName);
+        } else {
+            qualifiedName = Util.buildClassName(this.currentClassName, simpleName);
+        }
         
-        Log.d(TAG, "inspectInnerClass, qualifiedName: %s, currentHandleClassName: %s", qualifiedName, currentHandleClassName);
+        
+        Log.d(TAG, "inspectInnerClass, qualifiedName: %s, outerClassName: %s, currentClassName: %s", qualifiedName, outerClassName, currentClassName);
         
         ClassInfo classInfo = new ClassInfo();
         classInfo.setSimpleName(simpleName);
         classInfo.setQualifiedName(qualifiedName);
         sourceInfo.addClassInfo(classInfo);
         
-        currentHandleClassName = qualifiedName;
-
+        // recursive parse
+        new ClassTreeVisitor().inspectClassTress(sourceInfo, classDecl, qualifiedName, true);
     }
 }

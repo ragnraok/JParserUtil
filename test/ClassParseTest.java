@@ -7,12 +7,14 @@ import java.util.Iterator;
 public class Foo extends Date implements Iterator, Closeable, FooInterface {
     public static final String TAG = "Test";
     
-    public InnerFoo newInstance() {
+    public Bar newInstance() {
         
     }
     
-    public class InnerFoo {
-        
+    public class Bar {
+        public class Shit {
+            
+        }
     }
     
     public interface FooInterface {
