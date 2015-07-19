@@ -58,43 +58,4 @@ public class MethodParser {
         
         return null;
     }
-    
-    public static SourceInfo updateAllMethodReturnTypeAndParamsTypeForInnerClass(SourceInfo sourceInfo) {
-        ArrayList<ClassInfo> classInfos = sourceInfo.getAllClass();
-        for (ClassInfo classInfo : classInfos) {
-            List<MethodInfo> classMethods = classInfo.getAllMethods();
-            for (MethodInfo method : classMethods) {
-                
-                // update return type
-                Type returnType = method.getReturnType();
-                ClassInfo returnClassType = sourceInfo.getClassInfoBySuffixName(returnType.getTypeName());
-                if (returnClassType != null) {
-                    returnType.setTypeName(returnClassType.getQualifiedName());
-                    method.setReturnType(returnType);
-                    
-                    Log.d(TAG, "update method, name: %s, new returnType: %s", method.getMethodName(), returnType);
-                }
-                
-                // update parameter type
-                List<Type> paramsType = method.getParamType();
-                if (paramsType != null && paramsType.size() > 0) {
-                    for (int i = 0; i < paramsType.size(); i++) {
-                        Type paramType = paramsType.get(i);
-                        ClassInfo paramClassType = sourceInfo.getClassInfoBySuffixName(paramType.getTypeName());
-                        if (paramClassType != null) {
-                            paramType.setTypeName(paramClassType.getQualifiedName());
-                            method.setParamType(i, paramType);
-                            Log.d(TAG, "update method, name: %s, new paramType: %s, pos: %d", method.getMethodName(), paramType, i);
-                        }
-                    }
-                }
-                
-                classInfo.updateMethod(method.getMethodName(), method);
-            }
-            
-            sourceInfo.updateClassInfoByQualifiedName(classInfo.getQualifiedName(), classInfo);
-        }
-
-        return sourceInfo;
-    }
 }

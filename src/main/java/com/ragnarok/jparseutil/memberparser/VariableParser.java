@@ -58,25 +58,4 @@ public class VariableParser {
         
         return result;
     }
-    
-    // update inner class variables type
-    public static SourceInfo updateAllVariableTypeForInnerClassAfterParse(SourceInfo sourceInfo) {
-        ArrayList<ClassInfo> classInfos = sourceInfo.getAllClass();
-        for (ClassInfo classInfo : classInfos) {
-            ArrayList<VariableInfo> variableInfos = classInfo.getAllVariables();
-            for (VariableInfo variableInfo : variableInfos) {
-                Type type = variableInfo.getType();
-                ClassInfo classType = sourceInfo.getClassInfoBySuffixName(type.getTypeName());
-                if (classType != null) {
-                    type.setTypeName(classType.getQualifiedName());
-                    variableInfo.setType(type);
-                    classInfo.updateVariable(variableInfo.getVariableName(), variableInfo);
-                    Log.d(TAG, "update variable type: %s, name: %s", type, variableInfo.getVariableName());
-                    sourceInfo.updateClassInfoByQualifiedName(classInfo.getQualifiedName(), classInfo);
-                }
-            }
-        }
-        
-        return sourceInfo;
-    }
 }

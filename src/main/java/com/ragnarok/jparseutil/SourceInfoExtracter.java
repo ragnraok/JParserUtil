@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil;
 
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
+import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.memberparser.MethodParser;
 import com.ragnarok.jparseutil.memberparser.VariableParser;
 import com.ragnarok.jparseutil.visitor.SourceTreeVisitor;
@@ -28,8 +29,7 @@ public class SourceInfoExtracter {
             compilationUnitTree.accept(sourceTreeVisitor, null);
         }
         SourceInfo sourceInfo = sourceTreeVisitor.getParseResult();
-        sourceInfo = VariableParser.updateAllVariableTypeForInnerClassAfterParse(sourceInfo);
-        sourceInfo = MethodParser.updateAllMethodReturnTypeAndParamsTypeForInnerClass(sourceInfo);
+        Type.setFinalParseResult(sourceInfo);
         
         System.out.println("\n\n\n");
         
