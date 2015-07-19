@@ -23,6 +23,10 @@ public class ClassInfo {
     private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
     
     private ArrayList<MethodInfo> methodInfos = new ArrayList<>();
+    
+    private Type superType = null;
+    
+    private ArrayList<Type> implementsInterfaces = new ArrayList<>();
 
     public void setQualifiedName(String className) {
         this.qualifiedName = className;
@@ -105,6 +109,22 @@ public class ClassInfo {
     public boolean isInterface() {
         return this.isInterface;
     }
+    
+    public void setSuperClass(Type type) {
+        this.superType = type;
+    }
+    
+    public Type getSuperClass() {
+        return this.superType;
+    }
+    
+    public void addImplements(Type type) {
+        this.implementsInterfaces.add(type);
+    }
+    
+    public ArrayList<Type> getImplements() {
+        return this.implementsInterfaces;
+    }
 
     @Override
     public String toString() {
@@ -113,6 +133,17 @@ public class ClassInfo {
         result.append(String.format("qualifiedName: %s, ", qualifiedName));
         result.append(String.format("simpleName: %s, ", simpleName));
         result.append(String.format("isInterface: %b, ", isInterface));
+        if (superType != null) {
+            result.append(String.format("superClass: %s", superType));
+        }
+        if (implementsInterfaces.size() > 0) {
+            result.append("\n");
+            result.append("{implements: ");
+            for (Type type: implementsInterfaces) {
+                result.append(type.toString() + ", ");
+            }
+            result.append("}");
+        }
         if (modifiers.size() > 0) {
             result.append("\n");
             result.append("{modifiers: ");
@@ -142,6 +173,7 @@ public class ClassInfo {
                 result.append("\n");
             }
         }
+        
         result.append("}");
         return result.toString();
     }
