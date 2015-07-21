@@ -12,6 +12,7 @@ public class SourceInfo {
     
     private static final String TAG = "JParserUtil.SourceInfo";
     
+    private String fileName;
     private ArrayList<String> importClassNames = new ArrayList<>();
     private String packageName = null;
     private ArrayList<AnnotationInfo> annotationInfos = new ArrayList<>();
@@ -20,6 +21,14 @@ public class SourceInfo {
      * all class informations
      */
     private ArrayList<ClassInfo> classInfos = new ArrayList<>();
+    
+    public void setFilename(String filename) {
+        this.fileName = filename;
+    }
+    
+    public String getFilename() {
+        return this.fileName;
+    }
     
     public void addImports(String importClass) {
         this.importClassNames.add(importClass);
@@ -116,7 +125,7 @@ public class SourceInfo {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append(String.format("{SourceInfo, packageName: %s", packageName));
+        result.append(String.format("{SourceInfo, filename: %s, packageName: %s", fileName, packageName));
         result.append("\n");
         if (importClassNames.size() > 0) {
             for (String className : importClassNames) {

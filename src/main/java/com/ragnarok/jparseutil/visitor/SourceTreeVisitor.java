@@ -20,8 +20,10 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
     private ClassTreeVisitor classVisitor;
     private SourceInfo sourceInfo;
     
-    public SourceTreeVisitor() {
+    public SourceTreeVisitor(String filename) {
+        Log.d(TAG, "create SourceTreeVisitor, filename: %s", filename);
         this.sourceInfo = new SourceInfo();
+        this.sourceInfo.setFilename(filename);
         this.classVisitor = new ClassTreeVisitor();
     }
     

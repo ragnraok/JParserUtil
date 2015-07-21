@@ -7,6 +7,8 @@ import com.ragnarok.jparseutil.memberparser.VariableParser;
 import com.ragnarok.jparseutil.visitor.SourceTreeVisitor;
 import com.sun.source.tree.CompilationUnitTree;
 
+import java.io.FileNotFoundException;
+
 /**
  * Created by ragnarok on 15/5/17.
  * Extract information from a Java source file
@@ -23,8 +25,13 @@ public class SourceInfoExtracter {
     }
     
     public SourceInfo extract() {
-        Iterable<? extends CompilationUnitTree> parseResult = sourceReader.readSource();
-        SourceTreeVisitor sourceTreeVisitor = new SourceTreeVisitor();
+        Iterable<? extends CompilationUnitTree> parseResult = null;
+        try {
+            parseResult = sourceReader.readSource();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        SourceTreeVisitor sourceTreeVisitor = new SourceTreeVisitor(sourceReader.getFilename());
         for (CompilationUnitTree compilationUnitTree : parseResult) {
             compilationUnitTree.accept(sourceTreeVisitor, null);
         }
