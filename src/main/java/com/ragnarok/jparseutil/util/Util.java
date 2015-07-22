@@ -29,6 +29,8 @@ public class Util {
             FLOAT_TYPE, FLOAT_PKG_TYPE, DOUBLE_TYPE, DOUBLE_PKG_TYPE, CHAR_TYPE, CHARACTER_TYPE,
             LONG_TYPE, LONG_PKG_TYPE, BOOLEAN_TYPE, BOOLEAN_PKG_TYPE, NUMBER_TYPE};
     
+    public static final String JAVA_FILE_SUFFIX = ".java";
+    
     private static String SYSTEM_DEFAULT_PACKAGE = "java.lang.";
     public static String STRING_NULL_LITERAL = "null";
     
