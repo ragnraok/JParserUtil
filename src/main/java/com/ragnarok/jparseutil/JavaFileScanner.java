@@ -27,7 +27,7 @@ public class JavaFileScanner {
         this.dir = dir;
     } 
     
-    public void scanAllJavaSources() throws FileNotFoundException {
+    public CodeInfo scanAllJavaSources() throws FileNotFoundException {
         initJavaSourcePaths();
         result = new CodeInfo();
         if (allJavaSourcePaths.size() > 0) {
@@ -35,10 +35,16 @@ public class JavaFileScanner {
                 parseJavaSource(path);   
             }
         }
+        return result;
     }
     
     private void parseJavaSource(String filepath) {
-        
+        Log.d(TAG, "parsing source: %s", filepath);
+        SourceInfoExtracter extracter = new SourceInfoExtracter(filepath);
+        SourceInfo sourceInfo = extracter.extract();
+        if (sourceInfo != null) {
+            result.addSource(sourceInfo);
+        }
     }
     
     private void initJavaSourcePaths() throws FileNotFoundException {
