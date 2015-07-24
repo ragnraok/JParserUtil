@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class VariableParser {
     
-    private static final String TAG = "JParserUtil.VariableParser";
+    public static final String TAG = "JParserUtil.VariableParser";
     
     public static VariableInfo parseVariable(SourceInfo sourceInfo, JCTree.JCVariableDecl variableDecl) {
         VariableInfo result = new VariableInfo();
@@ -31,10 +31,13 @@ public class VariableParser {
             }
         }
         
-        Log.d(TAG, "vartype class name: %s, init class name: %s", variableDecl.vartype.getClass().getSimpleName(),
-                variableDecl.init.getClass().getSimpleName());
- 
-        Object value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);
+        Log.d(TAG, "vartype class name: %s", variableDecl.vartype.getClass().getSimpleName());
+        
+        Object value = null;
+        if (variableDecl.init != null) {
+            Log.d(TAG, "varinit class name: %s", variableDecl.init.getClass().getSimpleName());
+            value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);   
+        }
 
         Type variableType = TypeParser.parseType(sourceInfo, variableDecl.vartype, type);
         Log.d(TAG, "variableType: %s", variableType);

@@ -29,6 +29,7 @@ public class JavaFileScanner {
     
     public CodeInfo scanAllJavaSources() throws FileNotFoundException {
         initJavaSourcePaths();
+        Log.d(TAG, "source paths: %s\n", allJavaSourcePaths.toString());
         result = new CodeInfo();
         if (allJavaSourcePaths.size() > 0) {
             for (String path : allJavaSourcePaths) {
@@ -63,7 +64,6 @@ public class JavaFileScanner {
                 if (child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
                     String path = child.getAbsolutePath();
                     allJavaSourcePaths.add(path);
-                    Log.d(TAG, "get java source file path: %s", path);
                 }
                 initJavaSourcePathsRecursive(child);
             }

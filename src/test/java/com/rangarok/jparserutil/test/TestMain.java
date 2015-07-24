@@ -15,7 +15,7 @@ public class TestMain {
     private static final String TAG = "JParserUtil.TestMain";
 
     public static void main(String[] args) {
-        String dir = "test";
+        String dir = "testsource";
 
         JavaFileScanner fileScanner = new JavaFileScanner(dir);
         try {

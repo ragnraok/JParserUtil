@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ClassTreeVisitor {
     
-    private static final String TAG = "JParserUtil.ClassTreeVisitor";
+    public static final String TAG = "JParserUtil.ClassTreeVisitor";
     
     private SourceInfo sourceInfo;
     
@@ -40,6 +40,8 @@ public class ClassTreeVisitor {
         if (classTree.getKind() == Tree.Kind.CLASS || classTree.getKind() == Tree.Kind.INTERFACE) {
             if (!ignoreSelf) {
                 addClassInfo(classTree);
+            } else if (outerClassName != null) {
+                currentClassName = Util.buildClassName(outerClassName, classTree.getSimpleName().toString());
             }
             inspectAllClassTreeMembers(classTree.getMembers());
         } else if (classTree.getKind() == Tree.Kind.ANNOTATION_TYPE) {
@@ -126,24 +128,24 @@ public class ClassTreeVisitor {
     }
     
     private void inspectVariable(JCTree.JCVariableDecl variableDecl) {
-        Log.d(TAG, "inspectVariable, class: %s", outerClassName);
+        Log.d(TAG, "inspectVariable, class: %s", currentClassName);
         VariableInfo variableInfo = VariableParser.parseVariable(sourceInfo, variableDecl);
-        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(outerClassName);
+        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
         if (classInfo != null) {
             variableInfo.setContainedClass(classInfo);
             classInfo.addVariable(variableInfo);
             
-            sourceInfo.updateClassInfoByQualifiedName(outerClassName, classInfo);
+            sourceInfo.updateClassInfoByQualifiedName(currentClassName, classInfo);
         }
     }
     
     private void inspectMethod(JCTree.JCMethodDecl methodDecl) {
-        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(outerClassName);
+        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
         MethodInfo methodInfo = MethodParser.parseMethodInfo(classInfo, sourceInfo, methodDecl);
         if (methodInfo != null) {
             classInfo.putMethod(methodInfo);
             
-            sourceInfo.updateClassInfoByQualifiedName(outerClassName, classInfo);
+            sourceInfo.updateClassInfoByQualifiedName(currentClassName, classInfo);
         }
     }
     
@@ -165,6 +167,6 @@ public class ClassTreeVisitor {
         sourceInfo.addClassInfo(classInfo);
         
         // recursive parse
-        new ClassTreeVisitor().inspectClassTress(sourceInfo, classDecl, qualifiedName, true);
+        new ClassTreeVisitor().inspectClassTress(sourceInfo, classDecl, currentClassName, true);
     }
 }

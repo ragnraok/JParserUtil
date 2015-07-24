@@ -38,9 +38,11 @@ public class SourceInfoExtracter {
         SourceInfo sourceInfo = sourceTreeVisitor.getParseResult();
         Type.setFinalParseResult(sourceInfo);
         
-        System.out.println("\n\n\n");
+        System.out.println("\n\n");
         
         System.out.println(sourceInfo);
+        
+        System.out.println("\n\n");
         
         return sourceInfo;
     }
