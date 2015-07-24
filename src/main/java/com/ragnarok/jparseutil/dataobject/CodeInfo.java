@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 public class CodeInfo {
     
-    private String TAG = "JParserUtil.CodeInfo";
+    public static final String TAG = "JParserUtil.CodeInfo";
     
     private HashMap<String, SourceInfo> javaSources = new HashMap<>();
     

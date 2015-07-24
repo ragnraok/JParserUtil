@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class JavaFileScanner {
     
-    private static final String TAG = "JParserUtil.JavaFileScanner";
+    public static final String TAG = "JParserUtil.JavaFileScanner";
     
     private String dir;
     

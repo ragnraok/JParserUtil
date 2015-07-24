@@ -1,7 +1,13 @@
 package com.ragnarok.jparseutil.util;
 
+import com.ragnarok.jparseutil.JavaFileScanner;
+import com.ragnarok.jparseutil.dataobject.CodeInfo;
+import com.ragnarok.jparseutil.dataobject.SourceInfo;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by ragnarok on 15/5/17.
@@ -18,7 +24,17 @@ public class Log {
     private static final int WARNING = 4;
     private static final int ERROR = 5;
     
-    private static final String LOG_FORMAT = "%s/%s:%s %s"; // time/level: TAG content
+    private static final String LOG_FORMAT = "[%s/%s]:[%s] %s"; // time/level: TAG content
+    
+    public static final int MAX_SHOW_LOG_LEVEL = DEBUG;
+    
+    public static Set<String> SHOW_LOG_TAG = new HashSet<>();
+    
+    static {
+        SHOW_LOG_TAG.add(SourceInfo.TAG);
+        SHOW_LOG_TAG.add(CodeInfo.TAG);
+        SHOW_LOG_TAG.add(JavaFileScanner.TAG);
+    }
     
     public static void v(String TAG, String format, String args) {
         println(VERBOSE, TAG, String.format(format, args));
@@ -61,6 +77,8 @@ public class Log {
     }
     
     private static void println(int level, String tag, String content) {
-        System.out.println(String.format(LOG_FORMAT, getCurrentLogTime(), logLevelToString(level), tag, content));
+        if (MAX_SHOW_LOG_LEVEL >= level && SHOW_LOG_TAG.contains(tag)) {
+            System.out.println(String.format(LOG_FORMAT, getCurrentLogTime(), logLevelToString(level), tag, content));
+        }
     }
 }

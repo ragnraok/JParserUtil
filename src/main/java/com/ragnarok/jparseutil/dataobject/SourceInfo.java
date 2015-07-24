@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class SourceInfo {
     
-    private static final String TAG = "JParserUtil.SourceInfo";
+    public static final String TAG = "JParserUtil.SourceInfo";
     
     private String fileName;
     private ArrayList<String> importClassNames = new ArrayList<>();
