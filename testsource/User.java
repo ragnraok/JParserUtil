@@ -3,8 +3,9 @@ package com.rangnarok.testsouce;
 import java.util.Date;
 
 import com.rangnarok.testsouce.annotation.PrintMe;
+import com.rangnarok.testsouce.annotation.interfaces.Printable;
 
-class User {
+class User implements Printable {
     
     public static final String CLASS_NAME = "User";
     
