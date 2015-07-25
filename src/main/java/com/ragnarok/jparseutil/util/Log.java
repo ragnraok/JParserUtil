@@ -24,6 +24,14 @@ public class Log {
     private static final int WARNING = 4;
     private static final int ERROR = 5;
     
+    private static final String VERBOSE_COLOR = "\u001B[37m";
+    private static final String DEBUG_COLOR = "\u001B[34m";
+    private static final String INFO_COLOR = "\u001B[32m";
+    private static final String WARNING_COLOR = "\u001B[36m";
+    private static final String ERROR_COLOR = "\u001B[31m";
+    private static final String[] LOG_TEXT_COLOR = new String[] {VERBOSE_COLOR, DEBUG_COLOR, INFO_COLOR, WARNING_COLOR, ERROR_COLOR};
+    private static final String ANSI_RESET = "\u001B[0m";
+    
     private static final String LOG_FORMAT = "[%s/%s:%s] %s"; // time/level: TAG content
     
     public static final int MAX_SHOW_LOG_LEVEL = DEBUG;
@@ -36,7 +44,7 @@ public class Log {
         SHOW_LOG_TAG.add(JavaFileScanner.TAG);
     }
     
-    public static void v(String TAG, String format, String args) {
+    public static void v(String TAG, String format, Object... args) {
         println(VERBOSE, TAG, String.format(format, args));
     }
     
@@ -77,8 +85,8 @@ public class Log {
     }
     
     private static void println(int level, String tag, String content) {
-        if (MAX_SHOW_LOG_LEVEL >= level && SHOW_LOG_TAG.contains(tag)) {
-            System.out.println(String.format(LOG_FORMAT, getCurrentLogTime(), logLevelToString(level), tag, content));
+        if (level >= MAX_SHOW_LOG_LEVEL && SHOW_LOG_TAG.contains(tag)) {
+            System.out.println(String.format(LOG_TEXT_COLOR[level - 1] + LOG_FORMAT + ANSI_RESET, getCurrentLogTime(), logLevelToString(level), tag, content));
         }
     }
 }
