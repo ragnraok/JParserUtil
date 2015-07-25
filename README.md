@@ -19,7 +19,7 @@ Currently support:
 4. For annotaions annotated with variables or methods, now can extract its name, and arguments, but currently only support simple primitive simple value. 
 5. Extract Annotation declaration.
 6. Parse value from Array declaration, currently only support parse primitive type
-
+7. Support parse multiple Java source files, just need to give a input directory
 ---
 
 Todo: 
@@ -27,6 +27,6 @@ Todo:
 - [x] add modifiers information for class, variable, method
 - [x] add interface parse support
 - [x] add super class information
-- [ ] multiple files parsing support
+- [x] multiple files parsing support
 - [ ] add Java source map to support retrieve qualified class name from  ``import *`` 
 
