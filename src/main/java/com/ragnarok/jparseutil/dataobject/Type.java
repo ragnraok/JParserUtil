@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import com.ragnarok.jparseutil.util.Log;
+import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.javac.code.Source;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Type {
     }
     
     public String getTypeName() {
-        if (!isUpdatedToQualifiedTypeName) {
+        if (!isUpdatedToQualifiedTypeName && !Util.isPrimitive(this.typeName)) {
             // if this is a fully qualifed className, it must looks like "com.example.test.QualifiedClassName",
             // which must contained a '.'
             if (this.typeName != null && !this.typeName.contains(".")) {

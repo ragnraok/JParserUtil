@@ -3,7 +3,7 @@ package com.rangnarok.testsouce;
 import java.util.Date;
 
 import com.rangnarok.testsouce.annotation.PrintMe;
-import com.rangnarok.testsouce.annotation.interfaces.Printable;
+import com.rangnarok.testsouce.annotation.interfaces.*;
 
 class User implements Printable {
     

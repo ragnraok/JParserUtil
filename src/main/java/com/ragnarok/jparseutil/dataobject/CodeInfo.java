@@ -20,6 +20,8 @@ public class CodeInfo {
     
     private HashMap<String, List<AnnotationInfo>> packageAnnotationList = new HashMap<>();
     
+    private ArrayList<String> classQualifiedNameLists = new ArrayList<>();
+    
     public void addSource(SourceInfo sourceInfo) {
         javaSources.put(sourceInfo.getFilename(), sourceInfo);
     }
@@ -88,6 +90,27 @@ public class CodeInfo {
             AnnotationInfo annotationInfo = sourceInfo.getAnnotationInfoByQualifiedName(qualifiedName);
             if (annotationInfo != null) {
                 return annotationInfo;
+            }
+        }
+        return null;
+    }
+    
+    public void arrangeAllClassNameList() {
+        classQualifiedNameLists.clear();
+        for (SourceInfo sourceInfo : javaSources.values()) {
+            for (ClassInfo classInfo : sourceInfo.getAllClass()) {
+                classQualifiedNameLists.add(classInfo.getQualifiedName());
+            }
+        }
+    }
+    
+    public String getClassQualifiedNameBySimpleName(String simpleName) {
+        if (classQualifiedNameLists.size() == 0) {
+            arrangeAllClassNameList();
+        }
+        for (String qualifiedName : classQualifiedNameLists) {
+            if (qualifiedName.endsWith("." + simpleName)) {
+                return qualifiedName;
             }
         }
         return null;
