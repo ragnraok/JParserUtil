@@ -19,4 +19,14 @@ public class CodeInfo {
     public HashMap<String, SourceInfo> getAllSources() {
         return javaSources;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("");
+        for (SourceInfo sourceInfo : javaSources.values()) {
+            result.append(sourceInfo.toString());
+            result.append("\n");
+        }
+        return result.toString();
+    }
 }

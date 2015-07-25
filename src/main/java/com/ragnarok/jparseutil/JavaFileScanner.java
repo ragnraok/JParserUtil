@@ -2,6 +2,7 @@ package com.ragnarok.jparseutil;
 
 import com.ragnarok.jparseutil.dataobject.CodeInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
+import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 
@@ -36,6 +37,7 @@ public class JavaFileScanner {
                 parseJavaSource(path);   
             }
         }
+        Type.setFinalParseResult(result);
         return result;
     }
     

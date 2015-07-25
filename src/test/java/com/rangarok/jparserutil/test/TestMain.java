@@ -20,6 +20,7 @@ public class TestMain {
         JavaFileScanner fileScanner = new JavaFileScanner(dir);
         try {
             CodeInfo codeInfo = fileScanner.scanAllJavaSources();
+            System.out.println(codeInfo);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());

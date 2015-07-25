@@ -14,7 +14,7 @@ import com.sun.tools.javac.tree.JCTree;
  */
 public class TypeParser {
 
-    private static final String TAG = "JParserUtil.TypeParser";
+    public static final String TAG = "JParserUtil.TypeParser";
 
     public static Type parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
         Log.d(TAG, "parseType, typeElement class: %s", typeElement.getClass().getSimpleName());

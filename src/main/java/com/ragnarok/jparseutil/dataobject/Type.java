@@ -1,6 +1,10 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import com.ragnarok.jparseutil.util.Log;
+import com.sun.tools.javac.code.Source;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by ragnarok on 15/6/28.
@@ -8,7 +12,7 @@ import com.ragnarok.jparseutil.util.Log;
  */
 public class Type {
     
-    private static final String TAG = "JParserUtil.VariableType";
+    public static final String TAG = "JParserUtil.Type";
     
     private String typeName; // fully qualified
     private boolean isPrimitive = false;
@@ -26,12 +30,16 @@ public class Type {
             // if this is a fully qualifed className, it must looks like "com.example.test.QualifiedClassName",
             // which must contained a '.'
             if (this.typeName != null && !this.typeName.contains(".")) {
-                if (finalParseResult != null) {
-                    ClassInfo classInfo = finalParseResult.getClassInfoBySuffixName(this.typeName);
-                    if (classInfo != null) {
-                        String updatedName = classInfo.getQualifiedName();
-                        Log.d(TAG, "update type name, %s to %s", this.typeName, updatedName);
-                        this.typeName = updatedName;
+                if (finalParseResult != null && finalParseResult.getAllSources() != null && finalParseResult.getAllSources().size() > 0) {
+                    HashMap<String, SourceInfo> allSources = finalParseResult.getAllSources();
+                    for (SourceInfo sourceInfo : allSources.values()) {
+                        ClassInfo classInfo = sourceInfo.getClassInfoBySuffixName(this.typeName);
+                        if (classInfo != null) {
+                            String updatedName = classInfo.getQualifiedName();
+                            Log.d(TAG, "update type name, %s to %s", this.typeName, updatedName);
+                            this.typeName = updatedName;
+                            break;
+                        }
                     }
                     isUpdatedToQualifiedTypeName = true;
                 }
@@ -73,9 +81,9 @@ public class Type {
         }
     }
     
-    private static SourceInfo finalParseResult;
+    private static CodeInfo finalParseResult;
     
-    public static void setFinalParseResult(SourceInfo sourceInfo) {
-        finalParseResult = sourceInfo;
+    public static void setFinalParseResult(CodeInfo codeInfo) {
+        finalParseResult = codeInfo;
     }
 }
