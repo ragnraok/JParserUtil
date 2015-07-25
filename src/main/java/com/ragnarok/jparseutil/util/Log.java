@@ -24,7 +24,7 @@ public class Log {
     private static final int WARNING = 4;
     private static final int ERROR = 5;
     
-    private static final String LOG_FORMAT = "[%s/%s]:[%s] %s"; // time/level: TAG content
+    private static final String LOG_FORMAT = "[%s/%s:%s] %s"; // time/level: TAG content
     
     public static final int MAX_SHOW_LOG_LEVEL = DEBUG;
     
