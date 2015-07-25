@@ -4,6 +4,7 @@ import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
+import com.ragnarok.jparseutil.util.Primitive;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
@@ -77,19 +78,19 @@ public class TypeParser {
     
     private static String getTypeNameFromKind(Tree.Kind kind) {
         if (kind == Tree.Kind.INT_LITERAL) {
-            return Util.INT_TYPE;
+            return Primitive.INT_TYPE;
         } else if (kind == Tree.Kind.LONG_LITERAL) {
-            return Util.LONG_TYPE;
+            return Primitive.LONG_TYPE;
         } else if (kind == Tree.Kind.FLOAT_LITERAL) {
-            return Util.FLOAT_TYPE;
+            return Primitive.FLOAT_TYPE;
         } else if (kind == Tree.Kind.DOUBLE_LITERAL) {
-            return Util.DOUBLE_TYPE;
+            return Primitive.DOUBLE_TYPE;
         } else if (kind == Tree.Kind.BOOLEAN_LITERAL) {
-            return Util.BOOLEAN_TYPE;
+            return Primitive.BOOLEAN_TYPE;
         } else if (kind == Tree.Kind.CHAR_LITERAL) {
-            return Util.CHAR_TYPE;
+            return Primitive.CHAR_TYPE;
         } else if (kind == Tree.Kind.STRING_LITERAL) {
-            return Util.STRING_TYPE;
+            return Primitive.STRING_TYPE;
         } else {
             return "";
         }
