@@ -24,6 +24,14 @@ class User {
         return new Date();
     }
     
+    public Juno getJuno() {
+        return new Juno();
+    }
+    
+    public Damn getDamn() {
+        return new Damn();
+    }
+    
     public static class Juno {
         private String name = "Juno";
     }

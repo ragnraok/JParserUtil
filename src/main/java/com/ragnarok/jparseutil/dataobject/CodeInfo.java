@@ -1,5 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
+import com.sun.tools.classfile.Annotation;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +66,31 @@ public class CodeInfo {
     
     public HashMap<String, List<AnnotationInfo>> getPackageAnnotationList() {
         return packageAnnotationList;
+    }
+
+    /**
+     * get {@link ClassInfo} by qualified name 
+     * @param qualifiedName
+     * @return
+     */
+    public ClassInfo getClassByQualifiedName(String qualifiedName) {
+        for (SourceInfo sourceInfo : javaSources.values()) {
+            ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(qualifiedName);
+            if (classInfo != null) {
+                return classInfo;
+            }
+        }
+        return null;
+    }
+    
+    public AnnotationInfo getAnnotationByQualifiedName(String qualifiedName) {
+        for (SourceInfo sourceInfo : javaSources.values()) {
+            AnnotationInfo annotationInfo = sourceInfo.getAnnotationInfoByQualifiedName(qualifiedName);
+            if (annotationInfo != null) {
+                return annotationInfo;
+            }
+        }
+        return null;
     }
 
     @Override

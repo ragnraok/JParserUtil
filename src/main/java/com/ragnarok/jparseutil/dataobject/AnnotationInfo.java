@@ -63,7 +63,7 @@ public class AnnotationInfo {
     public String toString() {
         StringBuilder result = new StringBuilder(String.format("{Annotation, package: %s, ", packageName));
         result.append(String.format("name: %s, ", name));
-        result.append(String.format("qualifiedName: %s, \n", qualifiedName));
+        result.append(String.format("qualifiedName: %s", qualifiedName));
         if (modifiers.size() > 0) {
             result.append("\n");
             result.append("{modifiers: ");

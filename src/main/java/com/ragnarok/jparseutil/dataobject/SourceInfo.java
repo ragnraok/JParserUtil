@@ -121,6 +121,15 @@ public class SourceInfo {
     public ArrayList<AnnotationInfo> getAllAnnotations() {
         return this.annotationInfos;
     }
+    
+    public AnnotationInfo getAnnotationInfoByQualifiedName(String qualifiedName) {
+        for (AnnotationInfo annotationInfo : annotationInfos) {
+            if (annotationInfo.getQualifiedName().equals(qualifiedName)) {
+                return annotationInfo;
+            }
+        }
+        return null;
+    }
 
     @Override
     public String toString() {
