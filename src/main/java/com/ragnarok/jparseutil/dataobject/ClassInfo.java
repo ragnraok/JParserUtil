@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public class ClassInfo {
     
+    private String packageName;
+    
     private String qualifiedName;
     private String simpleName;
     
@@ -125,11 +127,19 @@ public class ClassInfo {
     public ArrayList<Type> getImplements() {
         return this.implementsInterfaces;
     }
+    
+    public String getPackageName() {
+        return this.packageName;
+    }
+    
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("{Class, ");
+        result.append(String.format("{Class, package: %s, ", packageName));
         result.append(String.format("qualifiedName: %s, ", qualifiedName));
         result.append(String.format("simpleName: %s, ", simpleName));
         result.append(String.format("isInterface: %b, ", isInterface));

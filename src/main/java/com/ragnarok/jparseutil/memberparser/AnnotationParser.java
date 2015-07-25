@@ -31,6 +31,7 @@ public class AnnotationParser {
         Log.d(TAG, "parseAnnotationInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
         
         AnnotationInfo result = new AnnotationInfo();
+        result.setPackageName(sourceInfo.getPackageName());
         result.setSimpleName(classTree.getSimpleName().toString());
         result.setQualifiedName(qualifiedName);
         

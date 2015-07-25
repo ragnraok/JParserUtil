@@ -55,6 +55,7 @@ public class ClassTreeVisitor {
         if (!this.sourceInfo.isContainClass(simpleName)) {
             ClassInfo classInfo = new ClassInfo();
             
+            classInfo.setPackageName(this.sourceInfo.getPackageName());
             classInfo.setSimpleName(simpleName);
             
             if (classTree.getKind() == Tree.Kind.INTERFACE) {
@@ -164,6 +165,7 @@ public class ClassTreeVisitor {
         ClassInfo classInfo = new ClassInfo();
         classInfo.setSimpleName(simpleName);
         classInfo.setQualifiedName(qualifiedName);
+        classInfo.setPackageName(sourceInfo.getPackageName());
         sourceInfo.addClassInfo(classInfo);
         
         // recursive parse

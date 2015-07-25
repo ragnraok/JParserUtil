@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public class AnnotationInfo {
     
+    private String packageName;
+    
     private String name;
     private String qualifiedName;
     
@@ -49,9 +51,17 @@ public class AnnotationInfo {
         return modifiers;
     }
 
+    public String getPackageName() {
+        return this.packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("{Annotation, ");
+        StringBuilder result = new StringBuilder(String.format("{Annotation, package: %s, ", packageName));
         result.append(String.format("name: %s, ", name));
         result.append(String.format("qualifiedName: %s, \n", qualifiedName));
         if (modifiers.size() > 0) {

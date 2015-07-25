@@ -21,6 +21,9 @@ public class TestMain {
         try {
             CodeInfo codeInfo = fileScanner.scanAllJavaSources();
             System.out.println(codeInfo);
+            
+            codeInfo.arrangeAnnotationByPackage();
+            codeInfo.arrangeClassByPackage();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
