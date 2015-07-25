@@ -29,6 +29,7 @@ public class JavaFileScanner {
     } 
     
     public CodeInfo scanAllJavaSources() throws FileNotFoundException {
+        long startTime = System.currentTimeMillis();
         initJavaSourcePaths();
         Log.d(TAG, "source paths: %s\n", allJavaSourcePaths.toString());
         result = new CodeInfo();
@@ -38,6 +39,8 @@ public class JavaFileScanner {
             }
         }
         Type.setFinalParseResult(result);
+        long endTime = System.currentTimeMillis();
+        Log.i(TAG, "parse finish, used: %dms", endTime - startTime);
         return result;
     }
     
