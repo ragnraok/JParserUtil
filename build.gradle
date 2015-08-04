@@ -11,3 +11,15 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile files('lib/tools.jar')
 }
+
+task createJar(type: Jar) {
+    manifest {
+        attributes 'Title': 'JParserUtil',
+                'Version': '1.0'
+    }
+    baseName = project.name + "-all"
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
