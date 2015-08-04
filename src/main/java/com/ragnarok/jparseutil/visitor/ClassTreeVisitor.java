@@ -169,6 +169,6 @@ public class ClassTreeVisitor {
         sourceInfo.addClassInfo(classInfo);
         
         // recursive parse
-        new ClassTreeVisitor().inspectClassTress(sourceInfo, classDecl, currentClassName, true);
+        new ClassTreeVisitor().inspectClassTress(sourceInfo, classDecl, qualifiedName, true);
     }
 }

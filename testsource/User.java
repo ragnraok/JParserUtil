@@ -1,5 +1,6 @@
 package com.rangnarok.testsouce;
 
+import java.lang.Class;
 import java.util.Date;
 
 import com.rangnarok.testsouce.annotation.PrintMe;
@@ -11,6 +12,10 @@ class User implements Printable {
     
     private String firstName = "Ragnarok";
     private String lastName;
+    
+    private String test = getClass().getSimpleName();
+    
+    private Class clazz = getClass();
     
     @PrintMe
     public String getFirstName() {
@@ -39,5 +44,9 @@ class User implements Printable {
     
     public static class Damn {
         private String name = "Damn";
+        
+        class DamnDamn {
+            
+        }
     }
 }
