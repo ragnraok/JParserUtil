@@ -20,6 +20,8 @@ public class ReferenceSourceMap {
    
     private static ReferenceSourceMap INSTANCE;
     
+    private boolean isPrepare = false;
+    
     private ReferenceSourceMap() {}
     
     public static ReferenceSourceMap getInstance() {
@@ -52,6 +54,7 @@ public class ReferenceSourceMap {
             e.printStackTrace();
             Log.e(TAG, "initFromSourceMapFile error: %s", e.getMessage());
         }
+        isPrepare = false;
     }
 
     /**
@@ -59,14 +62,19 @@ public class ReferenceSourceMap {
      */
     public void prepare() {
         Collections.sort(classesNameList);
+        isPrepare = true;
     }
 
     /**
      * search a class qualifed name from a prefix
      * @param prefix
+     * @throws IllegalStateException if not prepare to search
      * @return
      */
     public String searchClassNameByPrefix(String prefix) {
+        if (!isPrepare) {
+            throw new IllegalStateException("must call prepare before search!");
+        }
         if (prefix.endsWith(".*")) { // remove the 'import *' note
             prefix = prefix.substring(0, prefix.lastIndexOf(".*"));
         }
