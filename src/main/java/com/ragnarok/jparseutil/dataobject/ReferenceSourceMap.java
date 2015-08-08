@@ -78,17 +78,22 @@ public class ReferenceSourceMap {
         if (prefix.endsWith(".*")) { // remove the 'import *' note
             prefix = prefix.substring(0, prefix.lastIndexOf(".*"));
         }
-        int index = Collections.binarySearch(classesNameList, prefix, new Comparator<String>() {
-            @Override
-            public int compare(String currentItem, String key) {
-                if (currentItem.startsWith(key) && currentItem.endsWith(simpleClassName)) {
-                    return 0;
-                }
-                return currentItem.compareTo(key);
+//        int index = Collections.binarySearch(classesNameList, prefix, new Comparator<String>() {
+//            @Override
+//            public int compare(String currentItem, String key) {
+//                if (currentItem.startsWith(key) && currentItem.endsWith(simpleClassName)) {
+//                    return 0;
+//                }
+//                return currentItem.compareTo(key);
+//            }
+//        });
+//        if (index >= 0) {
+//            return classesNameList.get(index);
+//        }
+        for (String className : classesNameList) {
+            if (className.startsWith(prefix) && className.endsWith(simpleClassName)) {
+                return className;
             }
-        });
-        if (index >= 0) {
-            return classesNameList.get(index);
         }
         return null;
     }

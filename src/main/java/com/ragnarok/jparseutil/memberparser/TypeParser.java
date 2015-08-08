@@ -52,7 +52,7 @@ public class TypeParser {
             return null;
         }
         for (String className : sourceInfo.getImports()) {
-            if (!className.endsWith("*.*")) {
+            if (!className.endsWith(".*")) {
                 String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
                 if (simpleClassName.equals(type)) {
                     return className;
@@ -60,9 +60,11 @@ public class TypeParser {
             } else {
                 // import *
                 String fullQaulifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
-                String simpleClassName = fullQaulifiedClassName.substring(className.lastIndexOf(".") + 1);
-                if (simpleClassName.equals(type)) {
-                    return fullQaulifiedClassName;
+                if (fullQaulifiedClassName != null) {
+                    String simpleClassName = fullQaulifiedClassName.substring(className.lastIndexOf(".") + 1);
+                    if (simpleClassName.equals(type)) {
+                        return fullQaulifiedClassName;
+                    }
                 }
             }
         }
