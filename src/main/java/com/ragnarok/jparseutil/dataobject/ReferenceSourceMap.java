@@ -66,12 +66,12 @@ public class ReferenceSourceMap {
     }
 
     /**
-     * search a class qualifed name from a prefix
+     * search a class qualifed name by prefix and simple class name(not qualified)
      * @param prefix
      * @throws IllegalStateException if not prepare to search
      * @return
      */
-    public String searchClassNameByPrefix(String prefix) {
+    public String searchClassNameByPrefixAndSimpleClassName(String prefix, final String simpleClassName) {
         if (!isPrepare) {
             throw new IllegalStateException("must call prepare before search!");
         }
@@ -81,7 +81,7 @@ public class ReferenceSourceMap {
         int index = Collections.binarySearch(classesNameList, prefix, new Comparator<String>() {
             @Override
             public int compare(String currentItem, String key) {
-                if (currentItem.startsWith(key)) {
+                if (currentItem.startsWith(key) && currentItem.endsWith(simpleClassName)) {
                     return 0;
                 }
                 return currentItem.compareTo(key);

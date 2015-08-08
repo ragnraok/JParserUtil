@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
+import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
@@ -51,9 +52,18 @@ public class TypeParser {
             return null;
         }
         for (String className : sourceInfo.getImports()) {
-            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-            if (simpleClassName.equals(type)) {
-                return className;
+            if (!className.endsWith("*.*")) {
+                String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+                if (simpleClassName.equals(type)) {
+                    return className;
+                }
+            } else {
+                // import *
+                String fullQaulifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
+                String simpleClassName = fullQaulifiedClassName.substring(className.lastIndexOf(".") + 1);
+                if (simpleClassName.equals(type)) {
+                    return fullQaulifiedClassName;
+                }
             }
         }
 
