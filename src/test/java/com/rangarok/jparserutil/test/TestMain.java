@@ -5,6 +5,7 @@ import com.ragnarok.jparseutil.SourceInfoExtracter;
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.CodeInfo;
+import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.FileNotFoundException;
@@ -18,9 +19,12 @@ public class TestMain {
 
     public static void main(String[] args) {
         String dir = "testsource";
-
-        JavaFileScanner fileScanner = new JavaFileScanner(dir);
+        String sourceMapFile = "testsource/android-22.txt";
+        
         try {
+            JavaFileScanner fileScanner = new JavaFileScanner(dir);
+            ReferenceSourceMap.getInstance().initWithSourceMapFile(sourceMapFile);
+            ReferenceSourceMap.getInstance().prepare();
             CodeInfo codeInfo = fileScanner.scanAllJavaSources();
             System.out.println(codeInfo);
             
