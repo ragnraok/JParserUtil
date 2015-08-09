@@ -14,7 +14,7 @@ Currently support:
 
 1. Extract source information, like imports, packge name
 
-2.  Extract class info, include class name, inner class name, annotation modifiers, and retrive the fully qualified name from imports and package declaration(currently not support ``import *``)
+2.  Extract class info, include class name, inner class name, annotation modifiers, and retrive the fully qualified name from imports and package declaration(include parse from 'import *')
 
 3. Extract variable info, include variable name, variable type and the fully qualified from imports and package declaration, variable value(currently only support parse primitive type), and annotations. 
 
@@ -37,5 +37,5 @@ Todo:
 - [x] add interface parse support
 - [x] add super class information
 - [x] multiple files parsing support
-- [ ] add Java source map to support retrieve qualified class name from  ``import *`` 
+- [x] add Java source map to support retrieve qualified class name from  ``import *`` 
 
