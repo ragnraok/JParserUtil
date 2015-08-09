@@ -5,7 +5,6 @@ import com.ragnarok.jparseutil.util.Log;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -36,6 +35,19 @@ public class ReferenceSourceMap {
     }
 
     /**
+     * initialize the ReferenceSourceMap from a list of source map file
+     * @param sourceMapFileList an array contains all source map filenames
+     * @throws FileNotFoundException
+     */
+    public void initWithSourceMapFile(String... sourceMapFileList) throws FileNotFoundException {
+        classesNameList.clear();
+        for (String filename : sourceMapFileList) {
+            addClassesListFromSourceMapFile(filename);
+        }
+        isPrepare = false;
+    }
+
+    /**
      * add classes from the {@param sourceMapFile}
      * @param sourceMapFile
      * @throws FileNotFoundException
@@ -53,6 +65,14 @@ public class ReferenceSourceMap {
         } catch (IOException e) {
             e.printStackTrace();
             Log.e(TAG, "initFromSourceMapFile error: %s", e.getMessage());
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         isPrepare = false;
     }
