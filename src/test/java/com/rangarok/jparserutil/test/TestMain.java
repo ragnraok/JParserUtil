@@ -2,10 +2,7 @@ package com.rangarok.jparserutil.test;
 
 import com.ragnarok.jparseutil.JavaFileScanner;
 import com.ragnarok.jparseutil.SourceInfoExtracter;
-import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
-import com.ragnarok.jparseutil.dataobject.ClassInfo;
-import com.ragnarok.jparseutil.dataobject.CodeInfo;
-import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
+import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.FileNotFoundException;
@@ -15,9 +12,12 @@ import java.io.FileNotFoundException;
  */
 public class TestMain {
     
-    private static final String TAG = "JParserUtil.TestMain";
+    public static final String TAG = "JParserUtil.TestMain";
 
     public static void main(String[] args) {
+        Log.setMaxLogLevel(Log.DEBUG);
+        Log.addShowLogTAG(JavaFileScanner.TAG);
+        
         String dir = "testsource";
         String sourceMapFile = "testsource/android-22.txt";
         

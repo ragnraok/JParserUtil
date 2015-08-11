@@ -18,11 +18,11 @@ public class Log {
     /**
      * log level definitions
      */
-    private static final int VERBOSE = 1;
-    private static final int DEBUG = 2;
-    private static final int INFO = 3;
-    private static final int WARNING = 4;
-    private static final int ERROR = 5;
+    public static final int VERBOSE = 1;
+    public static final int DEBUG = 2;
+    public static final int INFO = 3;
+    public static final int WARNING = 4;
+    public static final int ERROR = 5;
     
     private static final String VERBOSE_COLOR = "\u001B[37m";
     private static final String DEBUG_COLOR = "\u001B[34m";
@@ -34,14 +34,20 @@ public class Log {
     
     private static final String LOG_FORMAT = "[%s/%s:%s] %s"; // time/level: TAG content
     
-    public static final int MAX_SHOW_LOG_LEVEL = DEBUG;
+    public static int MAX_SHOW_LOG_LEVEL = DEBUG;
     
     public static Set<String> SHOW_LOG_TAG = new HashSet<>();
     
     static {
-        SHOW_LOG_TAG.add(SourceInfo.TAG);
-        SHOW_LOG_TAG.add(CodeInfo.TAG);
         SHOW_LOG_TAG.add(JavaFileScanner.TAG);
+    }
+    
+    public static void setMaxLogLevel(int maxLogLevel) {
+        MAX_SHOW_LOG_LEVEL = maxLogLevel;
+    }
+    
+    public static void addShowLogTAG(String TAG) {
+        SHOW_LOG_TAG.add(TAG);
     }
     
     public static void v(String TAG, String format, Object... args) {
