@@ -38,5 +38,5 @@ Todo:
 - [x] add super class information
 - [x] multiple files parsing support
 - [x] add Java source map to support retrieve qualified class name from  ``import *`` 
-- [ ] simple mathematical operation parsing support for primitive type
+- [ ] simple mathematical operation parsing support for primitive type variable initialization
 
