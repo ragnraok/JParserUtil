@@ -13,9 +13,7 @@ import java.util.List;
  */
 public class MethodParser {
     
-    private static final String TAG = "JParserUtil.MethodParser";
-    
-    private static final String VOID_TYPE = "void";
+    public static final String TAG = "JParserUtil.MethodParser";
     
     public static MethodInfo parseMethodInfo(ClassInfo containedClass, SourceInfo sourceInfo, JCTree.JCMethodDecl methodDecl) {
         if (containedClass != null) {

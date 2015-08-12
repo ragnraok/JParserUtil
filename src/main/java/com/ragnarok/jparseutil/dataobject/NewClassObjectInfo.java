@@ -6,8 +6,6 @@ package com.ragnarok.jparseutil.dataobject;
  */
 public class NewClassObjectInfo {
     
-    private static final String TAG = "JParserUtil.NewClassObjectInfo";
-    
     private Type objectType; // the ``new`` object type
     
     public void setObjectType(Type type) {

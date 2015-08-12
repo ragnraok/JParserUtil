@@ -12,7 +12,7 @@ import com.sun.tools.javac.tree.JCTree;
  */
 public class ArrayParser {
     
-    private static final String TAG = "JParserUtil.ArrayParser";
+    public static final String TAG = "JParserUtil.ArrayParser";
     
     // for array with initialization, each dimension int the array is a JCNewArray object, and newArray.dims is 0
     // otherwise the newArray.elems will be null and newArray.dims.size() is equal to the number of dimensions for this array

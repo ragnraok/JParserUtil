@@ -12,8 +12,6 @@ import java.util.List;
  */
 public class CodeInfo {
     
-    public static final String TAG = "JParserUtil.CodeInfo";
-    
     private HashMap<String, SourceInfo> javaSources = new HashMap<>();
     
     private HashMap<String, List<ClassInfo>> packageClassList = new HashMap<>();

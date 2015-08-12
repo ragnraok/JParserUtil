@@ -15,7 +15,7 @@ import com.sun.tools.javac.tree.JCTree;
  */
 public class SourceTreeVisitor extends TreeScanner<Void, Void> {
     
-    private static final String TAG = "JParserUtil.SourceTreeVisitor";
+    public static final String TAG = "JParserUtil.SourceTreeVisitor";
     
     private ClassTreeVisitor classVisitor;
     private SourceInfo sourceInfo;

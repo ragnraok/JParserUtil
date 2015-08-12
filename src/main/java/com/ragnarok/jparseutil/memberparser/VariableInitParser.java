@@ -11,7 +11,7 @@ import com.sun.tools.javac.tree.JCTree;
  */
 public class VariableInitParser {
     
-    private static final String TAG = "JParserUtil.VariableInitParser";
+    public static final String TAG = "JParserUtil.VariableInitParser";
     
     public static Object parseVariableInit(SourceInfo sourceInfo, String fullQualifiedTypeName,
                                            JCTree.JCExpression type, JCTree.JCExpression expression) {

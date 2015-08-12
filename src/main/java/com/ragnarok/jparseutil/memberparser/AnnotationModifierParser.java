@@ -12,7 +12,7 @@ import com.sun.tools.javac.tree.JCTree;
  */
 public class AnnotationModifierParser {
     
-    private static final String TAG = "JParserUtil.AnnotationModifierParser";
+    public static final String TAG = "JParserUtil.AnnotationModifierParser";
     
     private static final String ANNOTATION_DEFAULT_ARG_NAME = "value";
     

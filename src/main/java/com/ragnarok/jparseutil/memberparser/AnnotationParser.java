@@ -17,7 +17,8 @@ import java.util.List;
  * parse the annotation declaration 
  */
 public class AnnotationParser {
-    private static final String TAG = "JParserUtil.AnnotationParser";
+   
+    public static final String TAG = "JParserUtil.AnnotationParser";
     
     public static AnnotationInfo parseAnnotationInfo(String containedClassName, SourceInfo sourceInfo, ClassTree classTree) {
         String simpleName = classTree.getSimpleName().toString();

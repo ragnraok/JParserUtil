@@ -11,7 +11,7 @@ import com.sun.tools.javac.tree.JCTree;
  */
 public class NewClassObjectParser {
     
-    private static final String TAG = "JParserUtil.NewClassObjectParser";
+    public static final String TAG = "JParserUtil.NewClassObjectParser";
     
     public static NewClassObjectInfo parseNewClass(SourceInfo sourceInfo, JCTree.JCNewClass newClass) {
         Log.d(TAG, "parseNewClass, class: %s, args: %s, constructor: %s, constructorType: %s", 
