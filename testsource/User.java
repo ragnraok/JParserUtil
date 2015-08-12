@@ -15,7 +15,9 @@ class User implements Printable {
     
     private String test = getClass().getSimpleName();
     
-    private Class clazz = getClass();
+    private Class clazz = User.class;
+    
+    private int cInt = 1 + 2 + 3;
     
     @PrintMe
     public String getFirstName() {
