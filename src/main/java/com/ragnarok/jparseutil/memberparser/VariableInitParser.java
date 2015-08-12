@@ -28,9 +28,6 @@ public class VariableInitParser {
         } else if (expression instanceof JCTree.JCNewArray) {
             JCTree.JCNewArray newArray = (JCTree.JCNewArray) expression;
             return ArrayParser.parseArray(sourceInfo, newArray);
-        } else if (expression instanceof JCTree.JCFieldAccess) {
-            JCTree.JCFieldAccess fieldAccess = (JCTree.JCFieldAccess) expression;
-            Log.d(TAG, "fieldAccess: %s, expression: %s, name: %s", fieldAccess, fieldAccess.getExpression(), fieldAccess.getIdentifier());
         }
         
         return expression.toString();
