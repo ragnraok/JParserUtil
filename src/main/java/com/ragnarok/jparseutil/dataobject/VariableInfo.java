@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by ragnarok on 15/5/24.
  * represent information about a variable for a class
  */
-public class VariableInfo {
+public class VariableInfo extends AnnotatedObject {
     
     private ClassInfo clazz;
     
@@ -88,5 +88,10 @@ public class VariableInfo {
         }
         result.append("}");
         return result.toString();
+    }
+
+    @Override
+    public int getTarget() {
+        return AnnotatedObject.TARGET_VARIABLE;
     }
 }

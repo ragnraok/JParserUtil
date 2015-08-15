@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by ragnarok on 15/5/24.
  * represent information for a Java Class or Interface
  */
-public class ClassInfo {
+public class ClassInfo extends AnnotatedObject {
     
     private String packageName;
     
@@ -186,5 +186,10 @@ public class ClassInfo {
         
         result.append("}");
         return result.toString();
+    }
+
+    @Override
+    public int getTarget() {
+        return AnnotatedObject.TARGET_CLASS;
     }
 }

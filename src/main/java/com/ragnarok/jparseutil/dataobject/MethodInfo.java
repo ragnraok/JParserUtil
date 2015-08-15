@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by ragnarok on 15/5/29.
  * represent information about a method
  */
-public class MethodInfo {
+public class MethodInfo extends AnnotatedObject {
     
     private String methodName;
     private Type returnType; // fully qualified name
@@ -92,5 +92,10 @@ public class MethodInfo {
         }
         result.append("}");
         return result.toString();
+    }
+
+    @Override
+    public int getTarget() {
+        return AnnotatedObject.TARGET_METHOD;
     }
 }
