@@ -19,8 +19,6 @@ public class VariableInfo extends AnnotatedObject {
 
     private Set<Modifier> modifiers = new HashSet<>();
     
-    private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
-    
     public void setContainedClass(ClassInfo clazz) {
         this.clazz = clazz;
     }
@@ -51,14 +49,6 @@ public class VariableInfo extends AnnotatedObject {
     
     public Object getVariableValue() {
         return this.variableValue;
-    }
-    
-    public void putAnnotation(AnnotationModifier annotationModifier) {
-        this.annotationModifiers.add(annotationModifier);
-    }
-    
-    public List<AnnotationModifier> getAllAnnotationModifiers() {
-        return annotationModifiers;
     }
 
     public void addModifier(Modifier modifier) {

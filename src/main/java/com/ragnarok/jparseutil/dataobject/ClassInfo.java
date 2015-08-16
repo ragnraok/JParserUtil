@@ -21,8 +21,6 @@ public class ClassInfo extends AnnotatedObject {
     private Set<Modifier> modifiers = new HashSet<>();
     
     private ArrayList<VariableInfo> variableInfos = new ArrayList<>();
-
-    private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
     
     private ArrayList<MethodInfo> methodInfos = new ArrayList<>();
     
@@ -66,14 +64,7 @@ public class ClassInfo extends AnnotatedObject {
     public ArrayList<VariableInfo> getAllVariables() {
         return this.variableInfos;
     }
-
-    public void putAnnotation(AnnotationModifier annotationModifier) {
-        this.annotationModifiers.add(annotationModifier);
-    }
     
-    public List<AnnotationModifier> getAllAnnotationModifiers() {
-        return annotationModifiers;
-    }
     
     public void putMethod(MethodInfo method) {
         this.methodInfos.add(method);

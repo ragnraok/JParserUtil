@@ -47,7 +47,7 @@ public class MethodParser {
             if (methodDecl.getModifiers().getAnnotations() != null && methodDecl.getModifiers().getAnnotations().size() > 0) {
                 for (JCTree.JCAnnotation annotation : methodDecl.getModifiers().getAnnotations()) {
                     AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
-                    methodInfo.addAnnotation(annotationModifier);
+                    methodInfo.putAnnotation(annotationModifier);
                 }
             }
             

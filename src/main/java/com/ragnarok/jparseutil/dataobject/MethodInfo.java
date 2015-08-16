@@ -13,7 +13,6 @@ public class MethodInfo extends AnnotatedObject {
     private String methodName;
     private Type returnType; // fully qualified name
     private ArrayList<Type> methodParamsType = new ArrayList<>(); // the parameters' type(fully qualified), in the order of declare in method
-    private ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
 
     private Set<Modifier> modifiers = new HashSet<>();
     
@@ -47,14 +46,6 @@ public class MethodInfo extends AnnotatedObject {
         return this.methodParamsType;
     }
     
-    public void addAnnotation(AnnotationModifier annotationModifier) {
-        this.annotationModifiers.add(annotationModifier);
-    }
-    
-    public ArrayList<AnnotationModifier> getAllAnnotationModifiers() {
-        return this.annotationModifiers;
-    }
-
     public void addModifier(Modifier modifier) {
         this.modifiers.add(modifier);
     }
