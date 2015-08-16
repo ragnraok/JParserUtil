@@ -1,5 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
+import com.ragnarok.jparseutil.util.Log;
+import com.sun.org.apache.xpath.internal.operations.Variable;
 import com.sun.tools.classfile.Annotation;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class CodeInfo {
     public HashMap<String, SourceInfo> getAllSources() {
         return javaSources;
     }
+    
+    public ArrayList<AnnotatedObject> annotatedObjectList = new ArrayList<>();
 
     /**
      * arrange {@link ClassInfo} by package name
@@ -56,6 +60,22 @@ public class CodeInfo {
                     packageAnnotationList.put(packageName, new ArrayList<AnnotationInfo>());
                 }
                 packageAnnotationList.get(packageName).add(annotationInfo);
+            }
+        }
+    }
+    
+    public void arrangeAnnotatedObjects() {
+        // currently, the AnnotatedObject are ClassInfo, VariableInfo, MethodInfo
+        annotatedObjectList.clear();
+        for (SourceInfo sourceInfo : javaSources.values()) {
+            for (ClassInfo classInfo : sourceInfo.getAllClass()) {
+                annotatedObjectList.add(classInfo);
+                for (VariableInfo variableInfo : classInfo.getAllVariables()) {
+                    annotatedObjectList.add(variableInfo);
+                }
+                for (MethodInfo method : classInfo.getAllMethods()) {
+                    annotatedObjectList.add(method);
+                }
             }
         }
     }

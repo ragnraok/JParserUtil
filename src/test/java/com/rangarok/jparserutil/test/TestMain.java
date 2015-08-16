@@ -30,6 +30,7 @@ public class TestMain {
             
             codeInfo.arrangeAnnotationByPackage();
             codeInfo.arrangeClassByPackage();
+            codeInfo.arrangeAnnotatedObjects();
 
 //            ClassInfo classInfo = codeInfo.getClassByQualifiedName("com.rangnarok.testsouce.User");
 //            System.out.println(classInfo + "\n");
