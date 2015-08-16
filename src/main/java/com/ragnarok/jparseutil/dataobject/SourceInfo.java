@@ -1,7 +1,5 @@
 package com.ragnarok.jparseutil.dataobject;
 
-import com.sun.tools.classfile.Annotation;
-
 import java.util.ArrayList;
 
 /**
