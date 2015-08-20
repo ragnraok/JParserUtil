@@ -34,7 +34,7 @@ Currently support:
 Todo: 
 
 - [x] add modifiers information for class, variable, method
-- [ ] add enum parse support
+- [x] add enum parse support
 - [x] add interface parse support
 - [x] add super class information
 - [x] multiple files parsing support
