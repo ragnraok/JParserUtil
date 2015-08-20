@@ -37,7 +37,7 @@ public class ClassTreeVisitor {
         this.sourceInfo = sourceInfo;
         this.outerClassName = outerClassName;
         Log.d(TAG, "inspectClassTree, name: %s, kind: %s, outerClassName: %s", classTree.getSimpleName().toString(), classTree.getKind(), outerClassName);
-        if (classTree.getKind() == Tree.Kind.CLASS || classTree.getKind() == Tree.Kind.INTERFACE) {
+        if (classTree.getKind() == Tree.Kind.CLASS || classTree.getKind() == Tree.Kind.INTERFACE || classTree.getKind() == Tree.Kind.ENUM) {
             if (!ignoreSelf) {
                 addClassInfo(classTree);
             } else if (outerClassName != null) {
@@ -60,7 +60,12 @@ public class ClassTreeVisitor {
             
             if (classTree.getKind() == Tree.Kind.INTERFACE) {
                 classInfo.setIsInterface(true);
+                classInfo.setIsEnum(false);
+            } else if (classTree.getKind() == Tree.Kind.ENUM) {
+                classInfo.setIsInterface(false);
+                classInfo.setIsEnum(true);
             } else {
+                classInfo.setIsEnum(false);
                 classInfo.setIsInterface(false);
             }
             

@@ -1,8 +1,8 @@
 package com.rangarok.jparserutil.test;
 
 import com.ragnarok.jparseutil.JavaFileScanner;
-import com.ragnarok.jparseutil.SourceInfoExtracter;
-import com.ragnarok.jparseutil.dataobject.*;
+import com.ragnarok.jparseutil.dataobject.CodeInfo;
+import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.FileNotFoundException;

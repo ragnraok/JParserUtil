@@ -18,6 +18,8 @@ public class ClassInfo extends AnnotatedObject {
     
     private boolean isInterface;
     
+    private boolean isEnum;
+    
     private Set<Modifier> modifiers = new HashSet<>();
     
     private ArrayList<VariableInfo> variableInfos = new ArrayList<>();
@@ -103,6 +105,14 @@ public class ClassInfo extends AnnotatedObject {
         return this.isInterface;
     }
     
+    public void setIsEnum(boolean isEnum) {
+        this.isEnum = isEnum;
+    }
+    
+    public boolean isEnum() {
+        return this.isEnum;
+    }
+    
     public void setSuperClass(Type type) {
         this.superType = type;
     }
@@ -134,6 +144,7 @@ public class ClassInfo extends AnnotatedObject {
         result.append(String.format("qualifiedName: %s, ", qualifiedName));
         result.append(String.format("simpleName: %s, ", simpleName));
         result.append(String.format("isInterface: %b, ", isInterface));
+        result.append(String.format("isEnum: %b, ", isEnum));
         if (superType != null) {
             result.append(String.format("superClass: %s", superType));
         }

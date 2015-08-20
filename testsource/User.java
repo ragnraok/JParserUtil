@@ -17,6 +17,8 @@ class User implements Printable {
     
     private Class clazz = getClass();
     
+    private UserType userType = UserType.MAN;
+    
     @PrintMe
     public String getFirstName() {
         return firstName;
