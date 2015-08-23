@@ -1,8 +1,6 @@
 package com.ragnarok.jparseutil.util;
 
-import com.ragnarok.jparseutil.JavaFileScanner;
-import com.ragnarok.jparseutil.dataobject.CodeInfo;
-import com.ragnarok.jparseutil.dataobject.SourceInfo;
+import com.ragnarok.jparseutil.filescanner.SimpleJavaFileScanner;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +37,7 @@ public class Log {
     public static Set<String> SHOW_LOG_TAG = new HashSet<>();
     
     static {
-        SHOW_LOG_TAG.add(JavaFileScanner.TAG);
+        SHOW_LOG_TAG.add(SimpleJavaFileScanner.TAG);
     }
     
     public static void setMaxLogLevel(int maxLogLevel) {

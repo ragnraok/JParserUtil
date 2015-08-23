@@ -19,7 +19,7 @@ public class TypeParser {
     public static final String TAG = "JParserUtil.TypeParser";
 
     public static Type parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
-        Log.d(TAG, "parseType, typeElement class: %s", typeElement.getClass().getSimpleName());
+        Log.d(TAG, "parseType, typeElement class: %s, kind: %s", typeElement.getClass().getSimpleName(), typeElement.getKind());
         Type result = new Type();
         if (Util.isPrimitive(typeName)) {
             result.setPrimitive(true);

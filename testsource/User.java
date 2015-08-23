@@ -52,3 +52,7 @@ class User implements Printable {
         }
     }
 }
+
+class MyUser extends User {
+    
+}
