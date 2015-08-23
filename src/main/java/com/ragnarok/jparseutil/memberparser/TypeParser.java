@@ -19,7 +19,9 @@ public class TypeParser {
     public static final String TAG = "JParserUtil.TypeParser";
 
     public static Type parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
-        Log.d(TAG, "parseType, typeElement class: %s, kind: %s", typeElement.getClass().getSimpleName(), typeElement.getKind());
+        if (typeElement != null) {
+            Log.d(TAG, "parseType, typeElement class: %s, kind: %s", typeElement.getClass().getSimpleName(), typeElement.getKind());
+        }
         Type result = new Type();
         if (Util.isPrimitive(typeName)) {
             result.setPrimitive(true);
@@ -33,17 +35,20 @@ public class TypeParser {
             }
         }
         result.setTypeName(typeName);
-        if (typeElement.getKind() == Tree.Kind.ARRAY_TYPE) {
-            result.setArray(true);
-            if (typeElement instanceof JCTree.JCArrayTypeTree) {
-                JCTree.JCArrayTypeTree arrayTypeTree = (JCTree.JCArrayTypeTree) typeElement;
-                if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
-                    result.setPrimitive(true);
+        if (typeElement != null) {
+            if (typeElement.getKind() == Tree.Kind.ARRAY_TYPE) {
+                result.setArray(true);
+                if (typeElement instanceof JCTree.JCArrayTypeTree) {
+                    JCTree.JCArrayTypeTree arrayTypeTree = (JCTree.JCArrayTypeTree) typeElement;
+                    if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
+                        result.setPrimitive(true);
+                    }
+                    Type arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
+                    result.setArrayElmentType(arrayElemType);
                 }
-                Type arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
-                result.setArrayElmentType(arrayElemType);
             }
         }
+        
         return result;
     }
 
@@ -52,21 +57,25 @@ public class TypeParser {
             return null;
         }
         for (String className : sourceInfo.getImports()) {
-            if (!className.endsWith(".*")) {
-                String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-                if (simpleClassName.equals(type)) {
-                    return className;
-                }
-            } else {
-                // import *
-                String fullQaulifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
-                if (fullQaulifiedClassName != null) {
-                    String simpleClassName = fullQaulifiedClassName.substring(className.lastIndexOf(".") + 1);
-                    if (simpleClassName.equals(type)) {
-                        return fullQaulifiedClassName;
-                    }
-                }
+            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+            if (simpleClassName.equals(type)) {
+                return className;
             }
+//            if (!className.endsWith(".*")) {
+//                String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+//                if (simpleClassName.equals(type)) {
+//                    return className;
+//                }
+//            } else {
+//                // import *
+//                String fullQualifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
+//                if (fullQualifiedClassName != null) {
+////                    String simpleClassName = fullQaulifiedClassName.substring(className.lastIndexOf(".") + 1);
+//                    if (fullQualifiedClassName.endsWith(type)) {
+//                        return fullQualifiedClassName;
+//                    }
+//                }
+//            }
         }
 
         // parse for annotation type

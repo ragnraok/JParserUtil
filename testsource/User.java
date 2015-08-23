@@ -19,6 +19,10 @@ class User implements Printable {
     
     private UserType userType = UserType.MAN;
     
+    public User() {
+        
+    }
+    
     @PrintMe
     public String getFirstName() {
         return firstName;
@@ -38,6 +42,10 @@ class User implements Printable {
     
     public Damn getDamn() {
         return new Damn();
+    }
+    
+    public void voidMethod() {
+        
     }
     
     public static class Juno {

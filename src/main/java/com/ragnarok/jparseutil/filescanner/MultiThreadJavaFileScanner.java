@@ -73,6 +73,10 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
             int startIndex = currentStartIndex > allJavaSourcePaths.size() ? allJavaSourcePaths.size() - 1 : currentStartIndex;
             int endIndex = startIndex + pieceSize > allJavaSourcePaths.size() ? allJavaSourcePaths.size() - 1 : startIndex + pieceSize;
             
+            if (i == threadNumber -1 && endIndex < allJavaSourcePaths.size()) {
+                endIndex = allJavaSourcePaths.size();
+            }
+            
             Log.d(TAG, "startIndex: %d, endIndex: %d", startIndex, endIndex);
             
             futureList[i] = executor.submit(new ScanSubSetFileRunnable(allJavaSourcePaths.subList(startIndex, endIndex), i));

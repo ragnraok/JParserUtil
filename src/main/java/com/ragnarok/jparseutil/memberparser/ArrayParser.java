@@ -47,7 +47,12 @@ public class ArrayParser {
             Log.d(TAG, "parseArrayForWithInitializationRecur, elemType: %s", newArray.elemtype);
 
             ArrayValue.ArrayDimension innerDimension = new ArrayValue.ArrayDimension();
-            innerDimension.setSize(newArray.elems.size());
+            if (newArray.elems != null) {
+                innerDimension.setSize(newArray.elems.size());
+            } else {
+                innerDimension.setSize(0);
+            }
+            
             
             
             if (currentDimenValue == null) { // the most outer array
@@ -57,16 +62,16 @@ public class ArrayParser {
                 currentDimenValue.addValue(innerDimension);
             }
             
-            
-            for (JCTree.JCExpression arrayExpr : newArray.elems) {
-                if (!(arrayExpr instanceof JCTree.JCNewArray) && arrayValue.getElemType() == null && newArray.elemtype != null) {
-                    Type type = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
-                    arrayValue.setElemType(type);    
+            if (newArray.elems != null) {
+                for (JCTree.JCExpression arrayExpr : newArray.elems) {
+                    if (!(arrayExpr instanceof JCTree.JCNewArray) && arrayValue.getElemType() == null && newArray.elemtype != null) {
+                        Type type = TypeParser.parseType(sourceInfo, newArray.elemtype, newArray.elemtype.toString());
+                        arrayValue.setElemType(type);
+                    }
+
+                    parseArrayForWithInitializationRecur(sourceInfo, arrayExpr, innerDimension, arrayValue);
                 }
-                
-                parseArrayForWithInitializationRecur(sourceInfo, arrayExpr, innerDimension, arrayValue);
             }
-            
         } else {
             if (expr instanceof JCTree.JCLiteral) {
                 JCTree.JCLiteral literal = (JCTree.JCLiteral) expr;

@@ -16,7 +16,8 @@ public class MethodParser {
     public static final String TAG = "JParserUtil.MethodParser";
     
     public static MethodInfo parseMethodInfo(ClassInfo containedClass, SourceInfo sourceInfo, JCTree.JCMethodDecl methodDecl) {
-        if (containedClass != null) {
+//        Log.d(TAG, "method name: %s, returnType: %s", methodDecl.name, methodDecl.getReturnType());
+        if (containedClass != null && methodDecl.getReturnType() != null) {
             MethodInfo methodInfo = new MethodInfo();
             
             String methodName = methodDecl.name.toString();
