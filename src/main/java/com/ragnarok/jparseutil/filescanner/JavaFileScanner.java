@@ -41,7 +41,7 @@ public abstract class JavaFileScanner {
      * @param filepath the path of this Java source file
      */
     protected void parseJavaSource(String filepath) {
-//        Log.d(TAG, "parsing source: %s", filepath);
+        Log.d(TAG, "parsing source: %s", filepath);
         SourceInfoExtracter extracter = new SourceInfoExtracter(filepath);
         SourceInfo sourceInfo = extracter.extract();
         if (sourceInfo != null) {

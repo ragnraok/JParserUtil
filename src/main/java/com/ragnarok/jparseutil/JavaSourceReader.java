@@ -28,7 +28,7 @@ public class JavaSourceReader {
         this.filePath = filepath;
 
         Context context = new Context();
-        fileManager = new JavacFileManager(context, true, Charset.defaultCharset());
+        fileManager = new JavacFileManager(context, true, Charset.forName("UTF-8"));
         javacTool = new JavacTool();
     }
     

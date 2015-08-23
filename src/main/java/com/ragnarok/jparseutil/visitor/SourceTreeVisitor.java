@@ -29,6 +29,9 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
     
     @Override
     public Void visitImport(ImportTree node, Void aVoid) {
+        if (node == null) {
+            return null;
+        }
         String classname = node.getQualifiedIdentifier().toString();
         Log.d(TAG, "visitImport, name: %s", classname);
         this.sourceInfo.addImports(classname);
@@ -38,6 +41,9 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
 
     @Override
     public Void visitClass(ClassTree node, Void aVoid) {
+        if (node == null) {
+            return null;
+        }
         Log.d(TAG, "visitClass, name: %s", node.getSimpleName());
         this.classVisitor.inspectClassTress(sourceInfo, node, null, false);
         return null;
@@ -45,13 +51,19 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
 
     @Override
     public Void visitCompilationUnit(CompilationUnitTree node, Void aVoid) {
-        Log.d(TAG, "visitCompilationUnit, packagename: %s", node.getPackageName().toString());
+        if (node == null || node.getPackageName() == null) {
+            return null;
+        }
+        Log.d(TAG, "visitCompilationUnit, packagename: %s", node.getPackageName());
         this.sourceInfo.setPackageName(node.getPackageName().toString());
         return super.visitCompilationUnit(node, aVoid);
     }
 
     @Override
     public Void visitAnnotation(AnnotationTree node, Void aVoid) {
+        if (node == null) {
+            return null;
+        }
         Log.d(TAG, "visitAnnotation, name: %s", node.getAnnotationType().toString());
         return super.visitAnnotation(node, aVoid);
     }
