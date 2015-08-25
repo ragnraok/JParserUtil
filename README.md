@@ -12,21 +12,15 @@ This project is still under heavily developement, if you have any idea, please o
 -----
 Currently support:
 
-1. Extract source information, like imports, packge name
-
+1. Extract source information, like imports, packge name
 2.  Extract class info, include class name, inner class name, annotation modifiers, and retrive the fully qualified name from imports and package declaration(include parse from 'import *')
-
 3. Extract variable info, include variable name, variable type and the fully qualified from imports and package declaration, variable value(currently only support parse primitive type), and annotations. 
-
 4. Extract methods info for classes, include method name, return type, and parameter type.
-
 5. For annotaions annotated with variables or methods, now can extract its name, and arguments, but currently only support simple primitive simple value. 
-
 6. Extract Annotation declaration.
-
 7. Parse value from Array declaration, currently only support parse primitive type
-
 8. Support parse multiple Java source files, just need to give a input directory
+9. Configurable multi thread support for speed up parsing
 
 
 ---
