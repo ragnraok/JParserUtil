@@ -123,7 +123,8 @@ public class ReferenceSourceMap {
         List<String> qualifiedNameList = simpleNameQualifiedNameMap.get(simpleClassName);
         if (qualifiedNameList != null && qualifiedNameList.size() > 0) {
             for (String className : qualifiedNameList) {
-                if (className.startsWith(prefix)) {
+                String classNamePrefix = className.substring(0, className.lastIndexOf("."));
+                if (classNamePrefix.equals(prefix)) {
                     return className;
                 }
             }

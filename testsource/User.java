@@ -13,6 +13,8 @@ class User implements Printable {
     private String firstName = "Ragnarok";
     private String lastName;
     
+    private String[][][] usernameList = null;
+    
     private String test = getClass().getSimpleName();
     
     private Class clazz = getClass();

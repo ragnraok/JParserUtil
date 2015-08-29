@@ -22,6 +22,7 @@ public class TypeParser {
         if (typeElement != null) {
             Log.d(TAG, "parseType, typeElement class: %s, kind: %s", typeElement.getClass().getSimpleName(), typeElement.getKind());
         }
+        boolean isArray = typeElement != null && typeElement.getKind() == Tree.Kind.ARRAY_TYPE;
         Type result = new Type();
         if (Util.isPrimitive(typeName)) {
             result.setPrimitive(true);
@@ -34,8 +35,7 @@ public class TypeParser {
                 result.setTypeName(typeName);
             }
         }
-
-        if (typeElement != null && typeElement.getKind() == Tree.Kind.ARRAY_TYPE) {
+        if (isArray) {
             result.setArray(true);
             if (typeElement instanceof JCTree.JCArrayTypeTree) {
                 JCTree.JCArrayTypeTree arrayTypeTree = (JCTree.JCArrayTypeTree) typeElement;
@@ -46,7 +46,6 @@ public class TypeParser {
                 result.setArrayElmentType(arrayElemType);
             }
         }
-        
         return result;
     }
 
@@ -82,7 +81,7 @@ public class TypeParser {
         }
         return null;
     }
-    
+
     public static Type parseTypeFromJCLiteral(JCTree.JCLiteral literal) {
         Type result = new Type();
         result.setArray(false);
@@ -91,7 +90,7 @@ public class TypeParser {
         result.setTypeName(getTypeNameFromKind(kind));
         return result;
     }
-    
+
     private static String getTypeNameFromKind(Tree.Kind kind) {
         if (kind == Tree.Kind.INT_LITERAL) {
             return Primitive.INT_TYPE;
