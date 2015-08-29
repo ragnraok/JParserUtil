@@ -22,7 +22,7 @@ public class ReferenceSourceMap {
     
     private static ReferenceSourceMap INSTANCE;
     
-    private boolean isPrepare = false;
+    private boolean isFinishParse = false;
     
     private ReferenceSourceMap() {}
     
@@ -47,7 +47,6 @@ public class ReferenceSourceMap {
         for (String filename : sourceMapFileList) {
             addClassesListFromSourceMapFile(filename);
         }
-        isPrepare = false;
     }
 
     /**
@@ -77,7 +76,6 @@ public class ReferenceSourceMap {
                 }
             }
         }
-        isPrepare = false;
     }
     
     public synchronized void addClassNameToSourceMap(String className) {
@@ -132,5 +130,13 @@ public class ReferenceSourceMap {
             }
         }
         return null;
+    }
+    
+    public void finishParse() {
+        this.isFinishParse = true;
+    }
+    
+    public boolean isFinishParse() {
+        return this.isFinishParse;
     }
 }

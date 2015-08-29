@@ -2,6 +2,7 @@ package com.ragnarok.jparseutil.dataobject;
 
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
+import com.sun.tools.javac.code.Source;
 
 import java.util.HashMap;
 
@@ -20,27 +21,25 @@ public class Type {
     
     private boolean isUpdatedToQualifiedTypeName = false;
     
+    private SourceInfo containedSourceInfo;
+    
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
     
     public String getTypeName() {
-        if (!isUpdatedToQualifiedTypeName && !Util.isPrimitive(this.typeName) && !isArray) {
+        if (!isUpdatedToQualifiedTypeName && !Util.isPrimitive(typeName) && !Util.isVoidType(typeName) && !isArray) {
             // if this is a fully qualifed className, it must looks like "com.example.test.QualifiedClassName",
             // which must contained a '.'
             if (this.typeName != null && !this.typeName.contains(".")) {
-                if (finalParseResult != null && finalParseResult.getAllSources() != null && finalParseResult.getAllSources().size() > 0) {
-                    HashMap<String, SourceInfo> allSources = finalParseResult.getAllSources();
-                    for (SourceInfo sourceInfo : allSources.values()) {
-                        ClassInfo classInfo = sourceInfo.getClassInfoBySuffixName(this.typeName);
-                        if (classInfo != null) {
-                            String updatedName = classInfo.getQualifiedName();
-                            Log.d(TAG, "update type name, %s to %s", this.typeName, updatedName);
-                            this.typeName = updatedName;
-                            break;
-                        }
-                    }
+                typeName = Util.parseTypeFromSourceInfo(containedSourceInfo, typeName);
+                if (typeName != null && typeName.contains(".")) {
                     isUpdatedToQualifiedTypeName = true;
+                } else {
+                    if (ReferenceSourceMap.getInstance().isFinishParse()) { // not in import, sample package of this containedSourceInfo
+                        typeName = containedSourceInfo.getPackageName() + "." + typeName;
+                        isUpdatedToQualifiedTypeName = true;
+                    }
                 }
             }
         }
@@ -70,6 +69,10 @@ public class Type {
     public Type getArrayElementType() {
         return this.arrayElementType;
     }
+    
+    public void setContainedSourceInfo(SourceInfo sourceInfo) {
+        this.containedSourceInfo = sourceInfo;
+    }
 
     @Override
     public String toString() {
@@ -80,9 +83,5 @@ public class Type {
         }
     }
     
-    private static CodeInfo finalParseResult;
     
-    public static void setFinalParseResult(CodeInfo codeInfo) {
-        finalParseResult = codeInfo;
-    }
 }

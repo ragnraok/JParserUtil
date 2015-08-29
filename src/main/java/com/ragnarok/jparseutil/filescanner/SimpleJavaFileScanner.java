@@ -30,7 +30,6 @@ public class SimpleJavaFileScanner extends JavaFileScanner {
                 parseJavaSource(path);
             }
         }
-        Type.setFinalParseResult(result);
         long endTime = System.currentTimeMillis();
         Log.i(TAG, "parse finish, used: %dms", endTime - startTime);
         return result;

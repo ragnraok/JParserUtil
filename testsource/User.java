@@ -3,7 +3,7 @@ package com.rangnarok.testsouce;
 import java.lang.Class;
 import java.util.*;
 
-import com.rangnarok.testsouce.annotation.PrintMe;
+import com.rangnarok.testsouce.annotation.*;
 import com.rangnarok.testsouce.annotation.interfaces.Printable;
 
 class User implements Printable {
@@ -14,6 +14,8 @@ class User implements Printable {
     private String lastName;
     
     private String[][][] usernameList = null;
+    
+    private Date[][] birthDateArray = null;
     
     private String test = getClass().getSimpleName();
     

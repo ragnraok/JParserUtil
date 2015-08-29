@@ -24,6 +24,13 @@ public class Util {
         }
         return false;
     }
+    
+    public static boolean isVoidType(String type) {
+        if (type == null) {
+            return false;
+        }
+        return type.equalsIgnoreCase(Primitive.VOID_TYPE);
+    }
 
     // parse type from source imports
     public static String parseTypeFromSourceInfo(SourceInfo sourceInfo, String type) {

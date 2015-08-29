@@ -24,6 +24,7 @@ public class TypeParser {
         }
         boolean isArray = typeElement != null && typeElement.getKind() == Tree.Kind.ARRAY_TYPE;
         Type result = new Type();
+        result.setContainedSourceInfo(sourceInfo);
         if (Util.isPrimitive(typeName)) {
             result.setPrimitive(true);
             result.setTypeName(typeName);
