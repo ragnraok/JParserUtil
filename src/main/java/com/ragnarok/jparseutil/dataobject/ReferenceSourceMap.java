@@ -98,8 +98,10 @@ public class ReferenceSourceMap {
         
         if (simpleNameQualifiedNameMap.containsKey(simpleClassName)) {
             List<String> qualifiedNameList = simpleNameQualifiedNameMap.get(simpleClassName);
-            qualifiedNameList.add(className);
-            simpleNameQualifiedNameMap.put(simpleClassName, qualifiedNameList);
+            if (!qualifiedNameList.contains(className)) {
+                qualifiedNameList.add(className);
+                simpleNameQualifiedNameMap.put(simpleClassName, qualifiedNameList);
+            }
         } else {
             List<String> qualifiedNameList = new ArrayList<>();
             qualifiedNameList.add(className);

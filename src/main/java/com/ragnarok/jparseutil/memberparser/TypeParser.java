@@ -20,7 +20,7 @@ public class TypeParser {
 
     public static Type parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
         if (typeElement != null) {
-            Log.d(TAG, "parseType, typeElement class: %s, kind: %s", typeElement.getClass().getSimpleName(), typeElement.getKind());
+            Log.d(TAG, "parseTypeFromSourceInfo, typeElement class: %s, kind: %s", typeElement.getClass().getSimpleName(), typeElement.getKind());
         }
         boolean isArray = typeElement != null && typeElement.getKind() == Tree.Kind.ARRAY_TYPE;
         Type result = new Type();
@@ -28,7 +28,7 @@ public class TypeParser {
             result.setPrimitive(true);
             result.setTypeName(typeName);
         } else {
-            String qualifiedName = parseTypeNameFromSourceInfo(sourceInfo, typeName);
+            String qualifiedName = Util.parseTypeFromSourceInfo(sourceInfo, typeName);
             if (qualifiedName != null) {
                 result.setTypeName(qualifiedName);
             } else {
@@ -43,43 +43,10 @@ public class TypeParser {
                     result.setPrimitive(true);
                 }
                 Type arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
-                result.setArrayElmentType(arrayElemType);
+                result.setArrayElementType(arrayElemType);
             }
         }
         return result;
-    }
-
-    private static String parseTypeNameFromSourceInfo(SourceInfo sourceInfo, String type) {
-        if (type == null) {
-            return null;
-        }
-        for (String className : sourceInfo.getImports()) {
-//            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-//            if (simpleClassName.equals(type)) {
-//                return className;
-//            }
-            if (!className.endsWith(".*")) {
-                String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-                if (simpleClassName.equals(type)) {
-                    return className;
-                }
-            } else {
-                // import *
-                String fullQualifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
-                if (fullQualifiedClassName != null) {
-                    return fullQualifiedClassName;
-                }
-            }
-        }
-
-        // parse for annotation type
-        for (AnnotationInfo annotationInfo : sourceInfo.getAllAnnotations()) {
-            String name = annotationInfo.getQualifiedName();
-            if (name != null && name.endsWith(type)) {
-                return name;
-            }
-        }
-        return null;
     }
 
     public static Type parseTypeFromJCLiteral(JCTree.JCLiteral literal) {

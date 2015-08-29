@@ -46,6 +46,7 @@ public class ClassTreeVisitor {
             inspectAllClassTreeMembers(classTree.getMembers());
         } else if (classTree.getKind() == Tree.Kind.ANNOTATION_TYPE) {
             AnnotationInfo annotationInfo = AnnotationParser.parseAnnotationInfo(this.outerClassName, sourceInfo, classTree);
+            ReferenceSourceMap.getInstance().addClassNameToSourceMap(annotationInfo.getQualifiedName());
             this.sourceInfo.putAnnotaiotn(annotationInfo);
         }
     }
@@ -94,6 +95,7 @@ public class ClassTreeVisitor {
             }
              
             classInfo.setQualifiedName(qualifiedName);
+            ReferenceSourceMap.getInstance().addClassNameToSourceMap(classInfo.getQualifiedName());
             
             currentClassName = qualifiedName;
 

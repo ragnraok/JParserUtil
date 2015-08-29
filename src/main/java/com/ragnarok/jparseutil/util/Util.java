@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.util;
 
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
+import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
@@ -25,16 +26,28 @@ public class Util {
     }
 
     // parse type from source imports
-    public static String parseType(SourceInfo sourceInfo, String type) {
+    public static String parseTypeFromSourceInfo(SourceInfo sourceInfo, String type) {
         if (isPrimitive(type)) {
             return type;
         }
         
-        // currently we just support parse type from imports
+
         for (String className : sourceInfo.getImports()) {
-            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-            if (simpleClassName.equals(type)) {
-                return className;
+//            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+//            if (simpleClassName.equals(type)) {
+//                return className;
+//            }
+            if (!className.endsWith(".*")) {
+                String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+                if (simpleClassName.equals(type)) {
+                    return className;
+                }
+            } else {
+                // import *
+                String fullQualifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
+                if (fullQualifiedClassName != null) {
+                    return fullQualifiedClassName;
+                }
             }
         }
         

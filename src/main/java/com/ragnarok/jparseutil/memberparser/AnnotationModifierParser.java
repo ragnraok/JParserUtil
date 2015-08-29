@@ -20,7 +20,7 @@ public class AnnotationModifierParser {
         AnnotationModifier result = new AnnotationModifier();
         
         String name = annotation.annotationType.toString();
-        name = Util.parseType(sourceInfo, name);
+        name = Util.parseTypeFromSourceInfo(sourceInfo, name);
         result.setAnnotationName(name);
         
         Log.d(TAG, "parseAnnotation, name: %s", name);

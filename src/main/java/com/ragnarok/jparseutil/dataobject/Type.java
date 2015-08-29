@@ -2,9 +2,7 @@ package com.ragnarok.jparseutil.dataobject;
 
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
-import com.sun.tools.javac.code.Source;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -18,7 +16,7 @@ public class Type {
     private String typeName; // fully qualified
     private boolean isPrimitive = false;
     private boolean isArray = false;
-    private Type arrayElmentType = null; // not null if isArray is true
+    private Type arrayElementType = null; // not null if isArray is true
     
     private boolean isUpdatedToQualifiedTypeName = false;
     
@@ -27,7 +25,7 @@ public class Type {
     }
     
     public String getTypeName() {
-        if (!isUpdatedToQualifiedTypeName && !Util.isPrimitive(this.typeName)) {
+        if (!isUpdatedToQualifiedTypeName && !Util.isPrimitive(this.typeName) && !isArray) {
             // if this is a fully qualifed className, it must looks like "com.example.test.QualifiedClassName",
             // which must contained a '.'
             if (this.typeName != null && !this.typeName.contains(".")) {
@@ -65,12 +63,12 @@ public class Type {
         return this.isArray;
     }
     
-    public void setArrayElmentType(Type elemType) {
-        this.arrayElmentType = elemType;
+    public void setArrayElementType(Type elemType) {
+        this.arrayElementType = elemType;
     }
     
-    public Type getArrayElmentType() {
-        return this.arrayElmentType;
+    public Type getArrayElementType() {
+        return this.arrayElementType;
     }
 
     @Override
@@ -78,7 +76,7 @@ public class Type {
         if (!isArray) {
             return String.format("{type: %s, isPrimitive: %b, isArray: %b}", getTypeName(), isPrimitive(), isArray());
         } else {
-            return String.format("{type: %s, isPrimitive: %b, isArray: %b, arrayElemType: %s}", getTypeName(), isPrimitive(), isArray(), arrayElmentType);
+            return String.format("{type: %s, isPrimitive: %b, isArray: %b, arrayElemType: %s}", getTypeName(), isPrimitive(), isArray(), arrayElementType);
         }
     }
     
