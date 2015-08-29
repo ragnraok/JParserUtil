@@ -26,26 +26,24 @@ public class TypeParser {
         if (Util.isPrimitive(typeName)) {
             result.setPrimitive(true);
             result.setTypeName(typeName);
-            return result;
         } else {
             String qualifiedName = parseTypeNameFromSourceInfo(sourceInfo, typeName);
             if (qualifiedName != null) {
                 result.setTypeName(qualifiedName);
-                return result;
+            } else {
+                result.setTypeName(typeName);
             }
         }
-        result.setTypeName(typeName);
-        if (typeElement != null) {
-            if (typeElement.getKind() == Tree.Kind.ARRAY_TYPE) {
-                result.setArray(true);
-                if (typeElement instanceof JCTree.JCArrayTypeTree) {
-                    JCTree.JCArrayTypeTree arrayTypeTree = (JCTree.JCArrayTypeTree) typeElement;
-                    if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
-                        result.setPrimitive(true);
-                    }
-                    Type arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
-                    result.setArrayElmentType(arrayElemType);
+
+        if (typeElement != null && typeElement.getKind() == Tree.Kind.ARRAY_TYPE) {
+            result.setArray(true);
+            if (typeElement instanceof JCTree.JCArrayTypeTree) {
+                JCTree.JCArrayTypeTree arrayTypeTree = (JCTree.JCArrayTypeTree) typeElement;
+                if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
+                    result.setPrimitive(true);
                 }
+                Type arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
+                result.setArrayElmentType(arrayElemType);
             }
         }
         
@@ -57,25 +55,22 @@ public class TypeParser {
             return null;
         }
         for (String className : sourceInfo.getImports()) {
-            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-            if (simpleClassName.equals(type)) {
-                return className;
-            }
-//            if (!className.endsWith(".*")) {
-//                String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
-//                if (simpleClassName.equals(type)) {
-//                    return className;
-//                }
-//            } else {
-//                // import *
-//                String fullQualifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
-//                if (fullQualifiedClassName != null) {
-////                    String simpleClassName = fullQaulifiedClassName.substring(className.lastIndexOf(".") + 1);
-//                    if (fullQualifiedClassName.endsWith(type)) {
-//                        return fullQualifiedClassName;
-//                    }
-//                }
+//            String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+//            if (simpleClassName.equals(type)) {
+//                return className;
 //            }
+            if (!className.endsWith(".*")) {
+                String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
+                if (simpleClassName.equals(type)) {
+                    return className;
+                }
+            } else {
+                // import *
+                String fullQualifiedClassName = ReferenceSourceMap.getInstance().searchClassNameByPrefixAndSimpleClassName(className, type);
+                if (fullQualifiedClassName != null) {
+                    return fullQualifiedClassName;
+                }
+            }
         }
 
         // parse for annotation type

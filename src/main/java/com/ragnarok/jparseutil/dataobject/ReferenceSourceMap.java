@@ -3,9 +3,7 @@ package com.ragnarok.jparseutil.dataobject;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ragnarok on 15/8/8.
@@ -15,8 +13,13 @@ public class ReferenceSourceMap {
     
     public static final String TAG = "JParserUtil.ReferenceSourceMap";
     
-    public List<String> classesNameList = new ArrayList<>();
-   
+//    private List<String> classesNameList = new ArrayList<>();
+
+    // simpleClassName -> qualifiedClassName list
+    // because simpleClassName may have multiple correspond qualified name, 
+    // like android.view.SurfaceView and android.view.mock.SurfaceView
+    private HashMap<String, List<String>> simpleNameQualifiedNameMap = new HashMap<>(); 
+    
     private static ReferenceSourceMap INSTANCE;
     
     private boolean isPrepare = false;
@@ -31,7 +34,7 @@ public class ReferenceSourceMap {
     }
     
     public void clearSourceMap() {
-        classesNameList.clear();
+        simpleNameQualifiedNameMap.clear();
     }
 
     /**
@@ -40,7 +43,7 @@ public class ReferenceSourceMap {
      * @throws FileNotFoundException
      */
     public void initWithSourceMapFile(String... sourceMapFileList) throws FileNotFoundException {
-        classesNameList.clear();
+        simpleNameQualifiedNameMap.clear();
         for (String filename : sourceMapFileList) {
             addClassesListFromSourceMapFile(filename);
         }
@@ -60,7 +63,7 @@ public class ReferenceSourceMap {
         String className = null;
         try {
             while ((className = reader.readLine()) != null) {
-                classesNameList.add(className);
+                addClassNameToSourceMap(className);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,13 +79,32 @@ public class ReferenceSourceMap {
         }
         isPrepare = false;
     }
-
-    /**
-     * prepare for the class name search, must be call before doing any class name search
-     */
-    public void prepare() {
-        Collections.sort(classesNameList);
-        isPrepare = true;
+    
+    public synchronized void addClassNameToSourceMap(String className) {
+        if (className == null) {
+            return;
+        }
+        String simpleClassName = null;
+        if (className.lastIndexOf(".") != -1) {
+            int lastDotIndex = className.lastIndexOf(".");
+            if (lastDotIndex < className.length() - 1) {
+                simpleClassName = className.substring(lastDotIndex + 1);
+            } else {
+                simpleClassName = className;
+            }
+        } else {
+            simpleClassName = className;
+        }
+        
+        if (simpleNameQualifiedNameMap.containsKey(simpleClassName)) {
+            List<String> qualifiedNameList = simpleNameQualifiedNameMap.get(simpleClassName);
+            qualifiedNameList.add(className);
+            simpleNameQualifiedNameMap.put(simpleClassName, qualifiedNameList);
+        } else {
+            List<String> qualifiedNameList = new ArrayList<>();
+            qualifiedNameList.add(className);
+            simpleNameQualifiedNameMap.put(simpleClassName, qualifiedNameList);
+        }
     }
 
     /**
@@ -92,27 +114,18 @@ public class ReferenceSourceMap {
      * @return
      */
     public String searchClassNameByPrefixAndSimpleClassName(String prefix, final String simpleClassName) {
-        if (!isPrepare) {
-            throw new IllegalStateException("must call prepare before search!");
+        if (prefix == null || simpleClassName == null) {
+            return null;
         }
         if (prefix.endsWith(".*")) { // remove the 'import *' note
             prefix = prefix.substring(0, prefix.lastIndexOf(".*"));
         }
-//        int index = Collections.binarySearch(classesNameList, prefix, new Comparator<String>() {
-//            @Override
-//            public int compare(String currentItem, String key) {
-//                if (currentItem.startsWith(key) && currentItem.endsWith(simpleClassName)) {
-//                    return 0;
-//                }
-//                return currentItem.compareTo(key);
-//            }
-//        });
-//        if (index >= 0) {
-//            return classesNameList.get(index);
-//        }
-        for (String className : classesNameList) {
-            if (className.startsWith(prefix) && className.endsWith(simpleClassName)) {
-                return className;
+        List<String> qualifiedNameList = simpleNameQualifiedNameMap.get(simpleClassName);
+        if (qualifiedNameList != null && qualifiedNameList.size() > 0) {
+            for (String className : qualifiedNameList) {
+                if (className.startsWith(prefix)) {
+                    return className;
+                }
             }
         }
         return null;
