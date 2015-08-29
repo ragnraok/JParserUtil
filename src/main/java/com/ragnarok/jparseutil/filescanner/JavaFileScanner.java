@@ -9,6 +9,7 @@ import com.ragnarok.jparseutil.util.Util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/8/23.
@@ -24,9 +25,16 @@ public abstract class JavaFileScanner {
     protected ArrayList<String> allJavaSourcePaths = new ArrayList<>();
 
     protected CodeInfo result = new CodeInfo();
+    
+    private List<String> excludePathList = new ArrayList<>();
+    
 
     public JavaFileScanner(String dir) {
         this.sourceDirectory = dir;
+    }
+    
+    public void addExcludePath(String path) {
+        excludePathList.add(path);
     }
 
     /**
@@ -41,7 +49,7 @@ public abstract class JavaFileScanner {
      * @param filepath the path of this Java source file
      */
     protected void parseJavaSource(String filepath) {
-        Log.d(TAG, "parsing source: %s", filepath);
+        Log.i(TAG, "parsing source: %s", filepath);
         SourceInfoExtracter extracter = new SourceInfoExtracter(filepath);
         SourceInfo sourceInfo = extracter.extract();
         if (sourceInfo != null) {
@@ -67,12 +75,27 @@ public abstract class JavaFileScanner {
         File[] children = rootPath.listFiles();
         if (children != null && children.length > 0) {
             for (File child : children) {
-                if (child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
-                    String path = child.getAbsolutePath();
-                    allJavaSourcePaths.add(path);
+                if (!isMatchExcludePathList(child.getName(), child.getAbsolutePath())) {
+                    if (child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
+                        String path = child.getAbsolutePath();
+                        allJavaSourcePaths.add(path);
+                    }
+                    initJavaSourcePathsRecursive(child);   
                 }
-                initJavaSourcePathsRecursive(child);
+                
             }
         }
+    }
+    
+    private boolean isMatchExcludePathList(String currentPathName, String absolutePath) {
+        if (currentPathName == null || absolutePath == null) {
+            return false;
+        }
+        for (String excludePath : excludePathList) {
+            if (currentPathName.equals(excludePath) || absolutePath.equals(excludePath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

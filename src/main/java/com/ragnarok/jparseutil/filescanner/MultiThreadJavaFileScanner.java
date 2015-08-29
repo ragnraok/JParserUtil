@@ -59,6 +59,7 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         
         result = new CodeInfo();
         initJavaSourcePaths();
+        Log.d(TAG, "filelist size: %d", allJavaSourcePaths.size());
         
         int sourceSetSize = allJavaSourcePaths.size();
         int pieceSize = sourceSetSize / threadNumber;
