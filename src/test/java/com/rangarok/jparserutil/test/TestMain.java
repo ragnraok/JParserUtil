@@ -6,8 +6,6 @@ import com.ragnarok.jparseutil.filescanner.JavaFileScanner;
 import com.ragnarok.jparseutil.filescanner.MultiThreadJavaFileScanner;
 import com.ragnarok.jparseutil.util.Log;
 
-import java.util.regex.Pattern;
-
 /**
  * Created by ragnarok on 15/5/24.
  */
@@ -30,6 +28,7 @@ public class TestMain {
             fileScanner.addExcludePath("pre-compile-tools");
             ReferenceSourceMap.getInstance().initWithSourceMapFile(sourceMapFile);
             CodeInfo codeInfo = fileScanner.scanAllJavaSources();
+            ReferenceSourceMap.getInstance().finishParse();
 //            System.out.println(codeInfo);
             
             codeInfo.arrangeAnnotationByPackage();
