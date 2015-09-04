@@ -97,6 +97,10 @@ public class ClassInfo extends AnnotatedObject {
         return modifiers;
     }
     
+    public void addAllModifiers(Set<Modifier> modifiers) {
+        this.modifiers.addAll(modifiers);
+    }
+    
     public void setIsInterface(boolean isInterface) {
         this.isInterface = isInterface;
     }

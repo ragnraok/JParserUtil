@@ -1,5 +1,11 @@
 package com.ragnarok.jparseutil.dataobject;
 
+import com.github.javaparser.ast.body.ModifierSet;
+import com.sun.source.tree.ModifiersTree;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by ragnarok on 15/7/14.
  * copy from javax.lang.model.element.Modifier
@@ -91,5 +97,33 @@ public enum Modifier {
             return STRICTFP;
         }
         return UNKNOWN;
+    }
+    
+    public static Set<Modifier> parseModifiersFromFlags(int flag) {
+        Set<Modifier> result = new HashSet<>();
+        if (ModifierSet.isAbstract(flag)) {
+            result.add(ABSTRACT);
+        } else if (ModifierSet.isFinal(flag)) {
+            result.add(FINAL);
+        } else if (ModifierSet.isNative(flag)) {
+            result.add(NATIVE);
+        } else if (ModifierSet.isPrivate(flag)) {
+            result.add(PRIVATE);
+        } else if (ModifierSet.isProtected(flag)) {
+            result.add(PROTECTED);
+        } else if (ModifierSet.isPublic(flag)) {
+            result.add(PUBLIC);
+        } else if (ModifierSet.isStatic(flag)) {
+            result.add(STATIC);
+        } else if (ModifierSet.isStrictfp(flag)) {
+            result.add(STRICTFP);
+        } else if (ModifierSet.isSynchronized(flag)) {
+            result.add(SYNCHRONIZED);
+        } else if (ModifierSet.isTransient(flag)) {
+            result.add(TRANSIENT);
+        } else if (ModifierSet.isVolatile(flag)) {
+            result.add(VOLATILE);
+        }
+        return result;
     }
 }

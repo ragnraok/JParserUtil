@@ -9,14 +9,6 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.util.Log;
-import com.sun.source.tree.AnnotationTree;
-import com.sun.source.tree.ClassTree;
-import com.sun.source.tree.CompilationUnitTree;
-import com.sun.source.tree.ImportTree;
-import com.sun.source.util.TreeScanner;
-import com.sun.tools.javac.tree.JCTree;
-
-import java.util.Objects;
 
 /**
  * Created by ragnarok on 15/5/18.
