@@ -35,12 +35,14 @@ public class AnnotationModifierParser {
                 result.putNameValue(ANNOTATION_DEFAULT_ARG_NAME, value);
             } else {
                 NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) annotation;
-                for (MemberValuePair valuePair : normalAnnotationExpr.getPairs()) {
-                    String argName = valuePair.getName();
-                    Expression argValueExpr = valuePair.getValue();
-                    Log.d(TAG, "parse NormalAnnotationExpr, argName: %s, argValueExpr: %s", argName, argValueExpr);
-                    Object value = VariableInitParser.parseVariableInit(sourceInfo, null, argValueExpr);
-                    result.putNameValue(argName, value);
+                if (normalAnnotationExpr.getPairs() != null && normalAnnotationExpr.getPairs().size() > 0) {
+                    for (MemberValuePair valuePair : normalAnnotationExpr.getPairs()) {
+                        String argName = valuePair.getName();
+                        Expression argValueExpr = valuePair.getValue();
+                        Log.d(TAG, "parse NormalAnnotationExpr, argName: %s, argValueExpr: %s", argName, argValueExpr);
+                        Object value = VariableInitParser.parseVariableInit(sourceInfo, null, argValueExpr);
+                        result.putNameValue(argName, value);
+                    }
                 }
             }
         }

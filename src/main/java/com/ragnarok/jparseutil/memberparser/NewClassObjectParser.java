@@ -13,12 +13,12 @@ public class NewClassObjectParser {
     
     public static final String TAG = "JParserUtil.NewClassObjectParser";
     
-    public static NewClassObjectInfo parseNewClass(SourceInfo sourceInfo, JCTree.JCNewClass newClass) {
-        Log.d(TAG, "parseNewClass, class: %s, args: %s, constructor: %s, constructorType: %s", 
-                newClass.clazz, newClass.args, newClass.constructor, newClass.constructorType);
-        NewClassObjectInfo newClassObjectInfo = new NewClassObjectInfo();
-        Type classType = TypeParser.parseType(sourceInfo, newClass.clazz, newClass.clazz.toString());
-        newClassObjectInfo.setObjectType(classType);
-        return newClassObjectInfo;
-    }
+//    public static NewClassObjectInfo parseNewClass(SourceInfo sourceInfo, JCTree.JCNewClass newClass) {
+//        Log.d(TAG, "parseNewClass, class: %s, args: %s, constructor: %s, constructorType: %s", 
+//                newClass.clazz, newClass.args, newClass.constructor, newClass.constructorType);
+//        NewClassObjectInfo newClassObjectInfo = new NewClassObjectInfo();
+//        Type classType = TypeParser.parseType(sourceInfo, newClass.clazz, newClass.clazz.toString());
+//        newClassObjectInfo.setObjectType(classType);
+//        return newClassObjectInfo;
+//    }
 }

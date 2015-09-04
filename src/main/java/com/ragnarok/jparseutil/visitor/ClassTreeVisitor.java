@@ -7,9 +7,6 @@ import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.memberparser.*;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
-import com.sun.source.tree.Tree;
-import com.sun.tools.javac.tree.JCTree;
-import sun.org.mozilla.javascript.internal.ast.VariableDeclaration;
 
 import java.util.List;
 
@@ -48,7 +45,9 @@ public class ClassTreeVisitor {
             } else if (outerClassName != null) {
                 currentClassName = Util.buildClassName(outerClassName, typeDeclaration.getName());
             }
-            inspectAllClassTreeMembers(typeDeclaration.getMembers());
+            if (typeDeclaration.getMembers() != null) {
+                inspectAllClassMembers(typeDeclaration.getMembers());
+            }
         } 
 //        else if (typeDeclaration instanceof AnnotationDeclaration) {
 //            AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) typeDeclaration;
@@ -63,9 +62,9 @@ public class ClassTreeVisitor {
             String simpleName = typeDeclaration.getName();
             ClassInfo classInfo = null;
             if (typeDeclaration instanceof AnnotationDeclaration) {
-                classInfo = new ClassInfo();
-            } else {
                 classInfo = new AnnotationInfo();
+            } else {
+                classInfo = new ClassInfo();
             }
             classInfo.setPackageName(this.sourceInfo.getPackageName());
             classInfo.setSimpleName(simpleName);
@@ -145,7 +144,7 @@ public class ClassTreeVisitor {
         return classInfo;
     }
    
-    private void inspectAllClassTreeMembers(List<BodyDeclaration> classMembers) {
+    private void inspectAllClassMembers(List<BodyDeclaration> classMembers) {
         for (BodyDeclaration member : classMembers) {
             Log.d(TAG, "member.class: %s", member.getClass().getSimpleName());
             
@@ -207,9 +206,12 @@ public class ClassTreeVisitor {
     
     private void inspectAnnotationMember(AnnotationMemberDeclaration annotationMember) {
         AnnotationInfo annotationInfo = sourceInfo.getAnnotationInfoByQualifiedName(currentClassName);
+        if (annotationInfo == null) {
+            return;
+        }
         Type type = TypeParser.parseType(sourceInfo, annotationMember.getType(), annotationMember.getType().toString());
         String name = annotationMember.getName();
-        Log.d(TAG, "inspectAnnotationMember, paramName: %s, paramType: %s");
+        Log.d(TAG, "inspectAnnotationMember, paramName: %s, paramType: %s", name, type);
         if (annotationMember.getDefaultValue() != null) {
             String defaultValueLiteral = annotationMember.getDefaultValue().toString();
             Log.d(TAG, "defaultValueLiteral: %s, defaultValueClass: %s", defaultValueLiteral,

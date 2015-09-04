@@ -35,12 +35,11 @@ public class SourceTreeVisitor extends VoidVisitorAdapter<Object> {
         }
         Log.d(TAG, "visit CompilationUnit, packageName: %s", node.getPackage().getName());
         sourceInfo.setPackageName(node.getPackage().getName().toString());
-        if (node.getImports() == null) {
-            super.visit(node, arg);
-        }
-        for (ImportDeclaration importDeclaration : node.getImports()) {
-            Log.d(TAG, "visit CompilationUnit, import: %s", importDeclaration.getName());
-            sourceInfo.addImports(importDeclaration.getName().toString());
+        if (node.getImports() != null && node.getImports().size() > 0) {
+            for (ImportDeclaration importDeclaration : node.getImports()) {
+                Log.d(TAG, "visit CompilationUnit, import: %s", importDeclaration.getName());
+                sourceInfo.addImports(importDeclaration.getName().toString());
+            }
         }
         super.visit(node, arg);
     }
@@ -52,6 +51,7 @@ public class SourceTreeVisitor extends VoidVisitorAdapter<Object> {
         }
         ensurePackageName(node);
         Log.d(TAG, "visit ClassOrInterfaceDeclaration, name: %s", node.getName());
+        classVisitor.inspectTypeDeclaration(sourceInfo, node, null, false);
     }
 
     @Override
@@ -70,7 +70,10 @@ public class SourceTreeVisitor extends VoidVisitorAdapter<Object> {
         }
         ensurePackageName(node);
         Log.d(TAG, "visit AnnotationDeclaration, name: %s", node.getName());
+        classVisitor.inspectTypeDeclaration(sourceInfo, node, null, false);
     }
+    
+    
     
     private void ensurePackageName(TypeDeclaration node) {
         if (node == null) {
