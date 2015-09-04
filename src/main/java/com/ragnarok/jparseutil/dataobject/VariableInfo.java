@@ -55,6 +55,10 @@ public class VariableInfo extends AnnotatedObject {
         this.modifiers.add(modifier);
     }
 
+    public void addAllModifiers(Set<Modifier> modifiers) {
+        this.modifiers.addAll(modifiers);
+    }
+
     public Set<Modifier> getModifiers() {
         return modifiers;
     }

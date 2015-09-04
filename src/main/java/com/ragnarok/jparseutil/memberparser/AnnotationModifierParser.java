@@ -30,7 +30,7 @@ public class AnnotationModifierParser {
             if (annotation instanceof SingleMemberAnnotationExpr) {
                 SingleMemberAnnotationExpr annotationExpr = (SingleMemberAnnotationExpr) annotation;
                 Expression valueExpr = annotationExpr.getMemberValue();
-                Object value = VariableInitParser.parseVariableInit(sourceInfo, null, null, valueExpr);
+                Object value = VariableInitParser.parseVariableInit(sourceInfo, null, valueExpr);
                 Log.d(TAG, "parse SingleMemberAnnotationExpr, valueExpr: %s", valueExpr);
                 result.putNameValue(ANNOTATION_DEFAULT_ARG_NAME, value);
             } else {
@@ -39,7 +39,7 @@ public class AnnotationModifierParser {
                     String argName = valuePair.getName();
                     Expression argValueExpr = valuePair.getValue();
                     Log.d(TAG, "parse NormalAnnotationExpr, argName: %s, argValueExpr: %s", argName, argValueExpr);
-                    Object value = VariableInitParser.parseVariableInit(sourceInfo, null, null, argValueExpr);
+                    Object value = VariableInitParser.parseVariableInit(sourceInfo, null, argValueExpr);
                     result.putNameValue(argName, value);
                 }
             }

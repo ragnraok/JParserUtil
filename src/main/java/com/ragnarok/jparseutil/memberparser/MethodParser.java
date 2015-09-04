@@ -1,6 +1,8 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.tools.javac.tree.JCTree;
@@ -15,36 +17,33 @@ public class MethodParser {
     
     public static MethodInfo parseMethodInfo(ClassInfo containedClass, SourceInfo sourceInfo, MethodDeclaration methodDecl) {
 //        Log.d(TAG, "method name: %s, returnType: %s", methodDecl.name, methodDecl.getReturnType());
-        if (containedClass != null && methodDecl.getReturnType() != null) {
+        if (containedClass != null && methodDecl.getType() != null) {
             MethodInfo methodInfo = new MethodInfo();
             
-            String methodName = methodDecl.name.toString();
+            String methodName = methodDecl.getName();
             methodName = containedClass.getQualifiedName() + "." + methodName;
-            Type returnType = TypeParser.parseType(sourceInfo, methodDecl.getReturnType(), methodDecl.getReturnType().toString());
+            Type returnType = TypeParser.parseType(sourceInfo, methodDecl.getType(), methodDecl.getType().toString());
             methodInfo.setMethodName(methodName);
             methodInfo.setReturnType(returnType);
             
-            if (methodDecl.getModifiers().getFlags() != null && methodDecl.getModifiers().getFlags().size() > 0) {
-                for (javax.lang.model.element.Modifier modifier : methodDecl.getModifiers().getFlags()) {
-                    methodInfo.addModifier(Modifier.convertFromToolsModifier(modifier));
-                }
+            if (methodDecl.getModifiers() != 0) {
+                methodInfo.addAllModifiers(Modifier.parseModifiersFromFlags(methodDecl.getModifiers()));
             }
             
             Log.d(TAG, "parseMethodInfo, methodName: %s, returnType: %s", methodName, returnType);
             
             // parse parameters
             if (methodDecl.getParameters() != null && methodDecl.getParameters().size() > 0) {
-                for (JCTree.JCVariableDecl variableDecl : methodDecl.getParameters()) {
-                    Type paramType = TypeParser.parseType(sourceInfo, variableDecl.getType(), variableDecl.getType().toString());
+                for (Parameter parameter : methodDecl.getParameters()) {
+                    Type paramType = TypeParser.parseType(sourceInfo, parameter.getType(), parameter.getType().toString());
                     methodInfo.addParamType(paramType);
-                    
                     Log.d(TAG, "parseMethodInfo, parameter type: %s", paramType);
                 }
             }
             
             // parse annotaion
-            if (methodDecl.getModifiers().getAnnotations() != null && methodDecl.getModifiers().getAnnotations().size() > 0) {
-                for (JCTree.JCAnnotation annotation : methodDecl.getModifiers().getAnnotations()) {
+            if (methodDecl.getAnnotations() != null && methodDecl.getAnnotations().size() > 0) {
+                for (AnnotationExpr annotation : methodDecl.getAnnotations()) {
                     AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
                     methodInfo.putAnnotation(annotationModifier);
                 }
