@@ -38,7 +38,8 @@ public class SourceTreeVisitor extends VoidVisitorAdapter<Object> {
         if (node.getImports() != null && node.getImports().size() > 0) {
             for (ImportDeclaration importDeclaration : node.getImports()) {
                 Log.d(TAG, "visit CompilationUnit, import: %s", importDeclaration.getName());
-                sourceInfo.addImports(importDeclaration.getName().toString());
+                sourceInfo.addImports(importDeclaration.isAsterisk() ? importDeclaration.getName().toString() + ".*" :
+                    importDeclaration.getName().toString());
             }
         }
         super.visit(node, arg);

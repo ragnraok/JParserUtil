@@ -46,6 +46,7 @@ public class AnnotationModifierParser {
                 }
             }
         }
+        result.setContainedSourceInfo(sourceInfo);
         
         return result;
     }

@@ -22,8 +22,6 @@ public class ReferenceSourceMap {
     
     private static ReferenceSourceMap INSTANCE;
     
-    private boolean isFinishParse = false;
-    
     private ReferenceSourceMap() {}
     
     public static ReferenceSourceMap getInstance() {
@@ -82,6 +80,7 @@ public class ReferenceSourceMap {
         if (className == null) {
             return;
         }
+        Log.d(TAG, "addClassNameToSourceMap, name: %s", className);
         String simpleClassName = null;
         if (className.lastIndexOf(".") != -1) {
             int lastDotIndex = className.lastIndexOf(".");
@@ -117,6 +116,7 @@ public class ReferenceSourceMap {
         if (prefix == null || simpleClassName == null) {
             return null;
         }
+        Log.d(TAG, "searchClassNameByPrefixAndSimpleClassName, prefix: %s, simpleClassName: %s", prefix, simpleClassName);
         if (prefix.endsWith(".*")) { // remove the 'import *' note
             prefix = prefix.substring(0, prefix.lastIndexOf(".*"));
         }
@@ -132,11 +132,4 @@ public class ReferenceSourceMap {
         return null;
     }
     
-    public void finishParse() {
-        this.isFinishParse = true;
-    }
-    
-    public boolean isFinishParse() {
-        return this.isFinishParse;
-    }
 }

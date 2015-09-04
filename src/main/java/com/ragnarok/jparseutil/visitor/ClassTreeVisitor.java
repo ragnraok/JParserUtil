@@ -199,6 +199,8 @@ public class ClassTreeVisitor {
         classInfo.setQualifiedName(qualifiedName);
         classInfo.setPackageName(sourceInfo.getPackageName());
         sourceInfo.addClassInfo(classInfo);
+
+        ReferenceSourceMap.getInstance().addClassNameToSourceMap(classInfo.getQualifiedName());
         
         // recursive parse
         new ClassTreeVisitor().inspectTypeDeclaration(sourceInfo, classDecl, qualifiedName, true);

@@ -46,7 +46,7 @@ public class Util {
 //            if (simpleClassName.equals(type)) {
 //                return className;
 //            }
-            if (!className.endsWith(".*")) {
+            if (!className.endsWith("*")) {
                 String simpleClassName = className.substring(className.lastIndexOf(".") + 1);
                 if (simpleClassName.equals(type)) {
                     return className;
