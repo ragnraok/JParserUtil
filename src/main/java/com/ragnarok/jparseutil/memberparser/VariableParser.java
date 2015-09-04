@@ -1,6 +1,8 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.util.Log;
@@ -21,26 +23,26 @@ public class VariableParser {
     public static VariableInfo parseVariable(SourceInfo sourceInfo, FieldDeclaration variableDecl) {
         VariableInfo result = new VariableInfo();
         
-        String name = variableDecl.name.toString();
-        String type = variableDecl.vartype.toString();
+        VariableDeclarator variableDeclarator = variableDecl.getVariables().get(0);
+        
+        String name = variableDeclarator.getId().getName();
+        String type = variableDecl.getType().toString();
         
         result.setVariableName(name);
         
-        if (variableDecl.getModifiers().getFlags() != null && variableDecl.getModifiers().getFlags().size() > 0) {
-            for (javax.lang.model.element.Modifier modifier : variableDecl.getModifiers().getFlags()) {
-                result.addModifier(Modifier.convertFromToolsModifier(modifier));
-            }
+        if (variableDecl.getModifiers() != 0) {
+            result.addAllModifiers(Modifier.parseModifiersFromFlags(variableDecl.getModifiers()));
         }
         
-        Log.d(TAG, "vartype class name: %s", variableDecl.vartype.getClass().getSimpleName());
+        Log.d(TAG, "vartype class name: %s", variableDecl.getType().getClass().getSimpleName());
         
         Object value = null;
-        if (variableDecl.init != null) {
-            Log.d(TAG, "varinit class name: %s", variableDecl.init.getClass().getSimpleName());
-            value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDecl.vartype, variableDecl.init);   
+        if (variableDeclarator.getInit() != null) {
+            Log.d(TAG, "varinit class name: %s", variableDeclarator.getInit().getClass().getSimpleName());
+            value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDeclarator.getInit());   
         }
 
-        Type variableType = TypeParser.parseType(sourceInfo, variableDecl.vartype, type);
+        Type variableType = TypeParser.parseType(sourceInfo, variableDecl.getType(), type);
         Log.d(TAG, "variableType: %s", variableType);
         result.setType(variableType);
         
@@ -48,9 +50,9 @@ public class VariableParser {
             result.setVariableValue(value);
         }
         
-        if (variableDecl.getModifiers().getAnnotations() != null && variableDecl.getModifiers().getAnnotations().size() > 0) {
-            List<JCTree.JCAnnotation> annotationList = variableDecl.getModifiers().getAnnotations();
-            for (JCTree.JCAnnotation annotation : annotationList) {
+        if (variableDecl.getAnnotations() != null && variableDecl.getAnnotations().size() > 0) {
+            List<AnnotationExpr> annotationList = variableDecl.getAnnotations();
+            for (AnnotationExpr annotation : annotationList) {
                 AnnotationModifier annotationModifier = AnnotationModifierParser.parseAnnotation(sourceInfo, annotation);
                 if (annotationModifier != null) {
                     result.putAnnotation(annotationModifier);
