@@ -35,7 +35,7 @@ public class Type {
                 if (typeName != null && typeName.contains(".")) {
                     isUpdatedToQualifiedTypeName = true;
                 } else {
-                    if (CodeInfo.isParseFinish() && !isUpdatedToQualifiedTypeName) { // not in import, sample package of this containedSourceInfo
+                    if (!isUpdatedToQualifiedTypeName) { // not in import, sample package of this containedSourceInfo
                         typeName = containedSourceInfo.getPackageName() + "." + typeName;
                         isUpdatedToQualifiedTypeName = true;
                     }
