@@ -1,7 +1,9 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ragnarok on 15/8/15.
@@ -28,6 +30,8 @@ public abstract class AnnotatedObject {
 
     protected ArrayList<AnnotationModifier> annotationModifiers = new ArrayList<>();
 
+    protected Set<Modifier> modifiers = new HashSet<>();
+
     public void putAnnotation(AnnotationModifier annotationModifier) {
         this.annotationModifiers.add(annotationModifier);
     }
@@ -43,6 +47,18 @@ public abstract class AnnotatedObject {
             }
         }
         return false;
+    }
+
+    public void addModifier(Modifier modifier) {
+        this.modifiers.add(modifier);
+    }
+
+    public void addAllModifiers(Set<Modifier> modifiers) {
+        this.modifiers.addAll(modifiers);
+    }
+
+    public Set<Modifier> getModifiers() {
+        return modifiers;
     }
     
 }

@@ -26,6 +26,10 @@ public class CodeInfo {
         javaSources.put(sourceInfo.getFilename(), sourceInfo);
     }
     
+    public void addCodeInfo(CodeInfo codeInfo) {
+        javaSources.putAll(codeInfo.getAllSources());
+    }
+    
     public HashMap<String, SourceInfo> getAllSources() {
         return javaSources;
     }

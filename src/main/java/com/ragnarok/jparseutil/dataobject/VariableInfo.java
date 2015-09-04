@@ -51,18 +51,6 @@ public class VariableInfo extends AnnotatedObject {
         return this.variableValue;
     }
 
-    public void addModifier(Modifier modifier) {
-        this.modifiers.add(modifier);
-    }
-
-    public void addAllModifiers(Set<Modifier> modifiers) {
-        this.modifiers.addAll(modifiers);
-    }
-
-    public Set<Modifier> getModifiers() {
-        return modifiers;
-    }
-
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder(String.format("{Variable: %s, type: %s, value: %s", variableName, type, variableValue));

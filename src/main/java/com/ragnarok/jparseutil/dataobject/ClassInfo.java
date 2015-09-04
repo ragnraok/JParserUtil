@@ -20,8 +20,6 @@ public class ClassInfo extends AnnotatedObject {
     private boolean isEnum;
     private boolean isAnnotaiton;
     
-    private Set<Modifier> modifiers = new HashSet<>();
-    
     private ArrayList<VariableInfo> variableInfos = new ArrayList<>();
     
     private ArrayList<MethodInfo> methodInfos = new ArrayList<>();
@@ -89,17 +87,6 @@ public class ClassInfo extends AnnotatedObject {
         }
     }
     
-    public void addModifier(Modifier modifier) {
-        this.modifiers.add(modifier);
-    }
-    
-    public Set<Modifier> getModifiers() {
-        return modifiers;
-    }
-    
-    public void addAllModifiers(Set<Modifier> modifiers) {
-        this.modifiers.addAll(modifiers);
-    }
     
     public void setIsInterface(boolean isInterface) {
         this.isInterface = isInterface;
