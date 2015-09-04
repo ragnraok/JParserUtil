@@ -34,7 +34,6 @@ public class SourceInfoExtracter {
         }
         if (parseResult != null) {
             SourceTreeVisitor sourceTreeVisitor = new SourceTreeVisitor(sourceReader.getFilename());
-            sourceTreeVisitor.visit(parseResult, null);
             parseResult.accept(sourceTreeVisitor, null);
             return sourceTreeVisitor.getParseResult();
         }
