@@ -1,6 +1,8 @@
 package com.ragnarok.jparseutil.filescanner;
 
+import com.ragnarok.jparseutil.SourceInfoExtracter;
 import com.ragnarok.jparseutil.dataobject.CodeInfo;
+import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.FileNotFoundException;
@@ -37,19 +39,32 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         private List<String> subSetFileList;
         private int threadNo;
         
+        private CodeInfo subTaskResult;
+        
         public ScanSubSetFileRunnable(List<String> subSetFileList, int threadNo) {
             this.subSetFileList = subSetFileList;
             this.threadNo = threadNo;
+            subTaskResult = new CodeInfo();
         }
         
         @Override
         public void run() {
             for (String file : subSetFileList) {
-                parseJavaSource(file);
+                SourceInfoExtracter extracter = new SourceInfoExtracter(file);
+                SourceInfo sourceInfo = extracter.extract();
+                if (sourceInfo != null) {
+                    subTaskResult.addSource(sourceInfo);
+                }
             }
             Log.i(TAG, "thread %d parsing finished", threadNo);
         }
+        
+        public CodeInfo getSubTaskResult() {
+            return subTaskResult;
+        }
     }
+    
+    
 
     @Override
     public CodeInfo scanAllJavaSources() throws FileNotFoundException {
@@ -69,6 +84,7 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         int currentStartIndex = 0;
 
         Future[] futureList = new Future[threadNumber];
+        ScanSubSetFileRunnable[] runnableList = new ScanSubSetFileRunnable[threadNumber];
         
         for (int i = 0; i < threadNumber; i++) {
             int startIndex = currentStartIndex > allJavaSourcePaths.size() ? allJavaSourcePaths.size() - 1 : currentStartIndex;
@@ -79,8 +95,9 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
             }
             
             Log.d(TAG, "startIndex: %d, endIndex: %d", startIndex, endIndex);
-            
-            futureList[i] = executor.submit(new ScanSubSetFileRunnable(allJavaSourcePaths.subList(startIndex, endIndex), i));
+
+            runnableList[i] = new ScanSubSetFileRunnable(allJavaSourcePaths.subList(startIndex, endIndex), i);
+            futureList[i] = executor.submit(runnableList[i]);
             
             currentStartIndex = endIndex;
         }
@@ -94,6 +111,10 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+        }
+        
+        for (ScanSubSetFileRunnable runnable : runnableList) {
+            result.addCodeInfo(runnable.getSubTaskResult());
         }
         
         executor.shutdown();
