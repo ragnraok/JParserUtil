@@ -7,7 +7,7 @@ import java.util.Set;
 
 /**
  * Created by ragnarok on 15/5/24.
- * represent information for a Java Class or Interface
+ * represent information for a Java Class or Interface or Annotaiton
  */
 public class ClassInfo extends AnnotatedObject {
     
@@ -17,8 +17,8 @@ public class ClassInfo extends AnnotatedObject {
     private String simpleName;
     
     private boolean isInterface;
-    
     private boolean isEnum;
+    private boolean isAnnotaiton;
     
     private Set<Modifier> modifiers = new HashSet<>();
     
@@ -115,6 +115,14 @@ public class ClassInfo extends AnnotatedObject {
     
     public boolean isEnum() {
         return this.isEnum;
+    }
+    
+    public void setIsAnnotation(boolean isAnnotaiton) {
+        this.isAnnotaiton = isAnnotaiton;
+    }
+    
+    public boolean isAnnotaiton() {
+        return isAnnotaiton;
     }
     
     public void setSuperClass(Type type) {

@@ -1,7 +1,6 @@
 package com.ragnarok.jparseutil.memberparser;
 
-import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
-import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
@@ -18,11 +17,11 @@ public class TypeParser {
 
     public static final String TAG = "JParserUtil.TypeParser";
 
-    public static Type parseType(SourceInfo sourceInfo, JCTree typeElement, String typeName) {
+    public static Type parseType(SourceInfo sourceInfo, com.github.javaparser.ast.type.Type typeElement, String typeName) {
         if (typeElement != null) {
-            Log.d(TAG, "parseTypeFromSourceInfo, typeElement class: %s, kind: %s", typeElement.getClass().getSimpleName(), typeElement.getKind());
+            Log.d(TAG, "parseTypeFromSourceInfo, typeElement class: %s", typeElement.getClass().getSimpleName());
         }
-        boolean isArray = typeElement != null && typeElement.getKind() == Tree.Kind.ARRAY_TYPE;
+        boolean isArray = typeElement != null && typeElement instanceof ReferenceType && ((ReferenceType)typeElement).getArrayCount() > 0;
         Type result = new Type();
         result.setContainedSourceInfo(sourceInfo);
         if (Util.isPrimitive(typeName)) {
@@ -38,14 +37,12 @@ public class TypeParser {
         }
         if (isArray) {
             result.setArray(true);
-            if (typeElement instanceof JCTree.JCArrayTypeTree) {
-                JCTree.JCArrayTypeTree arrayTypeTree = (JCTree.JCArrayTypeTree) typeElement;
-                if (Util.isPrimitive(arrayTypeTree.elemtype.toString())) {
-                    result.setPrimitive(true);
-                }
-                Type arrayElemType = parseType(sourceInfo, arrayTypeTree.elemtype, arrayTypeTree.elemtype.toString());
-                result.setArrayElementType(arrayElemType);
+            ReferenceType arrayType = (ReferenceType) typeElement;
+            if (Util.isPrimitive(arrayType.getType().toString())) {
+                result.setPrimitive(true);
             }
+            Type arrayElemType = parseType(sourceInfo, arrayType.getType(), arrayType.getType().toString());
+            result.setArrayElementType(arrayElemType);
         }
         return result;
     }

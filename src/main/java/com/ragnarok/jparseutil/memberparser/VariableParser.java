@@ -1,5 +1,6 @@
 package com.ragnarok.jparseutil.memberparser;
 
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.util.Log;
@@ -17,7 +18,7 @@ public class VariableParser {
     
     public static final String TAG = "JParserUtil.VariableParser";
     
-    public static VariableInfo parseVariable(SourceInfo sourceInfo, JCTree.JCVariableDecl variableDecl) {
+    public static VariableInfo parseVariable(SourceInfo sourceInfo, FieldDeclaration variableDecl) {
         VariableInfo result = new VariableInfo();
         
         String name = variableDecl.name.toString();

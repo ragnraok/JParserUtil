@@ -1,6 +1,8 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/5/24.
@@ -11,12 +13,14 @@ public class SourceInfo {
     private String fileName;
     private ArrayList<String> importClassNames = new ArrayList<>();
     private String packageName = null;
-    private ArrayList<AnnotationInfo> annotationInfos = new ArrayList<>();
+    
+    
+    private HashMap<String, AnnotationInfo> annotationInfos = new HashMap<>();
     
     /**
      * all class informations
      */
-    private ArrayList<ClassInfo> classInfos = new ArrayList<>();
+    private HashMap<String, ClassInfo> classInfos = new HashMap<>();
     
     public void setFilename(String filename) {
         this.fileName = filename;
@@ -43,14 +47,14 @@ public class SourceInfo {
     }
     
     public void addClassInfo(ClassInfo clazz) {
-        if (clazz != null && !isContainClass(clazz.getSimpleName())) {
+        if (clazz != null) {
 //            Log.d(TAG, "addClassInfo, name: %s, size: %d", clazz.getSimpleName(), this.classInfos.size());
-            this.classInfos.add(clazz);
+            this.classInfos.put(clazz.getQualifiedName(), clazz);
         }
     }
     
     public boolean isContainClass(String simpleClassName) {
-        for (ClassInfo clazz : classInfos) {
+        for (ClassInfo clazz : classInfos.values()) {
             if (clazz.getSimpleName().equals(simpleClassName)) {
                 return true;
             }
@@ -59,16 +63,11 @@ public class SourceInfo {
     }
     
     public ClassInfo getClassInfoByQualifiedName(String qualifiedName) {
-        for (ClassInfo clazz : classInfos) {
-            if (clazz.getQualifiedName().equals(qualifiedName)) {
-                return clazz;
-            }
-        }
-        return null;
+        return classInfos.get(qualifiedName);
     }
     
     public ClassInfo getClassInfoBySimpleName(String simpleName) {
-        for (ClassInfo clazz : classInfos) {
+        for (ClassInfo clazz : classInfos.values()) {
             if (clazz.getSimpleName().equals(simpleName)) {
                 return clazz;
             }
@@ -77,7 +76,7 @@ public class SourceInfo {
     }
     
     public ClassInfo getClassInfoBySuffixName(String suffixName) {
-        for (ClassInfo clazz : classInfos) {
+        for (ClassInfo clazz : classInfos.values()) {
             if (clazz.getQualifiedName().endsWith("." + suffixName)) {
                 return clazz;
             }
@@ -86,45 +85,43 @@ public class SourceInfo {
     }
     
     public void updateClassInfoByQualifiedName(String qualifiedName, ClassInfo newClazz) {
-        int index = -1;
-        for (int i = 0; i < classInfos.size(); i++) {
-            if (classInfos.get(i).getQualifiedName().equals(qualifiedName)) {
-                index = i;
-                break;
-            }
-        }
-        if (index != -1) {
-            classInfos.set(index, newClazz);
+        if (classInfos.containsKey(qualifiedName)) {
+            classInfos.put(qualifiedName, newClazz);
         }
     }
     
-    public ArrayList<ClassInfo> getAllClass() {
-        return this.classInfos;
+    public List<ClassInfo> getAllClass() {
+        List<ClassInfo> result = new ArrayList<>(this.classInfos.size());
+        result.addAll(classInfos.values());
+        return result;
     }
     
     public String dumpClazz() {
         String result = "";
-        for (ClassInfo clazz : classInfos) {
+        for (ClassInfo clazz : classInfos.values()) {
            result += clazz.getSimpleName() + ", ";
         }
         return result; 
     }
     
     public void putAnnotaiotn(AnnotationInfo annotationInfo) {
-        this.annotationInfos.add(annotationInfo);
+        this.annotationInfos.put(annotationInfo.getQualifiedName(), annotationInfo);
     }
     
-    public ArrayList<AnnotationInfo> getAllAnnotations() {
-        return this.annotationInfos;
+    public List<AnnotationInfo> getAllAnnotations() {
+        List<AnnotationInfo> result = new ArrayList<>(this.annotationInfos.size());
+        result.addAll(annotationInfos.values());
+        return result;
     }
     
     public AnnotationInfo getAnnotationInfoByQualifiedName(String qualifiedName) {
-        for (AnnotationInfo annotationInfo : annotationInfos) {
-            if (annotationInfo.getQualifiedName().equals(qualifiedName)) {
-                return annotationInfo;
-            }
+        return annotationInfos.get(qualifiedName);
+    }
+    
+    public void updateAnnotationByQualifiedName(String qualifiedName, AnnotationInfo annotationInfo) {
+        if (annotationInfos.containsKey(qualifiedName)) {
+            annotationInfos.put(qualifiedName, annotationInfo);
         }
-        return null;
     }
 
     @Override
@@ -139,13 +136,13 @@ public class SourceInfo {
         }
         result.append("\n");
         if (annotationInfos.size() > 0) {
-            for (AnnotationInfo annotationInfo : annotationInfos) {
+            for (AnnotationInfo annotationInfo : annotationInfos.values()) {
                 result.append(annotationInfo.toString());
                 result.append("\n");
             }
         }
         if (classInfos.size() > 0) {
-            for (ClassInfo classInfo : classInfos) {
+            for (ClassInfo classInfo : classInfos.values()) {
                 result.append(classInfo.toString());
                 result.append("\n");
             }

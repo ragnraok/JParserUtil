@@ -1,11 +1,9 @@
 package com.ragnarok.jparseutil.memberparser;
 
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.tools.javac.tree.JCTree;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ragnarok on 15/6/7.
@@ -15,7 +13,7 @@ public class MethodParser {
     
     public static final String TAG = "JParserUtil.MethodParser";
     
-    public static MethodInfo parseMethodInfo(ClassInfo containedClass, SourceInfo sourceInfo, JCTree.JCMethodDecl methodDecl) {
+    public static MethodInfo parseMethodInfo(ClassInfo containedClass, SourceInfo sourceInfo, MethodDeclaration methodDecl) {
 //        Log.d(TAG, "method name: %s, returnType: %s", methodDecl.name, methodDecl.getReturnType());
         if (containedClass != null && methodDecl.getReturnType() != null) {
             MethodInfo methodInfo = new MethodInfo();
