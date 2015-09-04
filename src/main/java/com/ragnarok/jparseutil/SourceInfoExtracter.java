@@ -1,5 +1,6 @@
 package com.ragnarok.jparseutil;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.memberparser.MethodParser;
@@ -25,17 +26,19 @@ public class SourceInfoExtracter {
     }
     
     public SourceInfo extract() {
-        Iterable<? extends CompilationUnitTree> parseResult = null;
+        CompilationUnit parseResult = null;
         try {
             parseResult = sourceReader.readSource();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        SourceTreeVisitor sourceTreeVisitor = new SourceTreeVisitor(sourceReader.getFilename());
-        for (CompilationUnitTree compilationUnitTree : parseResult) {
-            compilationUnitTree.accept(sourceTreeVisitor, null);
+        if (parseResult != null) {
+            SourceTreeVisitor sourceTreeVisitor = new SourceTreeVisitor(sourceReader.getFilename());
+            sourceTreeVisitor.visit(parseResult, null);
+            parseResult.accept(sourceTreeVisitor, null);
+            return sourceTreeVisitor.getParseResult();
         }
-        SourceInfo sourceInfo = sourceTreeVisitor.getParseResult();
-        return sourceInfo;
+        return null;
+        
     }
 }

@@ -1,5 +1,7 @@
 package com.ragnarok.jparseutil;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.util.JavacTask;
 import com.sun.tools.javac.api.JavacTool;
@@ -21,33 +23,24 @@ public class JavaSourceReader {
     
     private String filePath = null;
     private String filename = null;
-    private JavacFileManager fileManager;
-    private JavacTool javacTool;
     
     public JavaSourceReader(String filepath) {
         this.filePath = filepath;
 
-        Context context = new Context();
-        fileManager = new JavacFileManager(context, true, Charset.forName("UTF-8"));
-        javacTool = new JavacTool();
     }
     
-    public Iterable<? extends CompilationUnitTree> readSource() throws FileNotFoundException {
+    public CompilationUnit readSource() throws FileNotFoundException {
         File file = new File(this.filePath);
         if (!file.exists()) {
             throw new FileNotFoundException("try parse a not exist source file: " + this.filePath);
         }
         
         this.filename = file.getName();
-        
-        Iterable<? extends JavaFileObject> files = fileManager.getJavaFileObjects(this.filePath);
-        JavaCompiler.CompilationTask compilationTask = javacTool.getTask(null, fileManager, null, null, null, files);
-        JavacTask javacTask = (JavacTask) compilationTask;
 
         try {
-            Iterable<? extends CompilationUnitTree> result = javacTask.parse();
+            CompilationUnit result = JavaParser.parse(file, "UTF-8", false);
             return result;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

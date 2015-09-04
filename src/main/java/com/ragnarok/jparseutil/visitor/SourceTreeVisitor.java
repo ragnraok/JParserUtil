@@ -1,5 +1,12 @@
 package com.ragnarok.jparseutil.visitor;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.source.tree.AnnotationTree;
@@ -9,11 +16,13 @@ import com.sun.source.tree.ImportTree;
 import com.sun.source.util.TreeScanner;
 import com.sun.tools.javac.tree.JCTree;
 
+import java.util.Objects;
+
 /**
  * Created by ragnarok on 15/5/18.
  * The Source TreeVisitor, travel a CompilationUnit(a Java source file) and extract its info
  */
-public class SourceTreeVisitor extends TreeScanner<Void, Void> {
+public class SourceTreeVisitor extends VoidVisitorAdapter<Object> {
     
     public static final String TAG = "JParserUtil.SourceTreeVisitor";
     
@@ -26,49 +35,61 @@ public class SourceTreeVisitor extends TreeScanner<Void, Void> {
         this.sourceInfo.setFilename(filename);
         this.classVisitor = new ClassTreeVisitor();
     }
+
+    @Override
+    public void visit(CompilationUnit node, Object arg) {
+        if (node == null || node.getPackage() == null || node.getPackage().getName() == null) {
+            return;
+        }
+        Log.d(TAG, "visit CompilationUnit, packageName: %s", node.getPackage().getName());
+        sourceInfo.setPackageName(node.getPackage().getName().toString());
+        if (node.getImports() == null) {
+            super.visit(node, arg);
+        }
+        for (ImportDeclaration importDeclaration : node.getImports()) {
+            Log.d(TAG, "visit CompilationUnit, import: %s", importDeclaration.getName());
+            sourceInfo.addImports(importDeclaration.getName().toString());
+        }
+        super.visit(node, arg);
+    }
+
+    @Override
+    public void visit(ClassOrInterfaceDeclaration node, Object arg) {
+        if (node == null) {
+            return;
+        }
+        ensurePackageName(node);
+        Log.d(TAG, "visit ClassOrInterfaceDeclaration, name: %s", node.getName());
+    }
+
+    @Override
+    public void visit(EnumDeclaration node, Object arg) {
+        if (node == null) {
+            return;
+        }
+        ensurePackageName(node);
+        Log.d(TAG, "visit EnumDeclaration, name: %s", node.getName());
+    }
+
+    @Override
+    public void visit(AnnotationDeclaration node, Object arg) {
+        if (node == null) {
+            return;
+        }
+        ensurePackageName(node);
+        Log.d(TAG, "visit AnnotationDeclaration, name: %s", node.getName());
+    }
     
-    @Override
-    public Void visitImport(ImportTree node, Void aVoid) {
+    private void ensurePackageName(TypeDeclaration node) {
         if (node == null) {
-            return null;
+            return;
         }
-        String classname = node.getQualifiedIdentifier().toString();
-        Log.d(TAG, "visitImport, name: %s", classname);
-        this.sourceInfo.addImports(classname);
-        
-        return super.visitImport(node, aVoid);
+        if (sourceInfo.getPackageName() == null && node.getParentNode() instanceof CompilationUnit) {
+            CompilationUnit compilationUnit = (CompilationUnit) node.getParentNode();
+            sourceInfo.setPackageName(compilationUnit.getPackage().getName().getName());
+        }
     }
 
-    @Override
-    public Void visitClass(ClassTree node, Void aVoid) {
-        if (node == null) {
-            return null;
-        }
-        Log.d(TAG, "visitClass, name: %s", node.getSimpleName());
-        this.classVisitor.inspectClassTress(sourceInfo, node, null, false);
-        return null;
-    }
-
-    @Override
-    public Void visitCompilationUnit(CompilationUnitTree node, Void aVoid) {
-        if (node == null || node.getPackageName() == null) {
-            return null;
-        }
-        Log.d(TAG, "visitCompilationUnit, packagename: %s", node.getPackageName());
-        this.sourceInfo.setPackageName(node.getPackageName().toString());
-        return super.visitCompilationUnit(node, aVoid);
-    }
-
-    @Override
-    public Void visitAnnotation(AnnotationTree node, Void aVoid) {
-        if (node == null) {
-            return null;
-        }
-        Log.d(TAG, "visitAnnotation, name: %s", node.getAnnotationType().toString());
-        return super.visitAnnotation(node, aVoid);
-    }
-
-    
     public SourceInfo getParseResult() {
         return this.sourceInfo;
     }
