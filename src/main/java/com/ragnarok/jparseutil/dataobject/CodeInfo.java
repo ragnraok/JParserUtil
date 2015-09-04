@@ -147,4 +147,14 @@ public class CodeInfo {
         }
         return result.toString();
     }
+    
+    private static boolean isParseFinished = false;
+    
+    public static void markParseFinish() {
+        isParseFinished = true;
+    }
+    
+    public static boolean isParseFinish() {
+        return isParseFinished;
+    }
 }

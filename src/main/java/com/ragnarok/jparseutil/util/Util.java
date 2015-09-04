@@ -2,6 +2,7 @@ package com.ragnarok.jparseutil.util;
 
 import com.github.javaparser.ast.expr.*;
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
+import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.sun.source.tree.Tree;
@@ -69,6 +70,10 @@ public class Util {
 
         // for inner class variable, currently may not add in sourceInfo, so we will
         // update type later
+        ClassInfo classInfo = sourceInfo.getClassInfoBySuffixName(type);
+        if (classInfo != null) {
+            return classInfo.getQualifiedName();
+        }
 
         return type; // is import from java.lang
     }

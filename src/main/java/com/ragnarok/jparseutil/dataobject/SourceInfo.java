@@ -1,8 +1,6 @@
 package com.ragnarok.jparseutil.dataobject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ragnarok on 15/5/24.
@@ -15,12 +13,12 @@ public class SourceInfo {
     private String packageName = null;
     
     
-    private HashMap<String, AnnotationInfo> annotationInfos = new HashMap<>();
+    private Map<String, AnnotationInfo> annotationInfos = new TreeMap<>();
     
     /**
      * all class informations
      */
-    private HashMap<String, ClassInfo> classInfos = new HashMap<>();
+    private Map<String, ClassInfo> classInfos = new TreeMap<>();
     
     public void setFilename(String filename) {
         this.fileName = filename;

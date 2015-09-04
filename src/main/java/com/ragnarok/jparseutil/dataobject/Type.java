@@ -28,10 +28,9 @@ public class Type {
     }
     
     public String getTypeName() {
-        if (!isUpdatedToQualifiedTypeName && !Util.isPrimitive(typeName) && !Util.isVoidType(typeName) && !isArray) {
-            // if this is a fully qualifed className, it must looks like "com.example.test.QualifiedClassName",
-            // which must contained a '.'
-            if (this.typeName != null && !this.typeName.contains(".")) {
+        if (CodeInfo.isParseFinish() && 
+                !isUpdatedToQualifiedTypeName && !Util.isPrimitive(typeName) && !Util.isVoidType(typeName) && !isArray) {
+            if (this.typeName != null) {
                 typeName = Util.parseTypeFromSourceInfo(containedSourceInfo, typeName);
                 if (typeName != null && typeName.contains(".")) {
                     isUpdatedToQualifiedTypeName = true;

@@ -54,6 +54,10 @@ class User implements Printable {
     
     public static class Juno {
         private String name = "Juno";
+        
+        class Damn {
+            
+        }
     }
     
     public static class Damn {
