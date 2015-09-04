@@ -39,7 +39,7 @@ public class AnnotationModifierParser {
                     String argName = valuePair.getName();
                     Expression argValueExpr = valuePair.getValue();
                     Log.d(TAG, "parse NormalAnnotationExpr, argName: %s, argValueExpr: %s", argName, argValueExpr);
-                    Object value = VariableInitParser.parseVariableInit(sourceInfo, null, argValueExpr);
+                    Object value = VariableInitParser.parseVariableInit(sourceInfo, null, null, argValueExpr);
                     result.putNameValue(argName, value);
                 }
             }

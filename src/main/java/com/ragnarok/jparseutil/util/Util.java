@@ -1,5 +1,6 @@
 package com.ragnarok.jparseutil.util;
 
+import com.github.javaparser.ast.expr.*;
 import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
@@ -72,8 +73,24 @@ public class Util {
         return type; // is import from java.lang
     }
     
-    public static Object getValueFromLiteral(JCTree.JCLiteral literal) {
-        return literal.getValue();
+    public static Object getValueFromLiteral(LiteralExpr literal) {
+        if (literal instanceof BooleanLiteralExpr) {
+            return ((BooleanLiteralExpr) literal).getValue();
+        } else if (literal instanceof IntegerLiteralExpr) {
+            return ((IntegerLiteralExpr) literal).getValue();
+        } else if (literal instanceof LongLiteralExpr) {
+            return ((LongLiteralExpr) literal).getValue();
+        } else if (literal instanceof DoubleLiteralExpr) {
+            return ((DoubleLiteralExpr) literal).getValue();
+        } else if (literal instanceof CharLiteralExpr) {
+            return ((CharLiteralExpr) literal).getValue();
+        } else if (literal instanceof NullLiteralExpr) {
+            return null;
+        } else if (literal instanceof StringLiteralExpr) {
+            return ((StringLiteralExpr) literal).getValue();
+        } else {
+            return literal.toString();
+        }
     }
 
     public static String buildClassName(String prefix, String simpleName) {

@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LiteralExpr;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
@@ -17,13 +18,14 @@ public class VariableInitParser {
     public static Object parseVariableInit(SourceInfo sourceInfo, String fullQualifiedTypeName,
                                            JCTree.JCExpression type, Expression expression) {
         Log.d(TAG, "parseVariableInit, express class: %s", expression.getClass().getSimpleName());
-        if (expression instanceof JCTree.JCLiteral) {
-            return Util.getValueFromLiteral((JCTree.JCLiteral) expression);
-        } else if (expression instanceof JCTree.JCIdent) {
-            return expression.toString();
-        } else if (expression instanceof JCTree.JCAssign) {
-            return expression.toString();
-        }
+        if (expression instanceof LiteralExpr) {
+            return Util.getValueFromLiteral((LiteralExpr) expression);
+        } 
+//        else if (expression instanceof JCTree.JCIdent) {
+//            return expression.toString();
+//        } else if (expression instanceof JCTree.JCAssign) {
+//            return expression.toString();
+//        }
 //        else if (expression instanceof JCTree.JCNewClass) {
 //            JCTree.JCNewClass newClass = (JCTree.JCNewClass) expression;
 //            return NewClassObjectParser.parseNewClass(sourceInfo, newClass);
