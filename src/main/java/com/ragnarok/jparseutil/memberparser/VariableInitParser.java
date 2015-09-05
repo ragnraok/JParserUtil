@@ -16,7 +16,7 @@ public class VariableInitParser {
     public static final String TAG = "JParserUtil.VariableInitParser";
     
     public static Object parseVariableInit(SourceInfo sourceInfo, String fullQualifiedTypeName, Expression expression) {
-        Log.d(TAG, "parseVariableInit, express class: %s", expression.getClass().getSimpleName());
+//        Log.d(TAG, "parseVariableInit, express class: %s", expression.getClass().getSimpleName());
         if (expression instanceof LiteralExpr) {
             return Util.getValueFromLiteral((LiteralExpr) expression);
         } 

@@ -34,11 +34,11 @@ public class VariableParser {
             result.addAllModifiers(Modifier.parseModifiersFromFlags(variableDecl.getModifiers()));
         }
         
-        Log.d(TAG, "vartype class name: %s", variableDecl.getType().getClass().getSimpleName());
+//        Log.d(TAG, "vartype class name: %s", variableDecl.getType().getClass().getSimpleName());
         
         Object value = null;
         if (variableDeclarator.getInit() != null) {
-            Log.d(TAG, "varinit class name: %s", variableDeclarator.getInit().getClass().getSimpleName());
+//            Log.d(TAG, "varinit class name: %s", variableDeclarator.getInit().getClass().getSimpleName());
             value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDeclarator.getInit());   
         }
 

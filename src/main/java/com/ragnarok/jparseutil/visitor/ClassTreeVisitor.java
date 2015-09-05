@@ -160,7 +160,7 @@ public class ClassTreeVisitor {
    
     private void inspectAllClassMembers(List<BodyDeclaration> classMembers) {
         for (BodyDeclaration member : classMembers) {
-            Log.d(TAG, "member.class: %s", member.getClass().getSimpleName());
+//            Log.d(TAG, "member.class: %s", member.getClass().getSimpleName());
             
             if (member instanceof FieldDeclaration) {
                 inspectVariable((FieldDeclaration) member);

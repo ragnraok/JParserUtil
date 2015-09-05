@@ -30,7 +30,7 @@ public class TestMain {
 //        Log.addShowLogTAG(AnnotationModifier.TAG);
 //        Log.addShowLogTAG(ReferenceSourceMap.TAG);
 
-        String dir = "testsource";
+        String dir = "/Users/ragnarok/Works/MMSource/micromessenger_android";
         String sourceMapFile = "testsource/android-22.txt";
         
         try {
@@ -47,7 +47,7 @@ public class TestMain {
             fileScanner.addExcludePath("pre-compile-tools");
             CodeInfo codeInfo = fileScanner.scanAllJavaSources();
             CodeInfo.markParseFinish();
-            System.out.println(codeInfo);
+//            System.out.println(codeInfo);
             
             codeInfo.arrangeAnnotationByPackage();
             codeInfo.arrangeClassByPackage();

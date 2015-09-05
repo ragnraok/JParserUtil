@@ -19,7 +19,7 @@ public class TypeParser {
 
     public static Type parseType(SourceInfo sourceInfo, com.github.javaparser.ast.type.Type typeElement, String typeName) {
         if (typeElement != null) {
-            Log.d(TAG, "parseTypeFromSourceInfo, typeElement class: %s", typeElement.getClass().getSimpleName());
+//            Log.d(TAG, "parseTypeFromSourceInfo, typeElement class: %s", typeElement.getClass().getSimpleName());
         }
         boolean isArray = typeElement != null && typeElement instanceof ReferenceType && ((ReferenceType)typeElement).getArrayCount() > 0;
         Type result = new Type();
