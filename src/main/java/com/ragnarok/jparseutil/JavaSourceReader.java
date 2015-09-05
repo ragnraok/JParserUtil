@@ -29,6 +29,10 @@ public class JavaSourceReader {
 
     }
     
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+    
     public CompilationUnit readSource() throws FileNotFoundException {
         File file = new File(this.filePath);
         if (!file.exists()) {

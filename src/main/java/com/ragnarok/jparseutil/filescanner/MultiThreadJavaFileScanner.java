@@ -41,6 +41,8 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         
         private CodeInfo subTaskResult;
         
+        private SourceInfoExtracter extracter = null;
+        
         public ScanSubSetFileRunnable(List<String> subSetFileList, int threadNo) {
             this.subSetFileList = subSetFileList;
             this.threadNo = threadNo;
@@ -50,7 +52,11 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         @Override
         public void run() {
             for (String file : subSetFileList) {
-                SourceInfoExtracter extracter = new SourceInfoExtracter(file);
+                if (extracter == null) {
+                    extracter = new SourceInfoExtracter(file);
+                } else {
+                    extracter.setFilePath(file);
+                }
                 SourceInfo sourceInfo = extracter.extract();
                 if (sourceInfo != null) {
                     subTaskResult.addSource(sourceInfo);

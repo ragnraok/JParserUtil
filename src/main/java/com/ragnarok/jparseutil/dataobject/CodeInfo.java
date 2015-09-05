@@ -150,6 +150,10 @@ public class CodeInfo {
     
     private static boolean isParseFinished = false;
     
+    public static void reset() {
+        isParseFinished = false;
+    }
+    
     public static void markParseFinish() {
         isParseFinished = true;
     }

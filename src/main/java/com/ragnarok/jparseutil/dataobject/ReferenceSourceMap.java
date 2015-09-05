@@ -3,7 +3,11 @@ package com.ragnarok.jparseutil.dataobject;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by ragnarok on 15/8/8.
@@ -18,7 +22,7 @@ public class ReferenceSourceMap {
     // simpleClassName -> qualifiedClassName list
     // because simpleClassName may have multiple correspond qualified name, 
     // like android.view.SurfaceView and android.view.mock.SurfaceView
-    private HashMap<String, List<String>> simpleNameQualifiedNameMap = new HashMap<>(); 
+    private Map<String, List<String>> simpleNameQualifiedNameMap = new HashMap<>(); 
     
     private static ReferenceSourceMap INSTANCE;
     
@@ -76,7 +80,7 @@ public class ReferenceSourceMap {
         }
     }
     
-    public synchronized void addClassNameToSourceMap(String className) {
+    public void addClassNameToSourceMap(String className) {
         if (className == null) {
             return;
         }

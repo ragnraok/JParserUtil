@@ -25,6 +25,11 @@ public class SourceInfoExtracter {
         sourceReader = new JavaSourceReader(this.filePath);
     }
     
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+        sourceReader.setFilePath(filePath);
+    }
+    
     public SourceInfo extract() {
         CompilationUnit parseResult = null;
         try {
