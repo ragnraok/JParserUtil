@@ -30,7 +30,7 @@ public class TestMain {
 //        Log.addShowLogTAG(AnnotationModifier.TAG);
 //        Log.addShowLogTAG(ReferenceSourceMap.TAG);
 
-        String dir = "/Users/ragnarok/Works/MMSource/micromessenger_android";
+        String dir = "testsource";
         String sourceMapFile = "testsource/android-22.txt";
         
         try {
