@@ -62,6 +62,7 @@ public class SourceTreeVisitor extends VoidVisitorAdapter<Object> {
         }
         ensurePackageName(node);
         Log.d(TAG, "visit EnumDeclaration, name: %s", node.getName());
+        classVisitor.inspectTypeDeclaration(sourceInfo, node, null, false);
     }
 
     @Override

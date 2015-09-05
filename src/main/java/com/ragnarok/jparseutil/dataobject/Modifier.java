@@ -11,7 +11,7 @@ import java.util.Set;
  * copy from javax.lang.model.element.Modifier
  */
 public enum Modifier {
-    /** The modifier {@code public} */          
+    /** The modifier {@code public} */   
     PUBLIC,
     
     /** The modifier {@code protected} */       

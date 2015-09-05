@@ -20,9 +20,11 @@ public class ClassInfo extends AnnotatedObject {
     private boolean isEnum;
     private boolean isAnnotaiton;
     
-    private ArrayList<VariableInfo> variableInfos = new ArrayList<>();
+    private List<VariableInfo> variableInfos = new ArrayList<>();
     
-    private ArrayList<MethodInfo> methodInfos = new ArrayList<>();
+    private List<MethodInfo> methodInfos = new ArrayList<>();
+    
+    private List<EnumConstant> enumConstants = new ArrayList<>();
     
     private Type superType = null;
     
@@ -61,7 +63,7 @@ public class ClassInfo extends AnnotatedObject {
         }
     }
     
-    public ArrayList<VariableInfo> getAllVariables() {
+    public List<VariableInfo> getAllVariables() {
         return this.variableInfos;
     }
     
@@ -87,6 +89,13 @@ public class ClassInfo extends AnnotatedObject {
         }
     }
     
+    public void addEnumConstant(EnumConstant enumConstant) {
+        this.enumConstants.add(enumConstant);
+    }
+    
+    public List<EnumConstant> getAllEnumConstants() {
+        return this.enumConstants;
+    }
     
     public void setIsInterface(boolean isInterface) {
         this.isInterface = isInterface;
@@ -180,8 +189,15 @@ public class ClassInfo extends AnnotatedObject {
         if (methodInfos.size() > 0) {
             result.append("\n");
             for (MethodInfo methodInfo : methodInfos) {
-                result.append(methodInfo.toString() + ",");
+                result.append(methodInfo.toString() + ", ");
                 result.append("\n");
+            }
+        }
+        if (enumConstants.size() > 0) {
+            result.append("\n");
+            for (EnumConstant enumConstant : enumConstants) {
+                result.append(enumConstant.toString());
+                result.append(",");
             }
         }
         

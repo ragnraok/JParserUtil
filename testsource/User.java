@@ -64,7 +64,9 @@ class User implements Printable {
         private String name = "Damn";
         
         class DamnDamn {
-            
+            public void intDman() {
+                
+            }
         }
     }
 }

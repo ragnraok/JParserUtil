@@ -21,7 +21,7 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
     
     private ThreadPoolExecutor executor;
     
-    private LinkedBlockingQueue<Runnable> workerQueue;
+    private BlockingQueue<Runnable> workerQueue;
     
     public MultiThreadJavaFileScanner(String dir, int threadNumber) {
         super(dir);
@@ -30,8 +30,19 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
     }
     
     private void initThreadPool() {
-        workerQueue = new LinkedBlockingQueue<>();
-        executor = new ThreadPoolExecutor(threadNumber, threadNumber, 2L, TimeUnit.SECONDS, workerQueue);
+        workerQueue = new ArrayBlockingQueue<>(threadNumber * 2);
+        executor = new ThreadPoolExecutor(threadNumber, threadNumber * 2, 2L, TimeUnit.SECONDS, workerQueue);
+        executor.setThreadFactory(new FileScannerThreadPoolFactory());
+    }
+    
+    private class FileScannerThreadPoolFactory implements ThreadFactory {
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread thread = new Thread(r);
+            thread.setPriority(Thread.MAX_PRIORITY);
+            return thread;
+        }
     }
     
     private class ScanSubSetFileRunnable implements Runnable {
@@ -51,6 +62,7 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         
         @Override
         public void run() {
+            Log.i(TAG, "thread %d start, subSetFileList.size: %d", threadNo, subSetFileList.size());
             for (String file : subSetFileList) {
                 if (extracter == null) {
                     extracter = new SourceInfoExtracter(file);
@@ -100,7 +112,7 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
                 endIndex = allJavaSourcePaths.size();
             }
             
-            Log.d(TAG, "startIndex: %d, endIndex: %d", startIndex, endIndex);
+//            Log.d(TAG, "startIndex: %d, endIndex: %d", startIndex, endIndex);
 
             runnableList[i] = new ScanSubSetFileRunnable(allJavaSourcePaths.subList(startIndex, endIndex), i);
             futureList[i] = executor.submit(runnableList[i]);
@@ -109,16 +121,22 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         }
         
         
-        for (Future future : futureList) {
-            try {
-                future.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
+//        for (Future future : futureList) {
+//            try {
+//                future.get();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        executor.shutdown();
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        
+
         for (ScanSubSetFileRunnable runnable : runnableList) {
             result.addCodeInfo(runnable.getSubTaskResult());
         }

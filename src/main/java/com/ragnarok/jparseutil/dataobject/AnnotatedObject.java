@@ -12,7 +12,7 @@ import java.util.Set;
 public abstract class AnnotatedObject {
 
     /**
-     * Annotation target, Class, interface
+     * Annotation target, Class, Interface, Enum
      */
     public static final int TARGET_CLASS = 1;
 
@@ -25,6 +25,11 @@ public abstract class AnnotatedObject {
      * Annotation target, variable
      */
     public static final int TARGET_VARIABLE = 3;
+
+    /**
+     * Annotation target, enum constant
+     */
+    public static final int TARGET_ENUM_CONSTANT = 4;
     
     public abstract int getTarget();
 

@@ -21,7 +21,7 @@ public class ClassTreeVisitor {
     
     private SourceInfo sourceInfo;
     
-//    private String currentHandleClassName = null;
+    private ClassInfo currentClassInfo;
     
     private String outerClassName = null; // fully qualified
     
@@ -44,21 +44,17 @@ public class ClassTreeVisitor {
                 addClassInfo(typeDeclaration);
             } else if (outerClassName != null) {
                 currentClassName = Util.buildClassName(outerClassName, typeDeclaration.getName());
+                currentClassInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
             }
             if (typeDeclaration.getMembers() != null) {
                 inspectAllClassMembers(typeDeclaration.getMembers());
             }
-        } 
-//        else if (typeDeclaration instanceof AnnotationDeclaration) {
-//            AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) typeDeclaration;
-//            AnnotationInfo annotationInfo = AnnotationParser.parseAnnotationInfo(this.outerClassName, sourceInfo, annotationDeclaration);
-//            ReferenceSourceMap.getInstance().addClassNameToSourceMap(annotationInfo.getQualifiedName());
-//            this.sourceInfo.putAnnotaiotn(annotationInfo);
-//        }
+        }
     }
     
     private void addClassInfo(TypeDeclaration typeDeclaration) {
         if (typeDeclaration != null) {
+            
             String simpleName = typeDeclaration.getName();
             ClassInfo classInfo = null;
             if (typeDeclaration instanceof AnnotationDeclaration) {
@@ -69,69 +65,87 @@ public class ClassTreeVisitor {
             classInfo.setPackageName(this.sourceInfo.getPackageName());
             classInfo.setSimpleName(simpleName);
             
-            if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
-                ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
-                if (classOrInterfaceDeclaration.isInterface()) {
-                    classInfo.setIsInterface(true);
-                    classInfo.setIsEnum(false);
-                    classInfo.setIsAnnotation(false);
-                }
-            } else if (typeDeclaration instanceof EnumDeclaration) {
-                classInfo.setIsInterface(false);
-                classInfo.setIsEnum(true);
-                classInfo.setIsAnnotation(false);
-            } else if (typeDeclaration instanceof AnnotationDeclaration) {
-                classInfo.setIsEnum(false);
-                classInfo.setIsInterface(false);
-                classInfo.setIsAnnotation(true);
-            } else {
-                classInfo.setIsEnum(false);
-                classInfo.setIsInterface(false);
-                classInfo.setIsAnnotation(false); 
-            }
-            
-            if (typeDeclaration.getModifiers() != 0) {
-                classInfo.addAllModifiers(Modifier.parseModifiersFromFlags(typeDeclaration.getModifiers()));
-            }
-            
-            if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
-                ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
-                if (classDeclaration.getExtends() != null && classDeclaration.getExtends().size() > 0) {
-                    Type superClass = TypeParser.parseType(sourceInfo, 
-                           classDeclaration.getExtends().get(0), classDeclaration.getExtends().get(0).getName());
-                    classInfo.setSuperClass(superClass);
-                }
+            classInfo = setClassInfoAttribute(classInfo, typeDeclaration);
 
-                if (classDeclaration.getImplements() != null && classDeclaration.getImplements().size() > 0) {
-                    for (ClassOrInterfaceType type : classDeclaration.getImplements()) {
-                        Type implementType = TypeParser.parseType(sourceInfo, type, type.getName());
-                        classInfo.addImplements(implementType);
-                    }
-                }
-            }
-           
             String qualifiedName;
             if (outerClassName != null) {
                 qualifiedName = Util.buildClassName(outerClassName, simpleName);
             } else {
                 qualifiedName = Util.buildClassName(sourceInfo.getPackageName(), simpleName);
             }
-             
+
             classInfo.setQualifiedName(qualifiedName);
             ReferenceSourceMap.getInstance().addClassNameToSourceMap(classInfo.getQualifiedName());
-            
+
             currentClassName = qualifiedName;
 
             Log.d(TAG, "addClassInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
-
-            classInfo = parseClassAnnotation(typeDeclaration, classInfo);
 
             sourceInfo.addClassInfo(classInfo);
             
             if (classInfo.isAnnotaiton() && classInfo instanceof AnnotationInfo) {
                 sourceInfo.putAnnotaiotn((AnnotationInfo) classInfo);
             }
+            
+            currentClassInfo = classInfo;
+
+            if (classInfo.isEnum()) {
+                EnumDeclaration enumDeclaration = (EnumDeclaration) typeDeclaration;
+                if (enumDeclaration.getEntries() != null) {
+                    for (EnumConstantDeclaration enumConstantDeclaration : enumDeclaration.getEntries()) {
+                        inspectEnumConstant(enumConstantDeclaration);
+                    }
+                }
+
+            }
         }
+    }
+    
+    private ClassInfo setClassInfoAttribute(ClassInfo classInfo, TypeDeclaration typeDeclaration) {
+        if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
+            if (classOrInterfaceDeclaration.isInterface()) {
+                classInfo.setIsInterface(true);
+                classInfo.setIsEnum(false);
+                classInfo.setIsAnnotation(false);
+            }
+        } else if (typeDeclaration instanceof EnumDeclaration) {
+            classInfo.setIsInterface(false);
+            classInfo.setIsEnum(true);
+            classInfo.setIsAnnotation(false);
+        } else if (typeDeclaration instanceof AnnotationDeclaration) {
+            classInfo.setIsEnum(false);
+            classInfo.setIsInterface(false);
+            classInfo.setIsAnnotation(true);
+        } else {
+            classInfo.setIsEnum(false);
+            classInfo.setIsInterface(false);
+            classInfo.setIsAnnotation(false);
+        }
+
+        if (typeDeclaration.getModifiers() != 0) {
+            classInfo.addAllModifiers(Modifier.parseModifiersFromFlags(typeDeclaration.getModifiers()));
+        }
+
+        if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
+            ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
+            if (classDeclaration.getExtends() != null && classDeclaration.getExtends().size() > 0) {
+                Type superClass = TypeParser.parseType(sourceInfo,
+                        classDeclaration.getExtends().get(0), classDeclaration.getExtends().get(0).getName());
+                classInfo.setSuperClass(superClass);
+            }
+
+            if (classDeclaration.getImplements() != null && classDeclaration.getImplements().size() > 0) {
+                for (ClassOrInterfaceType type : classDeclaration.getImplements()) {
+                    Type implementType = TypeParser.parseType(sourceInfo, type, type.getName());
+                    classInfo.addImplements(implementType);
+                }
+            }
+        }
+
+        classInfo = parseClassAnnotation(typeDeclaration, classInfo);
+        
+        return classInfo;
     }
     
     private ClassInfo parseClassAnnotation(TypeDeclaration typeDeclaration, ClassInfo classInfo) {
@@ -156,74 +170,113 @@ public class ClassTreeVisitor {
                 inspectInnerClass((TypeDeclaration) member);
             } else if (member instanceof AnnotationMemberDeclaration) {
                 inspectAnnotationMember((AnnotationMemberDeclaration) member);
-            }
+            } 
         }
     }
     
     private void inspectVariable(FieldDeclaration variableDecl) {
         Log.d(TAG, "inspectVariable, class: %s", currentClassName);
         VariableInfo variableInfo = VariableParser.parseVariable(sourceInfo, variableDecl);
-        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
-        if (classInfo != null) {
-            variableInfo.setContainedClass(classInfo);
-            classInfo.addVariable(variableInfo);
-            
-            sourceInfo.updateClassInfoByQualifiedName(currentClassName, classInfo);
+        if (currentClassInfo == null) {
+            currentClassInfo =  sourceInfo.getClassInfoByQualifiedName(currentClassName);
+        }
+        if (currentClassInfo != null) {
+            variableInfo.setContainedClass(currentClassInfo);
+            currentClassInfo.addVariable(variableInfo);
+            sourceInfo.updateClassInfoByQualifiedName(currentClassName, currentClassInfo);
+
+            if (currentClassInfo.isAnnotaiton()) {
+                sourceInfo.updateAnnotationByQualifiedName(currentClassName, (AnnotationInfo) currentClassInfo);
+            }
         }
     }
     
     private void inspectMethod(MethodDeclaration methodDecl) {
-        ClassInfo classInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
-        MethodInfo methodInfo = MethodParser.parseMethodInfo(classInfo, sourceInfo, methodDecl);
+        if (currentClassInfo == null) {
+            currentClassInfo =  sourceInfo.getClassInfoByQualifiedName(currentClassName);
+        }
+        MethodInfo methodInfo = MethodParser.parseMethodInfo(currentClassInfo, sourceInfo, methodDecl);
         if (methodInfo != null) {
-            classInfo.putMethod(methodInfo);
-            
-            sourceInfo.updateClassInfoByQualifiedName(currentClassName, classInfo);
+            currentClassInfo.putMethod(methodInfo);
+            sourceInfo.updateClassInfoByQualifiedName(currentClassName, currentClassInfo);
+
+            if (currentClassInfo.isAnnotaiton()) {
+                sourceInfo.updateAnnotationByQualifiedName(currentClassName, (AnnotationInfo) currentClassInfo);
+            }
         }
     }
     
     private void inspectInnerClass(TypeDeclaration classDecl) {
         String simpleName = classDecl.getName();
         String qualifiedName = null;
-        if (outerClassName != null) {
-            qualifiedName  = Util.buildClassName(this.outerClassName, simpleName);
-        } else {
+//        if (outerClassName != null) {
+//            qualifiedName  = Util.buildClassName(this.outerClassName, simpleName);
+//        } else {
             qualifiedName = Util.buildClassName(this.currentClassName, simpleName);
-        }
+//        }
         
         
         Log.d(TAG, "inspectInnerClass, qualifiedName: %s, outerClassName: %s, currentClassName: %s", qualifiedName, outerClassName, currentClassName);
         
-        ClassInfo classInfo = new ClassInfo();
+        ClassInfo classInfo = null;
+        if (classDecl instanceof AnnotationDeclaration) {
+            classInfo = new AnnotationInfo();
+        } else {
+            classInfo = new ClassInfo();
+        }
         classInfo.setSimpleName(simpleName);
         classInfo.setQualifiedName(qualifiedName);
         classInfo.setPackageName(sourceInfo.getPackageName());
+        
+        setClassInfoAttribute(classInfo, classDecl);
+        
         sourceInfo.addClassInfo(classInfo);
+        if (classInfo.isAnnotaiton()) {
+            sourceInfo.putAnnotaiotn((AnnotationInfo) classInfo);
+        }
 
         ReferenceSourceMap.getInstance().addClassNameToSourceMap(classInfo.getQualifiedName());
         
         // recursive parse
-        new ClassTreeVisitor().inspectTypeDeclaration(sourceInfo, classDecl, qualifiedName, true);
+        new ClassTreeVisitor().inspectTypeDeclaration(sourceInfo, classDecl, currentClassInfo.getQualifiedName(), true);
     }
     
     private void inspectAnnotationMember(AnnotationMemberDeclaration annotationMember) {
-        AnnotationInfo annotationInfo = sourceInfo.getAnnotationInfoByQualifiedName(currentClassName);
-        if (annotationInfo == null) {
-            return;
+        if (currentClassInfo == null) {
+            currentClassInfo =  sourceInfo.getClassInfoByQualifiedName(currentClassName);
         }
-        Type type = TypeParser.parseType(sourceInfo, annotationMember.getType(), annotationMember.getType().toString());
-        String name = annotationMember.getName();
-        Log.d(TAG, "inspectAnnotationMember, paramName: %s, paramType: %s", name, type);
-        if (annotationMember.getDefaultValue() != null) {
-            String defaultValueLiteral = annotationMember.getDefaultValue().toString();
-            Log.d(TAG, "defaultValueLiteral: %s, defaultValueClass: %s", defaultValueLiteral,
-                    annotationMember.getDefaultValue().getClass().getSimpleName());
-            Object defaultValue = VariableInitParser.parseVariableInit(sourceInfo, null, annotationMember.getDefaultValue());
-            annotationInfo.putParams(type, name, defaultValue);
-        } else {
-            annotationInfo.putParams(type, name, null);
+        if (currentClassInfo.isAnnotaiton()) {
+            AnnotationInfo annotationInfo = (AnnotationInfo) currentClassInfo;
+            Type type = TypeParser.parseType(sourceInfo, annotationMember.getType(), annotationMember.getType().toString());
+            String name = annotationMember.getName();
+            Log.d(TAG, "inspectAnnotationMember, paramName: %s, paramType: %s", name, type);
+            if (annotationMember.getDefaultValue() != null) {
+                String defaultValueLiteral = annotationMember.getDefaultValue().toString();
+                Log.d(TAG, "defaultValueLiteral: %s, defaultValueClass: %s", defaultValueLiteral,
+                        annotationMember.getDefaultValue().getClass().getSimpleName());
+                Object defaultValue = VariableInitParser.parseVariableInit(sourceInfo, null, annotationMember.getDefaultValue());
+                annotationInfo.putParams(type, name, defaultValue);
+            } else {
+                annotationInfo.putParams(type, name, null);
+            }
+            sourceInfo.updateClassInfoByQualifiedName(currentClassName, annotationInfo);
+            sourceInfo.updateAnnotationByQualifiedName(currentClassName, annotationInfo);
         }
-        sourceInfo.updateClassInfoByQualifiedName(currentClassName, annotationInfo);
-        sourceInfo.updateAnnotationByQualifiedName(currentClassName, annotationInfo);
+        
+    }
+    
+    private void inspectEnumConstant(EnumConstantDeclaration enumConstantDeclaration) {
+        Log.d(TAG, "inspectEnumConstant, name: %s", enumConstantDeclaration.getName());
+        if (currentClassInfo != null) {
+            EnumConstant enumConstant = new EnumConstant();
+            enumConstant.setName(enumConstantDeclaration.getName());
+            currentClassInfo.addEnumConstant(enumConstant);
+
+            sourceInfo.updateClassInfoByQualifiedName(currentClassName, currentClassInfo);
+            if (currentClassInfo.isAnnotaiton()) {
+                sourceInfo.updateAnnotationByQualifiedName(currentClassName, (AnnotationInfo) currentClassInfo);
+            }
+        }
+        
     }
 }
