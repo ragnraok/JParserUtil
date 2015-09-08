@@ -6,6 +6,7 @@ import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -25,6 +26,14 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
     
     public MultiThreadJavaFileScanner(String dir, int threadNumber) {
         super(dir);
+        this.threadNumber = threadNumber;
+        initThreadPool();
+    }
+    
+    public MultiThreadJavaFileScanner(List<String> paths, int threadNumber) {
+        super(null);
+        allJavaSourcePaths = new ArrayList<>();
+        allJavaSourcePaths.addAll(paths);
         this.threadNumber = threadNumber;
         initThreadPool();
     }
@@ -91,7 +100,9 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
         }
         
         result = new CodeInfo();
-        initJavaSourcePaths();
+        if (sourceDirectory != null) {
+            initJavaSourcePaths();
+        }
         Log.d(TAG, "filelist size: %d", allJavaSourcePaths.size());
         
         int sourceSetSize = allJavaSourcePaths.size();

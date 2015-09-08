@@ -22,12 +22,11 @@ public abstract class JavaFileScanner {
     
     protected String sourceDirectory;
 
-    protected ArrayList<String> allJavaSourcePaths = new ArrayList<>();
+    protected List<String> allJavaSourcePaths = new ArrayList<>();
 
     protected CodeInfo result = new CodeInfo();
     
     private List<String> excludePathList = new ArrayList<>();
-    
 
     public JavaFileScanner(String dir) {
         this.sourceDirectory = dir;

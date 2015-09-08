@@ -5,6 +5,8 @@ import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/7/23.
@@ -17,12 +19,20 @@ public class SimpleJavaFileScanner extends JavaFileScanner {
     public SimpleJavaFileScanner(String dir) {
         super(dir);
     }
+    
+    public SimpleJavaFileScanner(List<String> paths) {
+        super(null);
+        allJavaSourcePaths = new ArrayList<>();
+        allJavaSourcePaths.addAll(paths);
+    }
 
 
     @Override
     public CodeInfo scanAllJavaSources() throws FileNotFoundException {
         long startTime = System.currentTimeMillis();
-        initJavaSourcePaths();
+        if (sourceDirectory != null) {
+            initJavaSourcePaths();  
+        }
         Log.d(TAG, "source paths: %s\n", allJavaSourcePaths.toString());
         result = new CodeInfo();
         if (allJavaSourcePaths.size() > 0) {
