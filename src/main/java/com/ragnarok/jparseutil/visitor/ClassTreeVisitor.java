@@ -16,27 +16,27 @@ import java.util.List;
  * extract info from a class
  */
 public class ClassTreeVisitor {
-    
+
     public static final String TAG = "JParserUtil.ClassTreeVisitor";
-    
+
     private SourceInfo sourceInfo;
-    
+
     private ClassInfo currentClassInfo;
-    
+
     private String outerClassName = null; // fully qualified
-    
+
     private String currentClassName = null; // fully qualified
-    
+
     public ClassTreeVisitor() {
     }
-    
+
     public void inspectTypeDeclaration(SourceInfo sourceInfo, TypeDeclaration typeDeclaration, String outerClassName, boolean ignoreSelf) {
         if (typeDeclaration == null) {
             return;
         }
         this.sourceInfo = sourceInfo;
         this.outerClassName = outerClassName;
-        Log.d(TAG, "inspectClassTree, name: %s, kind: %s, outerClassName: %s", 
+        Log.d(TAG, "inspectClassTree, name: %s, kind: %s, outerClassName: %s",
                 typeDeclaration.getName(), typeDeclaration.getClass().getName(), outerClassName);
         if (typeDeclaration instanceof ClassOrInterfaceDeclaration || typeDeclaration instanceof EnumDeclaration
                 || typeDeclaration instanceof AnnotationDeclaration) {
@@ -51,10 +51,10 @@ public class ClassTreeVisitor {
             }
         }
     }
-    
+
     private void addClassInfo(TypeDeclaration typeDeclaration) {
         if (typeDeclaration != null) {
-            
+
             String simpleName = typeDeclaration.getName();
             ClassInfo classInfo = null;
             if (typeDeclaration instanceof AnnotationDeclaration) {
@@ -64,7 +64,7 @@ public class ClassTreeVisitor {
             }
             classInfo.setPackageName(this.sourceInfo.getPackageName());
             classInfo.setSimpleName(simpleName);
-            
+
             classInfo = setClassInfoAttribute(classInfo, typeDeclaration);
 
             String qualifiedName;
@@ -82,11 +82,11 @@ public class ClassTreeVisitor {
             Log.d(TAG, "addClassInfo, simpleName: %s, qualifiedName: %s", simpleName, qualifiedName);
 
             sourceInfo.addClassInfo(classInfo);
-            
+
             if (classInfo.isAnnotaiton() && classInfo instanceof AnnotationInfo) {
                 sourceInfo.putAnnotaiotn((AnnotationInfo) classInfo);
             }
-            
+
             currentClassInfo = classInfo;
 
             if (classInfo.isEnum()) {
@@ -100,7 +100,7 @@ public class ClassTreeVisitor {
             }
         }
     }
-    
+
     private ClassInfo setClassInfoAttribute(ClassInfo classInfo, TypeDeclaration typeDeclaration) {
         if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
@@ -144,10 +144,10 @@ public class ClassTreeVisitor {
         }
 
         classInfo = parseClassAnnotation(typeDeclaration, classInfo);
-        
+
         return classInfo;
     }
-    
+
     private ClassInfo parseClassAnnotation(TypeDeclaration typeDeclaration, ClassInfo classInfo) {
         if (typeDeclaration.getAnnotations() != null && typeDeclaration.getAnnotations().size() > 0) {
             for (AnnotationExpr annotation : typeDeclaration.getAnnotations()) {
@@ -157,11 +157,11 @@ public class ClassTreeVisitor {
         }
         return classInfo;
     }
-   
+
     private void inspectAllClassMembers(List<BodyDeclaration> classMembers) {
         for (BodyDeclaration member : classMembers) {
 //            Log.d(TAG, "member.class: %s", member.getClass().getSimpleName());
-            
+
             if (member instanceof FieldDeclaration) {
                 inspectVariable((FieldDeclaration) member);
             } else if (member instanceof MethodDeclaration) {
@@ -170,15 +170,15 @@ public class ClassTreeVisitor {
                 inspectInnerClass((TypeDeclaration) member);
             } else if (member instanceof AnnotationMemberDeclaration) {
                 inspectAnnotationMember((AnnotationMemberDeclaration) member);
-            } 
+            }
         }
     }
-    
+
     private void inspectVariable(FieldDeclaration variableDecl) {
         Log.d(TAG, "inspectVariable, class: %s", currentClassName);
         VariableInfo variableInfo = VariableParser.parseVariable(sourceInfo, variableDecl);
         if (currentClassInfo == null) {
-            currentClassInfo =  sourceInfo.getClassInfoByQualifiedName(currentClassName);
+            currentClassInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
         }
         if (currentClassInfo != null) {
             variableInfo.setContainedClass(currentClassInfo);
@@ -190,10 +190,10 @@ public class ClassTreeVisitor {
             }
         }
     }
-    
+
     private void inspectMethod(MethodDeclaration methodDecl) {
         if (currentClassInfo == null) {
-            currentClassInfo =  sourceInfo.getClassInfoByQualifiedName(currentClassName);
+            currentClassInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
         }
         MethodInfo methodInfo = MethodParser.parseMethodInfo(currentClassInfo, sourceInfo, methodDecl);
         if (methodInfo != null) {
@@ -205,19 +205,15 @@ public class ClassTreeVisitor {
             }
         }
     }
-    
+
     private void inspectInnerClass(TypeDeclaration classDecl) {
         String simpleName = classDecl.getName();
         String qualifiedName = null;
-//        if (outerClassName != null) {
-//            qualifiedName  = Util.buildClassName(this.outerClassName, simpleName);
-//        } else {
-            qualifiedName = Util.buildClassName(this.currentClassName, simpleName);
-//        }
-        
-        
+        qualifiedName = Util.buildClassName(this.currentClassName, simpleName);
+
+
         Log.d(TAG, "inspectInnerClass, qualifiedName: %s, outerClassName: %s, currentClassName: %s", qualifiedName, outerClassName, currentClassName);
-        
+
         ClassInfo classInfo = null;
         if (classDecl instanceof AnnotationDeclaration) {
             classInfo = new AnnotationInfo();
@@ -227,23 +223,23 @@ public class ClassTreeVisitor {
         classInfo.setSimpleName(simpleName);
         classInfo.setQualifiedName(qualifiedName);
         classInfo.setPackageName(sourceInfo.getPackageName());
-        
+
         setClassInfoAttribute(classInfo, classDecl);
-        
+
         sourceInfo.addClassInfo(classInfo);
         if (classInfo.isAnnotaiton()) {
             sourceInfo.putAnnotaiotn((AnnotationInfo) classInfo);
         }
 
         ReferenceSourceMap.getInstance().addClassNameToSourceMap(classInfo.getQualifiedName());
-        
+
         // recursive parse
         new ClassTreeVisitor().inspectTypeDeclaration(sourceInfo, classDecl, currentClassInfo.getQualifiedName(), true);
     }
-    
+
     private void inspectAnnotationMember(AnnotationMemberDeclaration annotationMember) {
         if (currentClassInfo == null) {
-            currentClassInfo =  sourceInfo.getClassInfoByQualifiedName(currentClassName);
+            currentClassInfo = sourceInfo.getClassInfoByQualifiedName(currentClassName);
         }
         if (currentClassInfo.isAnnotaiton()) {
             AnnotationInfo annotationInfo = (AnnotationInfo) currentClassInfo;
@@ -262,9 +258,9 @@ public class ClassTreeVisitor {
             sourceInfo.updateClassInfoByQualifiedName(currentClassName, annotationInfo);
             sourceInfo.updateAnnotationByQualifiedName(currentClassName, annotationInfo);
         }
-        
+
     }
-    
+
     private void inspectEnumConstant(EnumConstantDeclaration enumConstantDeclaration) {
         Log.d(TAG, "inspectEnumConstant, name: %s", enumConstantDeclaration.getName());
         if (currentClassInfo != null) {
@@ -277,6 +273,6 @@ public class ClassTreeVisitor {
                 sourceInfo.updateAnnotationByQualifiedName(currentClassName, (AnnotationInfo) currentClassInfo);
             }
         }
-        
+
     }
 }

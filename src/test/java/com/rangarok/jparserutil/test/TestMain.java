@@ -47,7 +47,7 @@ public class TestMain {
             fileScanner.addExcludePath("pre-compile-tools");
             CodeInfo codeInfo = fileScanner.scanAllJavaSources();
             CodeInfo.markParseFinish();
-//            System.out.println(codeInfo);
+            System.out.println(codeInfo);
             
             codeInfo.arrangeAnnotationByPackage();
             codeInfo.arrangeClassByPackage();

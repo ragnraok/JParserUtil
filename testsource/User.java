@@ -10,7 +10,7 @@ class User implements Printable {
     
     public static final String CLASS_NAME = "User";
     
-    private String firstName = "Ragnarok";
+    private String firstName = "Ragnarok" + "123123";
     private String lastName;
     
     private String[][][] usernameList = null;
