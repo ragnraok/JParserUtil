@@ -9,6 +9,7 @@ import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
 
 import java.io.*;
+import java.util.Scanner;
 
 /**
  * Created by ragnarok on 15/5/25.
@@ -139,5 +140,28 @@ public class Util {
             }
         }
         return null;
+    }
+    
+    public static boolean isStringInFile(String filename, String... strings) {
+        File file = new File(filename);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                for (String str : strings) {
+                    if (line.contains(str)) {
+                        return true;
+                    }
+                }
+            }
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
+        return false;
     }
 }

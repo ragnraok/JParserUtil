@@ -33,22 +33,17 @@ public class AnnotationMatcher extends Matcher {
             return new ArrayList<>();
         }
         List<String> result = new ArrayList<>();
+        String annotationStr1 = "@" + matchAnnotationName;
+        String annotationStr2 = "@" + matchAnnotaionSimpleName;
         for (String file : inputFileList) {
-            String fileContent = Util.getFileContent(file);
-            if (fileContent != null && isContainedAnnotation(fileContent)) {
+            if (Util.isStringInFile(file, annotationStr1, annotationStr2)) {
                 result.add(file);
+                if (matchFileCallback != null) {
+                    matchFileCallback.onMatchFile(file);
+                }
             }
         }
         
         return result;
-    }
-    
-    private boolean isContainedAnnotation(String fileContent) {
-        String annotationStr1 = "@" + matchAnnotationName;
-        String annotationStr2 = "@" + matchAnnotaionSimpleName;
-        if (fileContent.contains(annotationStr2) || fileContent.contains(annotationStr1)) {
-            return true;
-        }
-        return false;
     }
 }

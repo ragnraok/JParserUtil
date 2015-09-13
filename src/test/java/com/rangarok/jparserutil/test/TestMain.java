@@ -2,6 +2,7 @@ package com.rangarok.jparserutil.test;
 
 import com.ragnarok.jparseutil.filescanner.MultiThreadJavaFileScanner;
 import com.ragnarok.jparseutil.incremental.matcher.AnnotationMatcher;
+import com.ragnarok.jparseutil.incremental.matcher.Matcher;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.util.List;
@@ -53,8 +54,14 @@ public class TestMain {
 //            e.printStackTrace();
 //            Log.e(TAG, e.getMessage());
 //        }
-
-        AnnotationMatcher annotationMatcher = new AnnotationMatcher("com.rangnarok.testsouce.annotation.PrintMe", "testsource");
+        
+        AnnotationMatcher annotationMatcher = new AnnotationMatcher("PrintMe", "testsource", "gen", "pre-compile-tools", "buck-out");
+        annotationMatcher.setMatchFileCallback(new Matcher.OnMatchFileCallback() {
+            @Override
+            public void onMatchFile(String filename) {
+//                Log.d(TAG, "match file: %s", filename);
+            }
+        });
         List<String> result = annotationMatcher.match();
         System.out.println(result);
         

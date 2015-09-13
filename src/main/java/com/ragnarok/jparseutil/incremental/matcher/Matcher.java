@@ -12,11 +12,20 @@ import java.util.List;
  * and find all files contain this component
  */
 public abstract class Matcher {
+
+    /**
+     * this callback should be called when a file is matched
+     */
+    public interface OnMatchFileCallback {
+        void onMatchFile(String filename);
+    }
     
     protected List<String> inputFileList;
     
     protected String sourceDirectory;
     protected String[] excludePaths;
+    
+    protected OnMatchFileCallback matchFileCallback;
     
     public Matcher(String dir, String... excludePaths) {
         this.sourceDirectory = dir;
@@ -63,4 +72,8 @@ public abstract class Matcher {
     }
     
     public abstract List<String> match();
+    
+    public void setMatchFileCallback(OnMatchFileCallback callback) {
+        this.matchFileCallback = callback;
+    }
 }
