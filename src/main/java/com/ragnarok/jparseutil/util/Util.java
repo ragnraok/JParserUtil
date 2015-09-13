@@ -8,6 +8,8 @@ import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
 
+import java.io.*;
+
 /**
  * Created by ragnarok on 15/5/25.
  */
@@ -105,5 +107,37 @@ public class Util {
         } else  {
             return prefix + "." + simpleName;
         }
+    }
+    
+    public static String getFileContent(String filename) {
+        File file = new File(filename);
+        if (!file.exists()) {
+            return null;
+        }
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader reader = new BufferedReader(isr);
+            String result = "";
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();   
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
