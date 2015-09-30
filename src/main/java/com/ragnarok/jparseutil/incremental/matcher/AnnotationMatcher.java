@@ -14,13 +14,13 @@ public class AnnotationMatcher extends Matcher {
     public static final String TAG = "JParserUtil.AnnotationMatcher";
     
     private String matchAnnotationName = null;
-    private String matchAnnotaionSimpleName = null;
+    private String matchAnnotationSimpleName = null;
 
     public AnnotationMatcher(String annotationQualifiedName, String dir, String... excludePaths) {
         super(dir, excludePaths);
         this.matchAnnotationName = annotationQualifiedName;
         if (this.matchAnnotationName.contains(".")) {
-            this.matchAnnotaionSimpleName = this.matchAnnotationName.substring(this.matchAnnotationName.lastIndexOf(".") + 1);   
+            this.matchAnnotationSimpleName = this.matchAnnotationName.substring(this.matchAnnotationName.lastIndexOf(".") + 1);   
         }
     }
 
@@ -34,7 +34,7 @@ public class AnnotationMatcher extends Matcher {
         }
         List<String> result = new ArrayList<>();
         String annotationStr1 = "@" + matchAnnotationName;
-        String annotationStr2 = "@" + matchAnnotaionSimpleName;
+        String annotationStr2 = "@" + matchAnnotationSimpleName;
         for (String file : inputFileList) {
             if (Util.isStringInFile(file, annotationStr1, annotationStr2)) {
                 result.add(file);

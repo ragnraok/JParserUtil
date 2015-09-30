@@ -32,6 +32,11 @@ public abstract class JavaFileScanner {
         this.sourceDirectory = dir;
     }
     
+    public JavaFileScanner(List<String> paths) {
+        allJavaSourcePaths = new ArrayList<>();
+        allJavaSourcePaths.addAll(paths);
+    }
+    
     public void addExcludePath(String path) {
         excludePathList.add(path);
     }

@@ -19,12 +19,6 @@ public class SimpleJavaFileScanner extends JavaFileScanner {
     public SimpleJavaFileScanner(String dir) {
         super(dir);
     }
-    
-    public SimpleJavaFileScanner(List<String> paths) {
-        super(null);
-        allJavaSourcePaths = new ArrayList<>();
-        allJavaSourcePaths.addAll(paths);
-    }
 
 
     @Override

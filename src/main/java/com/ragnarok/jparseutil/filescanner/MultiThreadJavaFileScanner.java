@@ -31,9 +31,7 @@ public class MultiThreadJavaFileScanner extends JavaFileScanner {
     }
     
     public MultiThreadJavaFileScanner(List<String> paths, int threadNumber) {
-        super(null);
-        allJavaSourcePaths = new ArrayList<>();
-        allJavaSourcePaths.addAll(paths);
+        super(paths);
         this.threadNumber = threadNumber;
         initThreadPool();
     }
