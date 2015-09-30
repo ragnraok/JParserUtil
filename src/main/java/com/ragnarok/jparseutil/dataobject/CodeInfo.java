@@ -26,6 +26,10 @@ public class CodeInfo {
         javaSources.put(sourceInfo.getFilename(), sourceInfo);
     }
     
+    public boolean isContainedSource(String path) {
+        return javaSources.containsKey(path);
+    }
+    
     public void addCodeInfo(CodeInfo codeInfo) {
         javaSources.putAll(codeInfo.getAllSources());
     }

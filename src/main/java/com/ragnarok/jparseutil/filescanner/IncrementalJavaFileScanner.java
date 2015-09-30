@@ -36,20 +36,16 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
             File parentPath = file.getParentFile();
             if (parentPath != null && parentPath.listFiles() != null) {
                 for (File path : parentPath.listFiles()) {
-                    File p = path.getAbsoluteFile();
-                    if (!isMatchExcludePathList(p.getName(), p.getAbsolutePath()) && 
-                            p.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX) && !allJavaSourcePaths.contains(p.getAbsolutePath())) {
-                        addFileList.add(p.getAbsolutePath());
+                    String fileName = path.getName();
+                    String absolutePath = path.getAbsolutePath();
+                    if (!isMatchExcludePathList(fileName, absolutePath) && 
+                            absolutePath.endsWith(Util.JAVA_FILE_SUFFIX) && !allJavaSourcePaths.contains(absolutePath)) {
+                        addFileList.add(absolutePath);
                     }
                 }
             }
         }
-        for (String addFilePath : addFileList) {
-            if (!allJavaSourcePaths.contains(addFilePath)) {
-                Log.i(TAG, "addPathListInSamePackage, add: %s", addFilePath);
-                allJavaSourcePaths.add(addFilePath);
-            }
-        }
+        allJavaSourcePaths.addAll(addFileList);
     }
 
     @Override
@@ -66,9 +62,11 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
             List<String> importAsteriskFiles = getFileListFromImportAsterisk(sourceInfo);
             if (importAsteriskFiles != null && importAsteriskFiles.size() > 0) {
                 for (String importAsteriskFilePath : importAsteriskFiles) {
-                    SourceInfo asteriskSourceInfo = parseJavaSource(importAsteriskFilePath);
-                    if (asteriskSourceInfo != null) {
-                        result.addSource(asteriskSourceInfo);
+                    if (!result.isContainedSource(importAsteriskFilePath)) {
+                        SourceInfo asteriskSourceInfo = parseJavaSource(importAsteriskFilePath);
+                        if (asteriskSourceInfo != null) {
+                            result.addSource(asteriskSourceInfo);
+                        }   
                     }
                 }
             }
