@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.filescanner;
 
 import com.ragnarok.jparseutil.dataobject.CodeInfo;
+import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 
@@ -31,7 +32,10 @@ public class SimpleJavaFileScanner extends JavaFileScanner {
         result = new CodeInfo();
         if (allJavaSourcePaths.size() > 0) {
             for (String path : allJavaSourcePaths) {
-                parseJavaSource(path);
+                SourceInfo sourceInfo = parseJavaSource(path);
+                if (sourceInfo != null) {
+                    result.addSource(sourceInfo);
+                }
             }
         }
         long endTime = System.currentTimeMillis();

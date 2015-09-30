@@ -52,13 +52,11 @@ public abstract class JavaFileScanner {
      * parse a single Java source file
      * @param filepath the path of this Java source file
      */
-    protected void parseJavaSource(String filepath) {
+    protected SourceInfo parseJavaSource(String filepath) {
         Log.i(TAG, "parsing source: %s", filepath);
         SourceInfoExtracter extracter = new SourceInfoExtracter(filepath);
         SourceInfo sourceInfo = extracter.extract();
-        if (sourceInfo != null) {
-            result.addSource(sourceInfo);
-        }
+        return sourceInfo;
     }
 
     /**
@@ -91,7 +89,7 @@ public abstract class JavaFileScanner {
         }
     }
     
-    private boolean isMatchExcludePathList(String currentPathName, String absolutePath) {
+    protected boolean isMatchExcludePathList(String currentPathName, String absolutePath) {
         if (currentPathName == null || absolutePath == null) {
             return false;
         }
