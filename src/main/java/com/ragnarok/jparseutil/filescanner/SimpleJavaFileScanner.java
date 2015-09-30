@@ -21,6 +21,9 @@ public class SimpleJavaFileScanner extends JavaFileScanner {
         super(dir);
     }
 
+    public SimpleJavaFileScanner(List<String> paths) {
+        super(paths);
+    }
 
     @Override
     public CodeInfo scanAllJavaSources() throws FileNotFoundException {
