@@ -1,5 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
+import com.ragnarok.jparseutil.util.Log;
+
 import java.util.*;
 
 /**
@@ -8,10 +10,13 @@ import java.util.*;
  */
 public class SourceInfo {
     
+    public static final String TAG = "JParserUtil.SourceInfo";
+    
     private String fileName;
-    private ArrayList<String> importClassNames = new ArrayList<>();
+    private List<String> importClassNames = new ArrayList<>();
     private String packageName = null;
     
+    private List<String> asteriskImports = new ArrayList<>();
     
     private Map<String, AnnotationInfo> annotationInfos = new TreeMap<>();
     
@@ -30,10 +35,17 @@ public class SourceInfo {
     
     public void addImports(String importClass) {
         this.importClassNames.add(importClass);
+        if (importClass.endsWith(".*")) {
+            this.asteriskImports.add(importClass);
+        }
     }
     
-    public ArrayList<String> getImports() {
+    public List<String> getImports() {
         return this.importClassNames;
+    }
+    
+    public List<String> getAsteriskImports() {
+        return this.asteriskImports;
     }
         
     public void setPackageName(String packageName) {
