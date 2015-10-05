@@ -40,8 +40,8 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
     }
 
     private void initThreadPool() {
-        workerQueue = new ArrayBlockingQueue<>(threadNumber * 2);
-        executor = new ThreadPoolExecutor(threadNumber, threadNumber * 2, 2L, TimeUnit.SECONDS, workerQueue);
+        workerQueue = new ArrayBlockingQueue<>(threadNumber);
+        executor = new ThreadPoolExecutor(threadNumber, threadNumber, 2L, TimeUnit.SECONDS, workerQueue);
     }
     
     private void addPathListInSamePackage() {
@@ -178,7 +178,9 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
     private List<String> searchMatchFilePath(String path) {
         List<String> result = new ArrayList<>();
         for (String filePath : allSourceFiles) {
-            if (filePath.toLowerCase().contains(path.toLowerCase())) {
+            File file = new File(path);
+            if (!isMatchExcludePathList(file.getName(), file.getAbsolutePath()) && 
+                    filePath.toLowerCase().contains(path.toLowerCase())) {
                 result.add(filePath);
             }
         }
