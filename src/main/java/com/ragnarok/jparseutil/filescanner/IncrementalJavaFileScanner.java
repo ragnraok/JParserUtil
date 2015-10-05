@@ -120,6 +120,7 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
                 // get file list from 'import *'
                 List<String> importAsteriskFiles = getFileListFromImportAsterisk(sourceInfo);
                 if (importAsteriskFiles != null && importAsteriskFiles.size() > 0) {
+                    Log.d(TAG, "importAsteriskFiles: %s", importAsteriskFiles);
                     for (String importAsteriskFilePath : importAsteriskFiles) {
                         if (!subTaskResult.isContainedSource(importAsteriskFilePath)) {
                             SourceInfo asteriskSourceInfo = parseJavaSource(importAsteriskFilePath);
@@ -192,7 +193,7 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
         }
         for (String importClass : sourceInfo.getAsteriskImports()) {
             String filePath = importClass.substring(0, importClass.lastIndexOf(".*"));
-            filePath = filePath.replace(".", "/");
+            filePath = filePath.replace(".", File.separator);
             List<String> paths = searchMatchFilePath(filePath);
             if (paths != null && paths.size() > 0) {
                 result.addAll(paths);
@@ -204,7 +205,7 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
     private List<String> searchMatchFilePath(String path) {
         List<String> result = new ArrayList<>();
         for (String filePath : parsingJavaSourcePaths) {
-            if (filePath.contains(path)) {
+            if (filePath.toLowerCase().contains(path.toLowerCase())) {
                 result.add(filePath);
             }
         }
