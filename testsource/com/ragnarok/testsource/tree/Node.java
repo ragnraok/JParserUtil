@@ -1,6 +1,6 @@
-package com.rangnarok.testsouce.tree;
+package com.ragnarok.testsource.tree;
 
-import com.rangnarok.testsouce.annotation.*;
+import com.ragnarok.testsource.annotation.*;
 
 public class Node {
     public static final String CLASS_NAME = "Node";
@@ -9,8 +9,11 @@ public class Node {
         return "node";
     }
     
-    @PrintMe
     public Node getSibling() {
         return this;
+    }
+    
+    public Tree getContainedTree() {
+        return new Tree();
     }
 }

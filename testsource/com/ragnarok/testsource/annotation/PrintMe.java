@@ -1,6 +1,6 @@
-package com.rangnarok.testsouce.annotation;
+package com.ragnarok.testsource.annotation;
 
-import com.rangnarok.testsouce.tree.*;
+import com.rangnarok.testsource.tree.*;
 
 public @interface PrintMe {
     public String value() default "123123";

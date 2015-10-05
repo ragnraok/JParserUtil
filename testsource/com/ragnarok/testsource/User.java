@@ -1,10 +1,10 @@
-package com.rangnarok.testsouce;
+package com.ragnarok.testsource;
 
 import java.lang.Class;
 import java.util.*;
 
-import com.rangnarok.testsouce.annotation.*;
-import com.rangnarok.testsouce.annotation.interfaces.Printable;
+import com.ragnarok.testsource.annotation.*;
+import com.ragnarok.testsource.interfaces.Printable;
 
 class User implements Printable {
     

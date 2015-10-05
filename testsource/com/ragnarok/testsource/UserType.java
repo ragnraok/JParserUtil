@@ -1,4 +1,4 @@
-package com.rangnarok.testsouce;
+package com.ragnarok.testsource;
 
 public enum UserType {
     MAN,
