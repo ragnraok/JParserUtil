@@ -35,7 +35,8 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
     public IncrementalJavaFileScanner(List<String> paths, List<String> allSourceFilePaths, int threadNumber) {
         super(paths);
         this.threadNumber = threadNumber;
-        this.allSourceFiles = allSourceFilePaths;
+        this.allSourceFiles = new ArrayList<>(allSourceFilePaths.size());
+        this.allSourceFiles.addAll(allSourceFilePaths);
         initThreadPool();
     }
 

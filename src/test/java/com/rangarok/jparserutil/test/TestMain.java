@@ -28,26 +28,36 @@ public class TestMain {
         Log.addShowLogTAG(SourceInfo.TAG);
 
         long startTime = System.currentTimeMillis();
-
+        
+        long initSourceMapStartTime = System.currentTimeMillis();
         String sourceMapFile = "testsource/android-22.txt";
-
         try {
             ReferenceSourceMap.getInstance().initWithSourceMapFile(sourceMapFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        long initSourceMapEndTime = System.currentTimeMillis();
+        Log.d(TAG, "init source map used: %dms", initSourceMapEndTime - initSourceMapStartTime);
         
-        String dir = "testsource";
+        String dir = "/Users/ragnarok/Works/MMSource/micromessenger_android";
         
-        AnnotationMatcher annotationMatcher = new AnnotationMatcher("PrintMe", dir, 
-                "gen", "pre-compile-tools", "buck-out");
+        long initPathStartTime = System.currentTimeMillis();
+        List<String> allSourceFiles = JavaFileScanner.getAllSourceFilePathFromDirectory(dir,
+                "gen", "pre-compile-tools", "buck-out", "buck_gen");
+        long initPathEndTime = System.currentTimeMillis();
+        Log.d(TAG, "init path used: %dms, size: %d", initPathEndTime - initPathStartTime, allSourceFiles.size());
+        
+        long matchStartTime = System.currentTimeMillis();
+        AnnotationMatcher annotationMatcher = new AnnotationMatcher("ActivityAttribute", allSourceFiles, 4);
         List<String> result = annotationMatcher.match();
-        Log.d(TAG, "file list size: %d", result.size());
+        long matchEndTime = System.currentTimeMillis();
+        Log.d(TAG, "file list size: %d, match used %dms", result.size(), matchEndTime - matchStartTime);
 
         CodeInfo parseResult = null;
         CodeInfo.reset();
-        IncrementalJavaFileScanner incrementalJavaFileScanner = new IncrementalJavaFileScanner(result, dir, 4);
+        IncrementalJavaFileScanner incrementalJavaFileScanner = new IncrementalJavaFileScanner(result, allSourceFiles, 4);
         incrementalJavaFileScanner.addExcludePath("buck_gen");
+        incrementalJavaFileScanner.addExcludePath("buck-out");
         incrementalJavaFileScanner.addExcludePath("gen");
         incrementalJavaFileScanner.addExcludePath("pre-compile-tools");
         try {
@@ -60,6 +70,6 @@ public class TestMain {
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "totally used %dms", endTime - startTime);
         
-        System.out.println(parseResult);
+//        System.out.println(parseResult);
     }
 }

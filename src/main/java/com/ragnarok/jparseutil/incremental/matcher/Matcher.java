@@ -12,29 +12,22 @@ import java.util.List;
  * and find all files contain this component
  */
 public abstract class Matcher {
-
-    /**
-     * this callback should be called when a file is matched
-     */
-    public interface OnMatchFileCallback {
-        void onMatchFile(String filename);
-    }
     
     protected List<String> inputFileList;
     
     protected String sourceDirectory;
     protected String[] excludePaths;
     
-    protected OnMatchFileCallback matchFileCallback;
-    
     public Matcher(String dir, String... excludePaths) {
         this.sourceDirectory = dir;
         this.excludePaths = excludePaths;
-        
         initSourcePathList();
     }
     
-    private void initSourcePathList() {
+    protected void initSourcePathList() {
+        if (sourceDirectory == null) {
+            return;
+        }
         File rootPath = new File(sourceDirectory);
         if (!rootPath.exists()) {
            return;
@@ -59,7 +52,7 @@ public abstract class Matcher {
         }
     }
 
-    private boolean isMatchExcludePathList(String currentPathName, String absolutePath) {
+    protected boolean isMatchExcludePathList(String currentPathName, String absolutePath) {
         if (currentPathName == null || absolutePath == null || excludePaths == null || excludePaths.length == 0) {
             return false;
         }
@@ -72,8 +65,4 @@ public abstract class Matcher {
     }
     
     public abstract List<String> match();
-    
-    public void setMatchFileCallback(OnMatchFileCallback callback) {
-        this.matchFileCallback = callback;
-    }
 }

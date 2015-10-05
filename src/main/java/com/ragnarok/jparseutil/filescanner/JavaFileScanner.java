@@ -101,26 +101,39 @@ public abstract class JavaFileScanner {
         return false;
     }
 
-    public static List<String> getAllSourceFilePathFromDirectory(String directory) {
+    public static List<String> getAllSourceFilePathFromDirectory(String directory, String... excludePaths) {
         List<String> result = new ArrayList<>();
         File rootPath = new File(directory);
         if (!rootPath.exists()) {
             return result;
         }
-        initSourceFilePathListRecursive(result, rootPath);
+        initSourceFilePathListRecursive(result, rootPath, excludePaths);
         return result;
     }
     
-    private static void initSourceFilePathListRecursive(List<String> result, File rootPath) {
+    private static void initSourceFilePathListRecursive(List<String> result, File rootPath, String[] excludePath) {
         File[] children = rootPath.listFiles();
         if (children != null && children.length > 0) {
             for (File child : children) {
-                if (child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
+                if (!isMathExcludePath(excludePath, child.getName(), child.getAbsolutePath())
+                        && child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
                     String path = child.getAbsolutePath();
                     result.add(path);
                 }
-                initSourceFilePathListRecursive(result, child);
+                initSourceFilePathListRecursive(result, child, excludePath);
             }
         }
+    }
+    
+    private static boolean isMathExcludePath(String[] excludePathList, String currentPathName, String absolutePath) {
+        if (currentPathName == null || absolutePath == null) {
+            return false;
+        }
+        for (String excludePath : excludePathList) {
+            if (currentPathName.equals(excludePath) || absolutePath.equals(excludePath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
