@@ -24,51 +24,24 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
     
     public static final String TAG = "JParserUtil.IncrementalJavaFileScanner";
     
-    private String sourceStartDirectory = null;
-    private List<String> parsingJavaSourcePaths = new ArrayList<>();
+    private List<String> allSourceFiles = new ArrayList<>();
+    
+    private Set<String> parsedSourceFiles = new HashSet<>();
 
     private int threadNumber;
     private ThreadPoolExecutor executor;
     private BlockingQueue<Runnable> workerQueue;
 
-    public IncrementalJavaFileScanner(List<String> paths, String sourceStartDirectory, int threadNumber) {
+    public IncrementalJavaFileScanner(List<String> paths, List<String> allSourceFilePaths, int threadNumber) {
         super(paths);
-        this.sourceStartDirectory = sourceStartDirectory;
         this.threadNumber = threadNumber;
+        this.allSourceFiles = allSourceFilePaths;
         initThreadPool();
     }
 
     private void initThreadPool() {
         workerQueue = new ArrayBlockingQueue<>(threadNumber * 2);
         executor = new ThreadPoolExecutor(threadNumber, threadNumber * 2, 2L, TimeUnit.SECONDS, workerQueue);
-    }
-
-    private void initParsingJavaSourcePaths() throws FileNotFoundException {
-        long startTime = System.currentTimeMillis();
-        File rootPath = new File(sourceStartDirectory);
-        if (!rootPath.exists()) {
-            throw new FileNotFoundException(String.format("Directory %s not exist!", sourceDirectory));
-        }
-        parsingJavaSourcePaths.clear();
-        initJavaSourcePathsRecursive(rootPath);
-        long endTime = System.currentTimeMillis();
-        Log.d(TAG, "initParsingJavaSourcePaths used: %dms", endTime - startTime);
-    }
-
-    private void initJavaSourcePathsRecursive(File rootPath) {
-        File[] children = rootPath.listFiles();
-        if (children != null && children.length > 0) {
-            for (File child : children) {
-                if (!isMatchExcludePathList(child.getName(), child.getAbsolutePath())) {
-                    if (child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
-                        String path = child.getAbsolutePath();
-                        parsingJavaSourcePaths.add(path);
-                    }
-                    initJavaSourcePathsRecursive(child);
-                }
-
-            }
-        }
     }
     
     private void addPathListInSamePackage() {
@@ -100,8 +73,6 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
 
         private CodeInfo subTaskResult;
 
-        private SourceInfoExtracter extracter = null;
-
         public ScanSubSetFileRunnable(List<String> subSetFileList, int threadNo) {
             this.subSetFileList = subSetFileList;
             this.threadNo = threadNo;
@@ -120,9 +91,11 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
                 // get file list from 'import *'
                 List<String> importAsteriskFiles = getFileListFromImportAsterisk(sourceInfo);
                 if (importAsteriskFiles != null && importAsteriskFiles.size() > 0) {
-                    Log.d(TAG, "importAsteriskFiles: %s", importAsteriskFiles);
+//                    Log.d(TAG, "importAsteriskFiles: %s", importAsteriskFiles);
                     for (String importAsteriskFilePath : importAsteriskFiles) {
-                        if (!subTaskResult.isContainedSource(importAsteriskFilePath)) {
+                        if (!subTaskResult.isContainedSource(importAsteriskFilePath) && 
+                                !parsedSourceFiles.contains(importAsteriskFilePath)) {
+                            parsedSourceFiles.add(importAsteriskFilePath);
                             SourceInfo asteriskSourceInfo = parseJavaSource(importAsteriskFilePath);
                             if (asteriskSourceInfo != null) {
                                 subTaskResult.addSource(asteriskSourceInfo);
@@ -141,8 +114,9 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
 
     @Override
     public CodeInfo scanAllJavaSources() throws FileNotFoundException {
-        initParsingJavaSourcePaths();
         Log.i(TAG, "final source path list size: %d", allJavaSourcePaths.size());
+        parsedSourceFiles.clear();
+        parsedSourceFiles.addAll(allJavaSourcePaths);
         CodeInfo result = new CodeInfo();
         if (executor == null || executor.isShutdown()) {
             initThreadPool();
@@ -183,14 +157,13 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
             result.addCodeInfo(runnable.getSubTaskResult());
         }
         
+        Log.d(TAG, "final parsedSource file size: %d", parsedSourceFiles.size());
+        
         return result;
     }
     
     private List<String> getFileListFromImportAsterisk(SourceInfo sourceInfo) {
         List<String> result = new ArrayList<>();
-        if (sourceStartDirectory == null) {
-            return result;
-        }
         for (String importClass : sourceInfo.getAsteriskImports()) {
             String filePath = importClass.substring(0, importClass.lastIndexOf(".*"));
             filePath = filePath.replace(".", File.separator);
@@ -204,7 +177,7 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
     
     private List<String> searchMatchFilePath(String path) {
         List<String> result = new ArrayList<>();
-        for (String filePath : parsingJavaSourcePaths) {
+        for (String filePath : allSourceFiles) {
             if (filePath.toLowerCase().contains(path.toLowerCase())) {
                 result.add(filePath);
             }

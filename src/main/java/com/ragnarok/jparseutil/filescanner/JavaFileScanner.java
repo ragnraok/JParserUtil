@@ -100,4 +100,27 @@ public abstract class JavaFileScanner {
         }
         return false;
     }
+
+    public static List<String> getAllSourceFilePathFromDirectory(String directory) {
+        List<String> result = new ArrayList<>();
+        File rootPath = new File(directory);
+        if (!rootPath.exists()) {
+            return result;
+        }
+        initSourceFilePathListRecursive(result, rootPath);
+        return result;
+    }
+    
+    private static void initSourceFilePathListRecursive(List<String> result, File rootPath) {
+        File[] children = rootPath.listFiles();
+        if (children != null && children.length > 0) {
+            for (File child : children) {
+                if (child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
+                    String path = child.getAbsolutePath();
+                    result.add(path);
+                }
+                initSourceFilePathListRecursive(result, child);
+            }
+        }
+    }
 }
