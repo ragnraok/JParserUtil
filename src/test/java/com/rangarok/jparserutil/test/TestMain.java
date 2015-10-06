@@ -24,6 +24,7 @@ public class TestMain {
     public static void main(String[] args) {
         Log.setMaxLogLevel(Log.DEBUG);
         Log.addShowLogTAG(TestMain.TAG);
+        Log.addShowLogTAG(AnnotationMatcher.TAG);
         Log.addShowLogTAG(IncrementalJavaFileScanner.TAG);
         Log.addShowLogTAG(SourceInfo.TAG);
 
@@ -40,6 +41,7 @@ public class TestMain {
         Log.d(TAG, "init source map used: %dms", initSourceMapEndTime - initSourceMapStartTime);
         
         String dir = "testsource";
+        String annotationName = "PrintMe";
         
         long initPathStartTime = System.currentTimeMillis();
         List<String> allSourceFiles = JavaFileScanner.getAllSourceFilePathFromDirectory(dir,
@@ -48,7 +50,7 @@ public class TestMain {
         Log.d(TAG, "init path used: %dms, size: %d", initPathEndTime - initPathStartTime, allSourceFiles.size());
         
         long matchStartTime = System.currentTimeMillis();
-        AnnotationMatcher annotationMatcher = new AnnotationMatcher("PrintMe", allSourceFiles, 4);
+        AnnotationMatcher annotationMatcher = new AnnotationMatcher(allSourceFiles, 4, annotationName);
         List<String> result = annotationMatcher.match();
         long matchEndTime = System.currentTimeMillis();
         Log.d(TAG, "file list size: %d, match used %dms", result.size(), matchEndTime - matchStartTime);
@@ -60,6 +62,7 @@ public class TestMain {
         incrementalJavaFileScanner.addExcludePath("buck-out");
         incrementalJavaFileScanner.addExcludePath("gen");
         incrementalJavaFileScanner.addExcludePath("pre-compile-tools");
+        
         try {
             parseResult = incrementalJavaFileScanner.scanAllJavaSources();
         } catch (FileNotFoundException e) {
