@@ -39,7 +39,7 @@ public class TestMain {
         long initSourceMapEndTime = System.currentTimeMillis();
         Log.d(TAG, "init source map used: %dms", initSourceMapEndTime - initSourceMapStartTime);
         
-        String dir = "/Users/ragnarok/Works/MMSource/micromessenger_android";
+        String dir = "testsource";
         
         long initPathStartTime = System.currentTimeMillis();
         List<String> allSourceFiles = JavaFileScanner.getAllSourceFilePathFromDirectory(dir,
@@ -48,7 +48,7 @@ public class TestMain {
         Log.d(TAG, "init path used: %dms, size: %d", initPathEndTime - initPathStartTime, allSourceFiles.size());
         
         long matchStartTime = System.currentTimeMillis();
-        AnnotationMatcher annotationMatcher = new AnnotationMatcher("ActivityAttribute", allSourceFiles, 4);
+        AnnotationMatcher annotationMatcher = new AnnotationMatcher("PrintMe", allSourceFiles, 4);
         List<String> result = annotationMatcher.match();
         long matchEndTime = System.currentTimeMillis();
         Log.d(TAG, "file list size: %d, match used %dms", result.size(), matchEndTime - matchStartTime);
@@ -70,6 +70,6 @@ public class TestMain {
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "totally used %dms", endTime - startTime);
         
-//        System.out.println(parseResult);
+        System.out.println(parseResult);
     }
 }
