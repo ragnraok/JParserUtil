@@ -6,6 +6,7 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -17,21 +18,35 @@ public class AnnotationMatcher extends Matcher {
 
     public static final String TAG = "JParserUtil.AnnotationMatcher";
     
-    private String matchAnnotationName = null;
-    private String matchAnnotationSimpleName = null;
+    private List<String> matchAnnotationList;
     
     private int threadNumber;
     private ThreadPoolExecutor executor;
 
-    public AnnotationMatcher(String annotationQualifiedName, List<String> fileList, int threadNumber) {
+    public AnnotationMatcher(List<String> fileList, int threadNumber, String... annotationQualifiedNameList) {
         super(null);
         inputFileList = new ArrayList<>(fileList.size());
         inputFileList.addAll(fileList);
-        this.matchAnnotationName = annotationQualifiedName;
-        if (this.matchAnnotationName.contains(".")) {
-            this.matchAnnotationSimpleName = this.matchAnnotationName.substring(this.matchAnnotationName.lastIndexOf(".") + 1);   
-        }
+        initAnnotationNameList(annotationQualifiedNameList);
         this.threadNumber = threadNumber;
+    }
+    
+    private void initAnnotationNameList(String[] annotationQualifiedNameList) {
+        if (annotationQualifiedNameList != null) {
+            matchAnnotationList = new ArrayList<>(annotationQualifiedNameList.length * 2);
+            for (String annotation : annotationQualifiedNameList) {
+                String qualifiedName = "@" + annotation;
+                String simpleName = annotation;
+                if (simpleName.contains(".")) {
+                    simpleName = simpleName.substring(simpleName.lastIndexOf(".") + 1);   
+                }
+                simpleName = "@" + simpleName;
+                matchAnnotationList.add(qualifiedName);
+                matchAnnotationList.add(simpleName);
+            }
+        } else {
+            matchAnnotationList = new ArrayList<>();
+        }
     }
     
     private void initThreadPool() {
@@ -54,11 +69,11 @@ public class AnnotationMatcher extends Matcher {
         @Override
         public void run() {
             Log.i(TAG, "thread %d start, filelist size: %d, thread: %s", threadNo, subTaskFiles.size(), Thread.currentThread());
-            String annotationStr1 = "@" + matchAnnotationName;
-            String annotationStr2 = "@" + matchAnnotationSimpleName;
+//            String annotationStr1 = "@" + matchAnnotationName;
+//            String annotationStr2 = "@" + matchAnnotationSimpleName;
             
             for (String filePath : subTaskFiles) {
-                if (Util.isStringInFile(filePath, annotationStr1, annotationStr2)) {
+                if (Util.isStringInFile(filePath, matchAnnotationList)) {
                     subTaskResult.add(filePath);
                 }
             }
@@ -73,7 +88,7 @@ public class AnnotationMatcher extends Matcher {
  
     @Override
     public List<String> match() {
-        if (this.matchAnnotationName == null) {
+        if (this.matchAnnotationList == null) {
             return new ArrayList<>();
         }
         if (inputFileList == null || inputFileList.size() == 0) {

@@ -9,6 +9,7 @@ import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
 
 import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -142,14 +143,14 @@ public class Util {
         return null;
     }
     
-    public static boolean isStringInFile(String filename, String... strings) {
+    public static boolean isStringInFile(String filename, List<String> stringList) {
         File file = new File(filename);
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                for (String str : strings) {
+                for (String str : stringList) {
                     if (line.contains(str)) {
                         return true;
                     }
