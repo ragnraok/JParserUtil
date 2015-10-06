@@ -53,7 +53,7 @@ public class AnnotationMatcher extends Matcher {
         
         @Override
         public void run() {
-            Log.i(TAG, "thread %d start, filelist size: %d", threadNo, subTaskFiles.size());
+            Log.i(TAG, "thread %d start, filelist size: %d, thread: %s", threadNo, subTaskFiles.size(), Thread.currentThread());
             String annotationStr1 = "@" + matchAnnotationName;
             String annotationStr2 = "@" + matchAnnotationSimpleName;
             
@@ -63,7 +63,7 @@ public class AnnotationMatcher extends Matcher {
                 }
             }
 
-            Log.i(TAG, "thread %d finished", threadNo);
+            Log.i(TAG, "thread %d finished, %s", threadNo, Thread.currentThread());
         }
         
         public List<String> getSubTaskResult() {
@@ -81,13 +81,6 @@ public class AnnotationMatcher extends Matcher {
         }
         initThreadPool();
         List<String> result = new ArrayList<>();
-//        String annotationStr1 = "@" + matchAnnotationName;
-//        String annotationStr2 = "@" + matchAnnotationSimpleName;
-//        for (String filePath : inputFileList) {
-//            if (Util.isStringInFile(filePath, annotationStr1, annotationStr2)) {
-//                result.add(filePath);
-//            }
-//        }
         Future[] futureList = new Future[threadNumber];
         MatchSubTask[] subTaskList = new MatchSubTask[threadNumber];
 

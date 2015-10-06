@@ -82,7 +82,7 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
 
         @Override
         public void run() {
-            Log.i(TAG, "thread %d start, subSetFileList.size: %d", threadNo, subSetFileList.size());
+            Log.i(TAG, "thread %d start, subSetFileList.size: %d, %s", threadNo, subSetFileList.size(), Thread.currentThread());
             for (String file : subSetFileList) {
                 SourceInfo sourceInfo = parseJavaSource(file);
                 if (sourceInfo != null) {
@@ -105,7 +105,7 @@ public class IncrementalJavaFileScanner extends JavaFileScanner {
                     }
                 }
             }
-            Log.i(TAG, "thread %d parsing finished", threadNo);
+            Log.i(TAG, "thread %d parsing finished, %s", threadNo, Thread.currentThread());
         }
 
         public CodeInfo getSubTaskResult() {
