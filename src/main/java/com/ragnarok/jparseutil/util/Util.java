@@ -5,12 +5,14 @@ import com.ragnarok.jparseutil.dataobject.AnnotationInfo;
 import com.ragnarok.jparseutil.dataobject.ClassInfo;
 import com.ragnarok.jparseutil.dataobject.ReferenceSourceMap;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.sun.source.tree.Tree;
-import com.sun.tools.javac.tree.JCTree;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Created by ragnarok on 15/5/25.
@@ -106,63 +108,52 @@ public class Util {
         simpleName = simpleName.replace(".", "");
         if (prefix.endsWith(".")) {
             return prefix + simpleName;
-        } else  {
+        } else {
             return prefix + "." + simpleName;
         }
     }
     
-    public static String getFileContent(String filename) {
-        File file = new File(filename);
-        if (!file.exists()) {
-            return null;
+    public static boolean isStringInFile(String filename, List<String> stringList) {
+        String content = getFileContent(filename);
+        if (content == null) {
+            return false;
         }
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(file);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader reader = new BufferedReader(isr);
-            String result = "";
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                result += line;
+        for (String str : stringList) {
+            if (content.contains(str)) {
+                return true;
             }
-            return result;
+        }
+        return false;
+    }
+    
+    public static String getFileContent(String filename) {
+        File file;
+        FileChannel channel;
+        MappedByteBuffer buffer;
+
+        file = new File(filename);
+        FileInputStream fin  = null;
+        try {
+            fin = new FileInputStream(file);
+            channel = fin.getChannel();
+            buffer  = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+            byte[] contentBytes = new byte[buffer.remaining()];
+            buffer.get(contentBytes);
+            String content = new String(contentBytes);
+            return content;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (fis != null) {
-                    fis.close();   
+            if (fin != null) {
+                try {
+                    fin.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         return null;
-    }
-    
-    public static boolean isStringInFile(String filename, List<String> stringList) {
-        File file = new File(filename);
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                for (String str : stringList) {
-                    if (line.contains(str)) {
-                        return true;
-                    }
-                }
-            }
-        } catch(FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (scanner != null) {
-                scanner.close();
-            }
-        }
-        return false;
     }
 }

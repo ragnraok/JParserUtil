@@ -1,13 +1,13 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import com.ragnarok.jparseutil.util.Log;
+import com.ragnarok.jparseutil.util.Util;
 
-import java.io.*;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by ragnarok on 15/8/8.
@@ -57,24 +57,12 @@ public class ReferenceSourceMap {
      * @throws FileNotFoundException
      */
     public void addClassesListFromSourceMapFile(String sourceMapFile) throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream(sourceMapFile);
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader reader = new BufferedReader(isr);
-        
-        String className = null;
-        try {
-            while ((className = reader.readLine()) != null) {
-                addClassNameToSourceMap(className);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "initFromSourceMapFile error: %s", e.getMessage());
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        String fileContent = Util.getFileContent(sourceMapFile);
+        if (fileContent != null) {
+            String[] classNameList = fileContent.split("\n");
+            if (classNameList != null) {
+                for (String className :classNameList) {
+                    addClassNameToSourceMap(className);
                 }
             }
         }
