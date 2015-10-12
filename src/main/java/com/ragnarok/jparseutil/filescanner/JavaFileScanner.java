@@ -8,6 +8,9 @@ import com.ragnarok.jparseutil.util.Util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,26 +106,18 @@ public abstract class JavaFileScanner {
 
     public static List<String> getAllSourceFilePathFromDirectory(String directory, String... excludePaths) {
         List<String> result = new ArrayList<>();
-        File rootPath = new File(directory);
-        if (!rootPath.exists()) {
-            return result;
-        }
-        initSourceFilePathListRecursive(result, rootPath, excludePaths);
-        return result;
-    }
-    
-    private static void initSourceFilePathListRecursive(List<String> result, File rootPath, String[] excludePath) {
-        File[] children = rootPath.listFiles();
-        if (children != null && children.length > 0) {
-            for (File child : children) {
-                if (!isMathExcludePath(excludePath, child.getName(), child.getAbsolutePath())
-                        && child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
-                    String path = child.getAbsolutePath();
-                    result.add(path);
+        try {
+            Files.walk(Paths.get(directory)).filter(path -> {
+                if (path.getFileName().toString().endsWith(Util.JAVA_FILE_SUFFIX) &&
+                        !isMathExcludePath(excludePaths, path.getFileName().toString(), path.toString())) {
+                    return true;
                 }
-                initSourceFilePathListRecursive(result, child, excludePath);
-            }
+                return false;
+            }).forEach(path -> result.add(path.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return result;
     }
     
     private static boolean isMathExcludePath(String[] excludePathList, String currentPathName, String absolutePath) {
