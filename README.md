@@ -21,7 +21,7 @@ Currently support:
 7. Parse value from Array declaration, currently only support parse primitive type
 8. Support parse multiple Java source files, just need to give a input directory
 9. Configurable multi thread support for speed up parsing
-
+10. Fast parsing with incremental fileset
 
 ---
 
