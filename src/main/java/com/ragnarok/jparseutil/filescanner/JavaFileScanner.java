@@ -72,24 +72,7 @@ public abstract class JavaFileScanner {
         if (!rootPath.exists()) {
             throw new FileNotFoundException(String.format("Directory %s not exist!", sourceDirectory));
         }
-        allJavaSourcePaths.clear();
-        initJavaSourcePathsRecursive(rootPath);
-    }
-
-    private void initJavaSourcePathsRecursive(File rootPath) {
-        File[] children = rootPath.listFiles();
-        if (children != null && children.length > 0) {
-            for (File child : children) {
-                if (!isMatchExcludePathList(child.getName(), child.getAbsolutePath())) {
-                    if (child.isFile() && child.getAbsolutePath().endsWith(Util.JAVA_FILE_SUFFIX)) {
-                        String path = child.getAbsolutePath();
-                        allJavaSourcePaths.add(path);
-                    }
-                    initJavaSourcePathsRecursive(child);   
-                }
-                
-            }
-        }
+        allJavaSourcePaths = getAllSourceFilePathFromDirectory(sourceDirectory);
     }
     
     protected boolean isMatchExcludePathList(String currentPathName, String absolutePath) {
