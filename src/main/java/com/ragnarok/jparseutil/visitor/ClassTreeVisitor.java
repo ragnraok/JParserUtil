@@ -250,7 +250,7 @@ public class ClassTreeVisitor {
                 String defaultValueLiteral = annotationMember.getDefaultValue().toString();
                 Log.d(TAG, "defaultValueLiteral: %s, defaultValueClass: %s", defaultValueLiteral,
                         annotationMember.getDefaultValue().getClass().getSimpleName());
-                Object defaultValue = VariableInitParser.parseVariableInit(sourceInfo, null, annotationMember.getDefaultValue());
+                Object defaultValue = VariableInitParser.parseVariableInit(sourceInfo, annotationMember.getDefaultValue());
                 annotationInfo.putParams(type, name, defaultValue);
             } else {
                 annotationInfo.putParams(type, name, null);

@@ -4,11 +4,9 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.ragnarok.jparseutil.dataobject.*;
-import com.ragnarok.jparseutil.dataobject.Modifier;
 import com.ragnarok.jparseutil.util.Log;
 import com.sun.tools.javac.tree.JCTree;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +37,7 @@ public class VariableParser {
         Object value = null;
         if (variableDeclarator.getInit() != null) {
 //            Log.d(TAG, "varinit class name: %s", variableDeclarator.getInit().getClass().getSimpleName());
-            value = VariableInitParser.parseVariableInit(sourceInfo, type, variableDeclarator.getInit());   
+            value = VariableInitParser.parseVariableInit(sourceInfo, variableDeclarator.getInit());   
         }
 
         Type variableType = TypeParser.parseType(sourceInfo, variableDecl.getType(), type);

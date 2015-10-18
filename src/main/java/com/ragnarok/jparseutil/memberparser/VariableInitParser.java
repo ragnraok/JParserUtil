@@ -1,15 +1,11 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.github.javaparser.ast.expr.*;
+import com.ragnarok.jparseutil.dataobject.ArrayValue;
 import com.ragnarok.jparseutil.dataobject.ClassLiteralValue;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
 import com.ragnarok.jparseutil.dataobject.Type;
-import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
-import com.sun.tools.internal.jxc.gen.config.Classes;
-import com.sun.tools.javac.tree.JCTree;
-
-import java.util.List;
 
 /**
  * Created by ragnarok on 15/6/21.
@@ -19,12 +15,13 @@ import java.util.List;
  * 3. Class literal
  * 4. Enum item
  * 5. one dimension array of them
+ * if cannot parse this variable initialization, just return its string representation
  */
 public class VariableInitParser {
     
     public static final String TAG = "JParserUtil.VariableInitParser";
     
-    public static Object parseVariableInit(SourceInfo sourceInfo, String fullQualifiedTypeName, Expression expression) {
+    public static Object parseVariableInit(SourceInfo sourceInfo, Expression expression) {
 //        Log.d(TAG, "parseVariableInit, express class: %s", expression.getClass().getSimpleName());
         if (expression instanceof LiteralExpr) {
             return Util.getValueFromLiteral((LiteralExpr) expression);
@@ -38,12 +35,34 @@ public class VariableInitParser {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) expression;
         } else if (expression instanceof ArrayInitializerExpr) {
             ArrayInitializerExpr arrayInitializerExpr = (ArrayInitializerExpr) expression;
-            List<Expression> values = arrayInitializerExpr.getValues();
-            for (Expression arrayElement : values) {
-                
-            }
+            return parseArray(sourceInfo, arrayInitializerExpr);
+        } else if (expression instanceof ArrayCreationExpr) {
+            ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr) expression;
+            return parseArray(sourceInfo, arrayCreationExpr);
         }
         
         return expression.toString();
+    }
+    
+    private static ArrayValue parseArray(SourceInfo sourceInfo, ArrayInitializerExpr arrayInitializerExpr) {
+        if (arrayInitializerExpr.getValues() != null && arrayInitializerExpr.getValues().size() > 0) {
+            ArrayValue result = new ArrayValue();
+            result.setSize(arrayInitializerExpr.getValues().size());
+            for (Expression expression : arrayInitializerExpr.getValues()) {
+                Object value = parseVariableInit(sourceInfo, expression);
+                result.addElement(value);
+            }
+            return result;
+        }
+        return null;
+    }
+    
+    private static ArrayValue parseArray(SourceInfo sourceInfo, ArrayCreationExpr arrayCreationExpr) {
+        ArrayInitializerExpr arrayInitializerExpr = arrayCreationExpr.getInitializer();
+        if (arrayInitializerExpr != null && arrayInitializerExpr.getValues() != null 
+                && arrayInitializerExpr.getValues().size() > 0) {
+            return parseArray(sourceInfo, arrayInitializerExpr);
+        }
+        return null;
     }
 }

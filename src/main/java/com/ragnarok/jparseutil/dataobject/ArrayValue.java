@@ -1,6 +1,7 @@
 package com.ragnarok.jparseutil.dataobject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/6/28.
@@ -8,72 +9,28 @@ import java.util.ArrayList;
  */
 public class ArrayValue {
     
-    private int dimensions = 0; // how many dimensions for this array
+    private int size;
     
-    private Type elemType = null;
+    private List<Object> values = new ArrayList<>();
     
-    private ArrayDimension value;
-    
-    public void setDimensions(int dimen) {
-        this.dimensions = dimen;
+    public void setSize(int size) {
+        this.size = size;
     }
     
-    public int getDimensions() {
-        return this.dimensions;
+    public int getSize() {
+        return this.size;
     }
     
-    public void setValue(ArrayDimension value) {
-        this.value = value;
+    public void addElement(Object elem) {
+        this.values.add(elem);
     }
     
-    public ArrayDimension getValue() {
-        return this.value;
-    }
-    
-    public void setElemType(Type type) {
-        this.elemType = type;
-    }
-    
-    public Type getElemType() {
-        return this.elemType;
-    }
-
-    /**
-     * represent a dimension of an array
-     */
-    public static class ArrayDimension {
-        private static final String TAG = "JParserUtil.ArrayValue.ArrayDimension";
-   
-        private int size;
-
-        // may be the value literal, or another ArrayDimension object, which is the multi dimensions array
-        // empty if the array does not initialize when decleare
-        private ArrayList<Object> values = new ArrayList<Object>();
-        
-        public void addValue(Object value) {
-            this.values.add(value);
-        }
-        
-        public ArrayList<Object> getValues() {
-            return this.values;
-        }
-        
-        public void setSize(int size) {
-            this.size = size;
-        }
-        
-        public int getSize() {
-            return this.size;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("{ArrayDimension, size: %d, value: %s}", size, values);
-        }
+    public List<Object> getElements() {
+        return this.values;
     }
 
     @Override
     public String toString() {
-        return String.format("{Array, dimensions: %d, elemType: %s, value: %s}", dimensions, elemType, value);
+        return String.format("{array, size: %s, values: %s}", this.size, this.values);
     }
 }

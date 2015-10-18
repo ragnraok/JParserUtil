@@ -13,9 +13,11 @@ class User implements Printable {
     private String firstName = "Ragnarok" + "123123";
     private String lastName;
     
-    private String[][][] usernameList = null;
+    private String[] usernameList = new String[]{"123", "!23", "!23"};
     
-    private Date[][] birthDateArray = null;
+    private String[][] usernameList2 = new String[][]{{"!23123", "123123", "!23123"}, {"123123", "123123", "!23123"}};
+    
+    private Date[][] birthDateArray = new Date[][]{{new Date(), new Date()}, {new Date(), new Date()}};
     
     private String test = getClass().getSimpleName();
     
