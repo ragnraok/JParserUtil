@@ -28,6 +28,6 @@ public class ObjectFieldRef {
 
     @Override
     public String toString() {
-        return String.format("{%s.%s}", type.getTypeName(), this.fieldName);
+        return String.format("{FieldAccess: %s.%s}", type.getTypeName(), this.fieldName);
     }
 }
