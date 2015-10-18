@@ -22,6 +22,8 @@ class User implements Printable {
     @PrintMe
     private Class clazz = User.class;
     
+    private Class clazz2 = getClass();
+    
     private UserType userType = UserType.MAN;
     
     public User() {

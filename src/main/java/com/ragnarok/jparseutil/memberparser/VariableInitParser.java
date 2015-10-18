@@ -1,11 +1,15 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.github.javaparser.ast.expr.*;
+import com.ragnarok.jparseutil.dataobject.ClassLiteralValue;
 import com.ragnarok.jparseutil.dataobject.SourceInfo;
+import com.ragnarok.jparseutil.dataobject.Type;
 import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 import com.sun.tools.internal.jxc.gen.config.Classes;
 import com.sun.tools.javac.tree.JCTree;
+
+import java.util.List;
 
 /**
  * Created by ragnarok on 15/6/21.
@@ -26,10 +30,18 @@ public class VariableInitParser {
             return Util.getValueFromLiteral((LiteralExpr) expression);
         } else if (expression instanceof ClassExpr) {
             ClassExpr classExpr = (ClassExpr) expression;
-        } else if (expression instanceof FieldAccessExpr) {
+            Type type = TypeParser.parseType(sourceInfo, classExpr.getType(), classExpr.getType().toString());
+            ClassLiteralValue classLiteralValue = new ClassLiteralValue();
+            classLiteralValue.setType(type);
+            return classLiteralValue;
+        } else if (expression instanceof FieldAccessExpr) { // Enum
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) expression;
         } else if (expression instanceof ArrayInitializerExpr) {
             ArrayInitializerExpr arrayInitializerExpr = (ArrayInitializerExpr) expression;
+            List<Expression> values = arrayInitializerExpr.getValues();
+            for (Expression arrayElement : values) {
+                
+            }
         }
         
         return expression.toString();
