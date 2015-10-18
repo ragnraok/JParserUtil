@@ -35,7 +35,7 @@ public class VariableParser {
 //        Log.d(TAG, "vartype class name: %s", variableDecl.getType().getClass().getSimpleName());
         
         Object value = null;
-        if (variableDeclarator.getInit() != null) {
+        if (result.isContainedModifier(Modifier.FINAL) && variableDeclarator.getInit() != null) {
 //            Log.d(TAG, "varinit class name: %s", variableDeclarator.getInit().getClass().getSimpleName());
             value = VariableInitParser.parseVariableInit(sourceInfo, variableDeclarator.getInit());   
         }

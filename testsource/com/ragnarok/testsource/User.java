@@ -2,6 +2,7 @@ package com.ragnarok.testsource;
 
 import java.lang.Class;
 import java.util.*;
+import java.io.File;
 
 import com.ragnarok.testsource.annotation.*;
 import com.ragnarok.testsource.interfaces.Printable;
@@ -10,8 +11,10 @@ class User implements Printable {
     
     public static final String CLASS_NAME = "User";
     
-    private String firstName = "Ragnarok" + "123123";
+    private final String firstName = "Ragnarok" + "123123" + "123123123";
     private String lastName;
+    
+    private String sep = File.separatorChar;
     
     private String[] usernameList = new String[]{"123", "!23", "!23"};
     

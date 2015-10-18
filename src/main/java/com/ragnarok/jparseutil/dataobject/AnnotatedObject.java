@@ -66,4 +66,8 @@ public abstract class AnnotatedObject {
         return modifiers;
     }
     
+    public boolean isContainedModifier(Modifier modifier) {
+        return modifiers.contains(modifier);
+    }
+    
 }
