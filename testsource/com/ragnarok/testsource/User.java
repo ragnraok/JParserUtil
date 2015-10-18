@@ -19,7 +19,8 @@ class User implements Printable {
     
     private String test = getClass().getSimpleName();
     
-    private Class clazz = getClass();
+    @PrintMe
+    private Class clazz = User.class;
     
     private UserType userType = UserType.MAN;
     

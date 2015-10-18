@@ -44,7 +44,7 @@ public class TestMain {
         String annotationName = "PrintMe";
         
         long initPathStartTime = System.currentTimeMillis();
-        List<String> allSourceFiles = JavaFileScanner.getAllSourceFilePathFromDirectory(dir,
+        List<String> allSourceFiles = JavaFileScanner.getAllSourceFilePathFromDirectory(dir, 
                 "gen", "pre-compile-tools", "buck-out", "buck_gen");
         long initPathEndTime = System.currentTimeMillis();
         Log.d(TAG, "init path used: %dms, size: %d", initPathEndTime - initPathStartTime, allSourceFiles.size());
@@ -55,6 +55,7 @@ public class TestMain {
         long matchEndTime = System.currentTimeMillis();
         Log.d(TAG, "file list size: %d, match used %dms", result.size(), matchEndTime - matchStartTime);
 
+        long parseStartTime = System.currentTimeMillis();
         CodeInfo parseResult = null;
         CodeInfo.reset();
         IncrementalJavaFileScanner incrementalJavaFileScanner = new IncrementalJavaFileScanner(result, allSourceFiles, 4);
@@ -62,13 +63,14 @@ public class TestMain {
         incrementalJavaFileScanner.addExcludePath("buck-out");
         incrementalJavaFileScanner.addExcludePath("gen");
         incrementalJavaFileScanner.addExcludePath("pre-compile-tools");
-        
         try {
             parseResult = incrementalJavaFileScanner.scanAllJavaSources();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         CodeInfo.markParseFinish();
+        long parseEndTime = System.currentTimeMillis();
+        Log.d(TAG, "parse used: %dms", parseEndTime - parseStartTime);
 
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "totally used %dms", endTime - startTime);
