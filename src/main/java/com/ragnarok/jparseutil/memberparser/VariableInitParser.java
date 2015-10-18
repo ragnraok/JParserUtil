@@ -1,10 +1,7 @@
 package com.ragnarok.jparseutil.memberparser;
 
 import com.github.javaparser.ast.expr.*;
-import com.ragnarok.jparseutil.dataobject.ArrayValue;
-import com.ragnarok.jparseutil.dataobject.ClassLiteralValue;
-import com.ragnarok.jparseutil.dataobject.SourceInfo;
-import com.ragnarok.jparseutil.dataobject.Type;
+import com.ragnarok.jparseutil.dataobject.*;
 import com.ragnarok.jparseutil.util.Util;
 
 /**
@@ -13,7 +10,7 @@ import com.ragnarok.jparseutil.util.Util;
  * 1. primitive type
  * 2. String
  * 3. Class literal
- * 4. Enum item
+ * 4. Field access
  * 5. one dimension array of them
  * if cannot parse this variable initialization, just return its string representation
  */
@@ -33,6 +30,15 @@ public class VariableInitParser {
             return classLiteralValue;
         } else if (expression instanceof FieldAccessExpr) { // Enum
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) expression;
+            Expression type = fieldAccessExpr.getScope();
+            if (type != null) {
+                ObjectFieldRef objectFieldRef = new ObjectFieldRef();
+                Type objectType = TypeParser.parseType(sourceInfo, null, type.toString());
+                String field = fieldAccessExpr.getField();
+                objectFieldRef.setType(objectType);
+                objectFieldRef.setFieldName(field);
+                return objectFieldRef;
+            }
         } else if (expression instanceof ArrayInitializerExpr) {
             ArrayInitializerExpr arrayInitializerExpr = (ArrayInitializerExpr) expression;
             return parseArray(sourceInfo, arrayInitializerExpr);
