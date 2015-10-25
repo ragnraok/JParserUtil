@@ -11,7 +11,9 @@ class User implements Printable {
     
     public static final String CLASS_NAME = "User";
     
-    private final String firstName = "Ragnarok" + "123123" + "123123123";
+    private final int age = '3' + '2' + '3';
+    private final String firstName = "Ragnarok" + ("123123" + "123123123");
+//    private final String secondName = true ? "123" : "123123";
     private String lastName;
     
     private String sep = File.separatorChar;

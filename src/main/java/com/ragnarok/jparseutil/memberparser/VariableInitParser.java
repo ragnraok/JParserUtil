@@ -2,6 +2,7 @@ package com.ragnarok.jparseutil.memberparser;
 
 import com.github.javaparser.ast.expr.*;
 import com.ragnarok.jparseutil.dataobject.*;
+import com.ragnarok.jparseutil.util.Log;
 import com.ragnarok.jparseutil.util.Util;
 
 /**
@@ -45,6 +46,9 @@ public class VariableInitParser {
         } else if (expression instanceof ArrayCreationExpr) {
             ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr) expression;
             return parseArray(sourceInfo, arrayCreationExpr);
+        } else if (expression instanceof BinaryExpr) {
+            BinaryExpr binaryExpr = (BinaryExpr) expression;
+            return parseBinaryExpr(binaryExpr);
         }
         
         return expression.toString();
@@ -69,6 +73,50 @@ public class VariableInitParser {
                 && arrayInitializerExpr.getValues().size() > 0) {
             return parseArray(sourceInfo, arrayInitializerExpr);
         }
+        return null;
+    }
+    
+    private static Object parseBinaryExpr(BinaryExpr binaryExpr) {
+        Expression leftExpr = binaryExpr.getLeft();
+        Expression rightExpr = binaryExpr.getRight();
+        BinaryExpr.Operator op = binaryExpr.getOperator();
+        Object leftResult = null, rightResult = null;
+        if (leftExpr instanceof BinaryExpr) {
+            leftResult = parseBinaryExpr((BinaryExpr) leftExpr);
+        } else if (leftExpr instanceof LiteralExpr) {
+            leftResult = Util.getValueFromLiteral((LiteralExpr) leftExpr);
+        } else if (leftExpr instanceof EnclosedExpr) {
+            EnclosedExpr enclosedExpr = (EnclosedExpr) leftExpr;
+            if (enclosedExpr.getInner() instanceof BinaryExpr) {
+                leftResult = parseBinaryExpr((BinaryExpr) enclosedExpr.getInner());
+            } else if (enclosedExpr.getInner() instanceof LiteralExpr) {
+                leftResult = Util.getValueFromLiteral((LiteralExpr) enclosedExpr.getInner());
+            }
+        } else {
+            leftResult = null;
+        }
+        Log.d(TAG, "leftResult: %s", leftResult);
+
+        if (rightExpr instanceof BinaryExpr) {
+            rightResult = parseBinaryExpr((BinaryExpr) rightExpr);
+        } else if (rightExpr instanceof LiteralExpr) {
+            rightResult = Util.getValueFromLiteral((LiteralExpr) rightExpr);
+        } else if (rightExpr instanceof EnclosedExpr) {
+            EnclosedExpr enclosedExpr = (EnclosedExpr) rightExpr;
+            if (enclosedExpr.getInner() instanceof BinaryExpr) {
+                rightResult = parseBinaryExpr((BinaryExpr) enclosedExpr.getInner());
+            } else if (enclosedExpr.getInner() instanceof LiteralExpr) {
+                rightResult = Util.getValueFromLiteral((LiteralExpr) enclosedExpr.getInner());
+            }
+        } else {
+            rightResult = null;
+        }
+        Log.d(TAG, "rightResult: %s", rightResult);
+
+        if (leftResult != null && rightResult != null && (leftExpr instanceof LiteralExpr || rightExpr instanceof LiteralExpr)) {
+            return Util.opWithTwoLiteralValue(leftResult, leftExpr, rightResult, rightExpr, op);
+        }
+        
         return null;
     }
 }

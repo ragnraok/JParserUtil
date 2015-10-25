@@ -8,6 +8,7 @@ import com.ragnarok.jparseutil.filescanner.JavaFileScanner;
 import com.ragnarok.jparseutil.filescanner.MultiThreadJavaFileScanner;
 import com.ragnarok.jparseutil.incremental.matcher.AnnotationMatcher;
 import com.ragnarok.jparseutil.incremental.matcher.Matcher;
+import com.ragnarok.jparseutil.memberparser.VariableInitParser;
 import com.ragnarok.jparseutil.util.Log;
 
 import java.io.File;
@@ -27,9 +28,10 @@ public class TestMain {
         Log.addShowLogTAG(AnnotationMatcher.TAG);
         Log.addShowLogTAG(IncrementalJavaFileScanner.TAG);
         Log.addShowLogTAG(SourceInfo.TAG);
+        Log.addShowLogTAG(VariableInitParser.TAG);
 
         long startTime = System.currentTimeMillis();
-        
+
         long initSourceMapStartTime = System.currentTimeMillis();
         String sourceMapFile = "testsource/android-22.txt";
         try {
@@ -39,16 +41,16 @@ public class TestMain {
         }
         long initSourceMapEndTime = System.currentTimeMillis();
         Log.d(TAG, "init source map used: %dms", initSourceMapEndTime - initSourceMapStartTime);
-        
+
         String dir = "testsource";
         String annotationName = "PrintMe";
-        
+
         long initPathStartTime = System.currentTimeMillis();
-        List<String> allSourceFiles = JavaFileScanner.getAllSourceFilePathFromDirectory(dir, 
+        List<String> allSourceFiles = JavaFileScanner.getAllSourceFilePathFromDirectory(dir,
                 "gen", "pre-compile-tools", "buck-out", "buck_gen");
         long initPathEndTime = System.currentTimeMillis();
         Log.d(TAG, "init path used: %dms, size: %d", initPathEndTime - initPathStartTime, allSourceFiles.size());
-        
+
         long matchStartTime = System.currentTimeMillis();
         AnnotationMatcher annotationMatcher = new AnnotationMatcher(allSourceFiles, 4, annotationName);
         List<String> result = annotationMatcher.match();
@@ -74,7 +76,9 @@ public class TestMain {
 
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "totally used %dms", endTime - startTime);
-        
+
         System.out.println(parseResult);
+        
+        System.out.println('3' + '2' + '3');
     }
 }
