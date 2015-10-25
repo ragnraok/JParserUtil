@@ -104,38 +104,6 @@ public class Util {
         }
     }
     
-    public static Object opWithTwoLiteralValue(Object val1, Expression val1Literal, Object val2, Expression val2Literal,
-                                               BinaryExpr.Operator op) {
-        if (val1 != null && val2 != null) {
-            switch (op) {
-                case plus: {
-                    if (val1Literal.getClass().getName().equals(StringLiteralExpr.class.getName()) 
-                            || val2Literal.getClass().getName().equals(StringLiteralExpr.class.getName())) {
-                        return val1.toString() + val2.toString();
-                    } else {
-                        if (val1Literal instanceof DoubleLiteralExpr || val2Literal instanceof DoubleLiteralExpr) {
-                            return Double.valueOf(val1.toString()) + Double.valueOf(val2.toString());    
-                        } else if (val1Literal instanceof CharLiteralExpr || val2Literal instanceof CharLiteralExpr) {
-                          if (val1Literal instanceof CharLiteralExpr && !(val2Literal instanceof CharLiteralExpr)) {
-                              return val1.toString().charAt(0) + Long.valueOf(val2.toString());
-                          } else if (val2Literal instanceof CharLiteralExpr && !(val1Literal instanceof CharLiteralExpr)) {
-                              return Long.valueOf(val1.toString()) + val2.toString().charAt(0);
-                          } else {
-                              return val1.toString().charAt(0) + val2.toString().charAt(0);
-                          }
-                        } else {
-                            return Long.valueOf(val1.toString()) + Long.valueOf(val2.toString()); 
-                        }
-                    }
-                }
-               
-            }
-            
-        }
-       
-        return null;
-    }
-
     public static String buildClassName(String prefix, String simpleName) {
         simpleName = simpleName.replace(".", "");
         if (prefix.endsWith(".")) {

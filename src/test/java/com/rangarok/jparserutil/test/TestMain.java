@@ -78,7 +78,5 @@ public class TestMain {
         Log.d(TAG, "totally used %dms", endTime - startTime);
 
         System.out.println(parseResult);
-        
-        System.out.println('3' + '2' + '3');
     }
 }
